@@ -1,0 +1,20 @@
+﻿<environment names="Development">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/npstrap/css/controls.css" />
+    <link rel="stylesheet" href="~/lib/npstrap/css/general.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @foreach (string filename in ViewData["ImportCSS"] as List<string>)
+    {
+        <link rel="stylesheet" href="@Url.Content(string.Format("~/css/{0}/{1}.css", ViewData["Controller"], filename))" />
+    }
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/npstrap/css/controls.min.css" />
+    <link rel="stylesheet" href="~/lib/npstrap/css/general.min.css" />
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    @foreach (string filename in ViewData["ImportCSS"] as List<string>)
+    {
+        <link rel="stylesheet" href="@Url.Content(string.Format("~/css/{0}/{1}.min.css", ViewData["Controller"], filename))" asp-append-version="true" />
+    }
+</environment>

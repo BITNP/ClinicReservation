@@ -1,0 +1,202 @@
+﻿@import "../include.less";
+
+.titletd {
+    width: 1em;
+}
+
+.smalltitle {
+    .selection-none;
+    font-size: 1.4em;
+    margin-top: 1.4em;
+    margin-bottom: 0.5em;
+}
+
+.itemname {
+    .selection-none;
+    margin: 1em 1em 0.2em 0.5em;
+    white-space: nowrap;
+}
+
+div[data-control="listbox"],
+div[data-control="datepicker"] {
+}
+
+.info-base {
+    .selection-none;
+    .transition(all, 0.2s, ease-in-out);
+    font-size: 0.8em;
+    color: #FFF;
+    padding: 0 0.55em;
+    height: 0;
+    margin: 0 0.3em;
+    width: calc(100% - 1.8em);
+    overflow: hidden;
+}
+
+.info-base.show {
+    padding: 0.5em 0.55em;
+    height: 1.4em;
+}
+
+.info-hint {
+    background: #7BA23F;
+}
+
+.info-error {
+    background: #E83015;
+}
+
+.input-item {
+    -webkit-appearance: none;
+
+    &[data-error="true"] {
+
+        input, textarea {
+            border-color: #C00 !important;
+
+            &:hover {
+                border-color: #A00 !important;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: #F44 !important;
+                background: #fff;
+            }
+        }
+    }
+}
+
+#load_ring {
+    .transition(opacity, 1s, ease-in-out);
+}
+
+#input_bookdate {
+    max-width: initial;
+}
+
+.date-quick-pick {
+    .flex-row(stretch);
+    background: #AAA;
+    padding: 0.3em;
+    margin: 0.3em;
+    overflow-x: auto;
+
+    p {
+        .transition(background, 0.2s, linear);
+        cursor: pointer;
+        margin: 0;
+        flex-shrink: 0;
+
+        span {
+            margin: 0.5em 1em;
+            display: block;
+        }
+    }
+
+    .selected {
+        background: #003567;
+        color: #FFF;
+    }
+}
+
+.preclear {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+    border: none;
+    background: none;
+    font-family: 'Microsoft YaHei';
+}
+
+.boardct {
+    .flex-col(stretch);
+    margin: 0 1em 0.2em 0.3em;
+    max-height: 20em;
+    overflow-y: auto;
+}
+
+.boardct > div {
+    .flex-row(center);
+    background: #EEE;
+    padding: 0.5em 1em;
+    margin: 0.3em 0;
+    flex-shrink: 0;
+
+    img {
+        width: 4em;
+        height: 4em;
+        border-radius: 2em;
+        flex-shrink: 0;
+    }
+
+    div {
+        margin-left: 1em;
+        flex-grow: 1;
+        align-self: flex-start;
+
+        p {
+            margin: 0.4em 0;
+        }
+
+        pre {
+            white-space: pre-wrap;
+        }
+    }
+}
+
+.textarea_msg {
+    height: 6em;
+}
+
+.page-container {
+    .flex-row(stretch);
+    flex-wrap: wrap;
+    padding: 0.3em;
+    margin-top: 1em;
+
+    & > .page-indicate {
+        .flex-row(center);
+        flex: 0 0 auto;
+        font-size: 0.9em;
+        margin-right: 1em;
+        display: none;
+    }
+
+    & > .pages {
+        .flex-row(center);
+        flex: 1 1 auto;
+
+        p {
+            .selection-none();
+            padding: 0.4em;
+            border: 0.1em solid #CCC;
+            min-width: 1em;
+            margin: 0.2em;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9em;
+            flex-shrink: 0;
+
+            &:hover {
+                background: #eee;
+                border-color: #777;
+            }
+        }
+
+        p.disabled {
+            color: #444;
+            cursor: default;
+            background: #ccc;
+            border-color: #ccc;
+        }
+
+        p.current-page {
+            cursor: default;
+            background: #003567;
+            border-color: #003567;
+            color: #FFF;
+            font-weight: bold;
+        }
+    }
+}

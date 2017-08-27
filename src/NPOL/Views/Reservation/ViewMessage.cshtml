@@ -1,0 +1,67 @@
+﻿@*
+
+*@
+@using NPOL.Models.Reservation
+@{
+    ViewData["Title"] = "查看留言消息";
+    ViewData["Controller"] = "reservation";
+    ViewData["ImportCSS"] = new List<string>() { "create" };
+    ViewData["ImportScript"] = new List<string>() { "message" };
+    ViewData["DisableLeftNavi"] = true;
+
+    int page = (int)ViewData["Page"] + 1;
+    int maxpage = (int)ViewData["MaxPage"];
+
+    IEnumerable<ReservationBoardMessage> msgs = ViewData["Messages"] as IEnumerable<ReservationBoardMessage>;
+}
+<form id="actionform" style="display: none" asp-controller="Reservation" asp-action="ViewMessage">
+    <input type="text" name="id" value="@ViewData["id"]" />
+    <input type="text" name="phone" value="@ViewData["phone"]" />
+    <input type="text" name="page" value="@page" />
+</form>
+<script>
+    window.actualLen = @msgs.Count();
+</script>
+<div>
+    <div style="width: 100%">
+        <div class="boardct" style="max-height: none">
+            @foreach (ReservationBoardMessage msg in msgs)
+            {
+                <div>
+                    @if (msg.FromUser == true)
+                    {
+                        <img src="~/images/resources/user.png" />
+                        <div>
+                            <p>[@msg.PostedTime.ToString("yyyy/MM/dd HH:mm")] 用户</p>
+                            <pre class="preclear">@msg.Message</pre>
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(string.Format("~/images/members/{0}", msg.DutyMember.IconName))">
+                        <div>
+                            <p>[@msg.PostedTime.ToString("yyyy/MM/dd HH:mm")] @msg.DutyMember.Name</p>
+                            <pre class="preclear">@msg.Message</pre>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <br />
+        <div class="page-container">
+            <div class="page-indicate">
+                <p>第@(page)/@(maxpage)页</p>
+            </div>
+            <div class="pages">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.page = {
+        min: 1,
+        max: @maxpage,
+        cur: @page,
+    };
+</script>

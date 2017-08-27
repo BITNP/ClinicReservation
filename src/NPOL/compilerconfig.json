@@ -1,0 +1,74 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/site.css",
+    "inputFile": "wwwroot/css/site.less"
+  },
+  {
+    "outputFile": "wwwroot/css/reservation/create.css",
+    "inputFile": "wwwroot/css/reservation/create.less"
+  },
+  {
+    "outputFile": "wwwroot/lib/npstrap/js/controls.es5.js",
+    "inputFile": "wwwroot/lib/npstrap/js/controls.js"
+  },
+  {
+    "outputFile": "wwwroot/js/reservation/create.es5.js",
+    "inputFile": "wwwroot/js/reservation/create.js"
+  },
+  {
+    "outputFile": "wwwroot/js/reservation/detail.es5.js",
+    "inputFile": "wwwroot/js/reservation/detail.js"
+  },
+  {
+    "outputFile": "wwwroot/js/reservation/index.es5.js",
+    "inputFile": "wwwroot/js/reservation/index.js"
+  },
+  {
+    "outputFile": "wwwroot/css/member/index.css",
+    "inputFile": "wwwroot/css/member/index.less"
+  },
+  {
+    "outputFile": "wwwroot/css/reservation/index.css",
+    "inputFile": "wwwroot/css/reservation/index.less"
+  },
+  {
+    "outputFile": "wwwroot/js/member/index.es5.js",
+    "inputFile": "wwwroot/js/member/index.js"
+  },
+  {
+    "outputFile": "wwwroot/css/member/viewdetails.css",
+    "inputFile": "wwwroot/css/member/viewdetails.less"
+  },
+  {
+    "outputFile": "wwwroot/js/member/viewdetails.es5.js",
+    "inputFile": "wwwroot/js/member/viewdetails.js"
+  },
+  {
+    "outputFile": "wwwroot/_shared/_sharedheader.es5.js",
+    "inputFile": "wwwroot/_shared/_sharedheader.js"
+  },
+  {
+    "outputFile": "wwwroot/_shared/_sharedheader.css",
+    "inputFile": "wwwroot/_shared/_sharedheader.less"
+  },
+  {
+    "outputFile": "wwwroot/_shared/_sharedfooter.es5.js",
+    "inputFile": "wwwroot/_shared/_sharedfooter.js"
+  },
+  {
+    "outputFile": "wwwroot/_shared/_sharedfooter.css",
+    "inputFile": "wwwroot/_shared/_sharedfooter.less"
+  },
+  {
+    "outputFile": "wwwroot/js/reservation/message.es5.js",
+    "inputFile": "wwwroot/js/reservation/message.js"
+  },
+  {
+    "outputFile": "wwwroot/js/member/createmember.es5.js",
+    "inputFile": "wwwroot/js/member/createmember.js"
+  },
+  {
+    "outputFile": "wwwroot/css/member/create.css",
+    "inputFile": "wwwroot/css/member/create.less"
+  }
+]

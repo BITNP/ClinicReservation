@@ -1,0 +1,26 @@
+﻿@*
+    协会成员首页
+    登陆
+*@
+@{
+    ViewData["Title"] = "NPMember";
+    ViewData["Controller"] = "member";
+    ViewData["ImportCSS"] = new List<string>() { "index" };
+    ViewData["ImportScript"] = new List<string>() { "index" };
+    ViewData["DisableLeftNavi"] = true;
+}
+
+<div>
+    <p class="np-title">MEMBER LOGIN</p>
+    <form id="form_memberlogin" method="post" asp-action="Main" asp-controller="Member" style="width: 15em;">
+        <p style="margin-bottom: 0">USERNAME</p>
+        <div id="input_username" data-control="input" data-type="text" data-name="name" type="text"></div>
+        <p style="margin-top: 1em; margin-bottom: 0">PASSWORD</p>
+        <div id="input_password" data-control="input" data-type="password" ></div>
+        <input id="input_hiddenpwd" name="pwd" type="hidden" />
+    </form>
+
+    <br />
+    <div id="btn_login" data-control="button" data-text="LOGIN" data-accent="true"></div>
+    <div id="btn_apply" data-control="button" data-text="APPLICATION" data-enabled="false"></div>
+</div>

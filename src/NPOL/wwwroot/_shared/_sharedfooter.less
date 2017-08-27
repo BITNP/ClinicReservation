@@ -1,0 +1,43 @@
+﻿@import "../css/include.less";
+
+.nppage-footer {
+    height: 3em;
+    color: #666;
+    font-size: 0.9em;
+
+    > div.left {
+        .flex-row(center);
+        flex-grow: 1;
+        margin-left: 6em;
+
+    }
+
+    > div.right {
+        .flex-row(center);
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin-right: 6em;
+    }
+}
+@media screen and (max-width: 800px) {
+    .nppage-footer {
+        > div.left {
+            margin-left: 3em;
+        }
+
+        > div.right {
+            margin-right: 3em;
+        }
+    }
+}
+@media screen and (max-width: 450px) {
+    .nppage-footer {
+        > div.left {
+            margin-left: 1em;
+        }
+
+        > div.right {
+            margin-right: 1em;
+        }
+    }
+}

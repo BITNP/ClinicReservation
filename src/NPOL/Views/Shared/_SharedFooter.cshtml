@@ -1,0 +1,16 @@
+﻿<div class="left">
+    <span class="glyphicon glyphicon-globe" style="margin-right: 0.5em; font-size: 1.2em"></span>
+    <span>简体中文 (zh-CN)</span>
+</div>
+<div class="right">
+    <span>©2017 BITNP</span>
+</div>
+
+<environment names="Development">
+    <link rel="stylesheet" href="~/_shared/_sharedfooter.css" />
+    <script src="~/_shared/_sharedfooter.es5.js"> </script>
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="~/_shared/_sharedfooter.min.css" asp-append-version="true" />
+    <script src="~/_shared/_sharedfooter.es5.min.js" asp-append-version="true"> </script>
+</environment>

@@ -1,0 +1,26 @@
+﻿<environment names="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-ext/jquery.mousewheel.min.js"></script>
+    <script src="~/lib/jquery-ext/jquery.throttle-debounce.min.js"></script>
+    <script src="~/lib/jquery-ext/jquery.md5.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/npstrap/js/controls.js"></script>
+    <script src="~/js/site.js"></script>
+    @foreach (string filename in ViewData["ImportScript"] as List<string>)
+    {
+        <script src="@Url.Content(string.Format("~/js/{0}/{1}.es5.js", ViewData["Controller"], filename))" asp-append-version="true"></script>
+    }
+</environment>
+<environment names="Staging,Production">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-ext/jquery.mousewheel.min.js"></script>
+    <script src="~/lib/jquery-ext/jquery.throttle-debounce.min.js"></script>
+    <script src="~/lib/jquery-ext/jquery.md5.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/npstrap/js/controls.min.js" ></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    @foreach (string filename in ViewData["ImportScript"] as List<string>)
+    {
+        <script src="@Url.Content(string.Format("~/js/{0}/{1}.es5.min.js", ViewData["Controller"], filename))" asp-append-version="true"></script>
+    }
+</environment>
