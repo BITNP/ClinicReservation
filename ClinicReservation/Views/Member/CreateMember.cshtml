@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using ClinicReservation.Models.Reservation
+@{
+    ViewData["Title"] = "Create Member";
+    ViewData["Controller"] = "member";
+    ViewData["ImportCSS"] = new List<string>() { "create" };
+    ViewData["ImportScript"] = new List<string>() { "createmember" };
+    ViewData["DisableLeftNavi"] = true;
+}
+<div>
+    <p class="smalltitle">创建内部成员</p>
+    <div>
+        <p class="itemname">通行证</p>
+        <div id="input_ticket" class="input-item" data-control="input" data-type="text" ></div>
+    </div>
+    <br />
+    <p class="smalltitle">登陆信息</p>
+    <div>
+        <p class="itemname">登录名</p>
+        <div id="input_loginname" class="input-item" data-control="input" data-type="text" ></div>
+        <p class="itemname">登陆密码</p>
+        <div id="input_pwd" class="input-item" data-control="input" data-type="password"></div>
+        <p class="itemname">确认密码</p>
+        <div id="input_pwd_confirm" class="input-item" data-type="password" data-control="input"></div>
+    </div>
+    <p class="smalltitle">个人信息</p>
+    <div>
+        <p class="itemname">姓名</p>
+        <div id="input_name" class="input-item" data-control="input" data-type="text"></div>
+        <p class="itemname">年级</p>
+        <div id="input_grade" class="input-item" data-control="input" data-type="number" data-value="2015"></div>
+        <p class="itemname">性别</p>
+        <div id="input_sexual" data-control="listbox" data-selected-index="2">
+            <span>Male</span>
+            <span>Female</span>
+            <span>Other</span>
+        </div>
+        <p class="itemname">所属学院</p>
+        <div id="input_school" data-control="select" data-selected-index="0">
+            @foreach (SchoolType school in ViewData["SchoolTypes"] as IEnumerable<SchoolType>)
+            {
+                <span>@school.Name</span>
+            }
+        </div>
+        <p class="itemname">上传图片</p>
+        <div id="btn_pickpic" data-control="button" data-text="选择文件"></div><br />
+        <img id="preview_img" style="max-width: 10em; max-height: 10em; margin-left: 0.25em;"/>
+    </div>
+    <div>
+        <p></p>
+    </div>
+    <br />
+    <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="创建"></div>
+    <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
+
+    <form id="hidden_submiter" asp-action="CreateMember" asp-controller="Member" enctype="multipart/form-data" method="post" style="display:none">
+        <input name="ticket" />
+        <input name="name" />
+        <input name="loginname" />
+        <input name="password" />
+        <input name="grade" />
+        <input name="sexual" />
+        <input name="school" />
+        <input name="userpic" id="userpic" type="file" style="display: none" />
+    </form>
+    <br />
+</div>
+
