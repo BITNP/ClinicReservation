@@ -23,16 +23,18 @@ namespace ClinicReservation.Controllers
     {
         public const int ITEMS_PER_PAGE = 10;
 
+        private readonly SMSService smsService;
         private readonly ReservationDbContext db;
         private readonly NPOLJwtTokenService tokenservice;
         private readonly ServiceConfig serviceConfig;
         private readonly string membersPath;
 
-        public MemberController(IHostingEnvironment env, ReservationDbContext dbcontext, NPOLJwtTokenService tokensrv, ServiceConfig serviceConfig)
+        public MemberController(IHostingEnvironment env, ReservationDbContext dbcontext, NPOLJwtTokenService tokensrv, ServiceConfig serviceConfig, SMSService smsService)
         {
             db = dbcontext;
             tokenservice = tokensrv;
             this.serviceConfig = serviceConfig;
+            this.smsService = smsService;
             membersPath = Path.Combine(env.WebRootPath, "images", "members");
         }
 

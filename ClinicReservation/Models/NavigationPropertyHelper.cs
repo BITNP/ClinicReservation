@@ -15,14 +15,14 @@ namespace ClinicReservation.Models
             if (entity == null)
                 return;
 
-            foreach(ReferenceEntry refentry in entity.References)
+            foreach (ReferenceEntry refentry in entity.References)
             {
                 if (refentry.IsLoaded == false)
                     refentry.Load();
             }
-            if(loadcollections == true)
+            if (loadcollections == true)
             {
-                foreach(CollectionEntry colentry in entity.Collections)
+                foreach (CollectionEntry colentry in entity.Collections)
                 {
                     if (colentry.IsLoaded == false)
                         colentry.Load();

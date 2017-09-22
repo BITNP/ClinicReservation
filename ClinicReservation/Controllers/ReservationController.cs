@@ -21,6 +21,7 @@ namespace ClinicReservation.Controllers
 
         private readonly ReservationDbContext db;
         private readonly NPOLJwtTokenService tokenservice;
+        private readonly SMSService smsService;
 
         private TimeSpan cancelClosedTimeout = TimeSpan.FromDays(7);
         private static Dictionary<string, int> ACTION_CODES { get; } = new Dictionary<string, int>()
@@ -34,10 +35,11 @@ namespace ClinicReservation.Controllers
             ["complete"] = 340,
         };
 
-        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice)
+        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice, SMSService smsService)
         {
             db = dbcontext;
             this.tokenservice = tokenservice;
+            this.smsService = smsService;
         }
 
         // 在线预约首页
@@ -162,7 +164,7 @@ namespace ClinicReservation.Controllers
 
         // 处理提交预约请求
         [HttpPost]
-        public IActionResult SubmitCreate(SMSService smsservice, string postername, string posterphone, string posteremail, string posterqq, string posterschool, string problemtype, string problemdetail, string location, string bookdate)
+        public IActionResult SubmitCreate(string postername, string posterphone, string posteremail, string posterqq, string posterschool, string problemtype, string problemdetail, string location, string bookdate)
         {
             string _postername = postername ?? "";
             string _posterphone = posterphone ?? "";
@@ -199,7 +201,7 @@ namespace ClinicReservation.Controllers
                 EntityEntry<ReservationDetail> entry = db.ReservationDetails.Add(detail);
                 db.SaveChanges();
                 entry.Reload();
-                smsservice.SendCreationSuccessAsync(entry.Entity);
+                smsService.SendCreationSuccessAsync(entry.Entity);
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
                 TempData["showhint"] = true;

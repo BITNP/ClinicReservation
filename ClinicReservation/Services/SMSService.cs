@@ -29,14 +29,14 @@ namespace ClinicReservation.Services
         public Task SendCreationSuccessAsync(ReservationDetail reservation)
         {
             string phone = reservation.PosterPhone;
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         // 用于向诊所人员发送短信
         // 通知有新的申请
         public Task SendReservationCreatedAsync(ReservationDetail reservation)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         // 发送短信底层
