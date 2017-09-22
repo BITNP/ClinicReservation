@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,20 @@ namespace ClinicReservation.Models.Reservation
     {
         public ReservationDbContext CreateDbContext(string[] args)
         {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            IConfigurationRoot configurationRoot = new ConfigurationBuilder()
+                .SetBasePath(basePath)
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{envName}.json", true)
+                .Build();
+            string connectionString = configurationRoot.GetConnectionString("reservationData");
+
             DbContextOptionsBuilder<ReservationDbContext> builder = new DbContextOptionsBuilder<ReservationDbContext>();
-            builder = builder.UseMySql("Server=aws-kr-mysql-5627.ct3t40831ye1.ap-northeast-2.rds.amazonaws.com;Port=3306;Database=bitnp_online_reservation;Uid=bitnp;Pwd=awsKRb1tNP2016;");
+            builder = builder.UseSqlServer(connectionString);
             return new ReservationDbContext(builder.Options);
         }
+
     }
     public class ReservationDbContext : DbContext
     {

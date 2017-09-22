@@ -52,7 +52,7 @@ namespace ClinicReservation
                 options.Cookie.Name = serviceConfig.SessionName;
             });
 
-            services.AddDbContext<ReservationDbContext>(options => options.UseMySql(serviceConfig.ConnectionString));
+            services.AddDbContext<ReservationDbContext>(options => options.UseSqlServer(serviceConfig.ConnectionString));
 
             services.AddSingleton<NPOLJwtTokenService>(provider =>
             {
