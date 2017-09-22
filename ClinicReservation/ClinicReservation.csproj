@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/c702710e-a3bb-464e-abf9-f4d881c3d25c/resourcegroups/bitnp-clinic-res/providers/microsoft.insights/components/bitnp-clinic-res</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/c702710e-a3bb-464e-abf9-f4d881c3d25c/resourcegroups/bitnp-clinic-res/providers/microsoft.insights/components/bitnp-clinic-res</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   
   <ItemGroup>
@@ -11,8 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>

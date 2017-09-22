@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -6,6 +7,7 @@
     <title>@ViewData["Title"]</title>
 
     @Html.Partial("_StyleImport", ViewData)
+    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <div class="nppage-header">
