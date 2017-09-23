@@ -193,7 +193,8 @@ namespace ClinicReservation.Controllers
                     CreateDate = now,
                     ModifiedDate = now,
                     ReservationDate = _reservationDate,
-                    State = ReservationState.NewlyCreated
+                    State = ReservationState.NewlyCreated,
+                    LastUpdatedLanguage = cultureContext.Culture.Language
                 };
                 EntityEntry<ReservationDetail> entry = db.ReservationDetails.Add(detail);
                 db.SaveChanges();
@@ -367,6 +368,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.NewlyCreated || _detail.State == ReservationState.Answered)
             {
                 _detail.State = ReservationState.Cancelled;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -383,6 +385,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Cancelled)
             {
                 _detail.State = ReservationState.ClosedWithoutComplete;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -399,6 +402,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Cancelled)
             {
                 _detail.State = ReservationState.NewlyCreated;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -440,6 +444,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Answered)
             {
                 _detail.State = ReservationState.Completed;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -519,6 +524,7 @@ namespace ClinicReservation.Controllers
                 _detail.ProblemType = _problemType;
                 _detail.Detail = problemdetail;
                 _detail.ModifiedDate = now;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ReservationDate = _reservationDate;
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
