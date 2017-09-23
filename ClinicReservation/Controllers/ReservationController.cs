@@ -23,6 +23,7 @@ namespace ClinicReservation.Controllers
         private readonly ReservationDbContext db;
         private readonly NPOLJwtTokenService tokenservice;
         private readonly SMSService smsService;
+        private readonly CultureContext cultureContext;
         private readonly ICaptchaProtectionProvider captchaProtectionProvider;
         private readonly IHumanReadableIntegerProvider humanReadableIntegerProvider;
         private TimeSpan cancelClosedTimeout = TimeSpan.FromDays(7);
@@ -43,6 +44,7 @@ namespace ClinicReservation.Controllers
             db = dbcontext;
             this.tokenservice = tokenservice;
             this.smsService = smsService;
+            this.cultureContext = cultureContext;
             this.captchaProtectionProvider = captchaProtectionProvider;
             this.humanReadableIntegerProvider = humanReadableIntegerProvider;
         }
@@ -195,8 +197,8 @@ namespace ClinicReservation.Controllers
                 };
                 EntityEntry<ReservationDetail> entry = db.ReservationDetails.Add(detail);
                 db.SaveChanges();
-                entry.Reload();
-                smsService.SendCreationSuccessAsync(entry.Entity);
+                smsService.SendCreationSuccessAsync(entry.Entity, cultureContext.Culture);
+                smsService.SendReservationCreatedAsync(entry.Entity);
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
                 TempData["showhint"] = true;
@@ -369,6 +371,7 @@ namespace ClinicReservation.Controllers
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
+                smsService.SendReservationCancelledAsync(entry.Entity);
             }
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -384,6 +387,7 @@ namespace ClinicReservation.Controllers
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
+                smsService.SendReservationClosedAsync(entry.Entity);
             }
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -416,6 +420,7 @@ namespace ClinicReservation.Controllers
                 };
                 db.ReservationBoardMessages.Add(boardmessage);
                 db.SaveChanges();
+
             }
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -519,6 +524,7 @@ namespace ClinicReservation.Controllers
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
                 entry.Reload();
+                smsService.SendReservationUpdatedAsync(entry.Entity);
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
                 return RedirectToActionPermanent(nameof(Detail));

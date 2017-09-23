@@ -26,7 +26,15 @@ namespace ClinicReservation.Services
 
         // 用于向申请者发送短信
         // 通知创建申请成功
-        public Task SendCreationSuccessAsync(ReservationDetail reservation)
+        public Task SendCreationSuccessAsync(ReservationDetail reservation, CultureExpression culture)
+        {
+            string phone = reservation.PosterPhone;
+            return Task.CompletedTask;
+        }
+
+        // 用于向申请者发送短信
+        // 通知已受理
+        public Task SendAnsweredAsync(ReservationDetail reservation)
         {
             string phone = reservation.PosterPhone;
             return Task.CompletedTask;
@@ -38,6 +46,31 @@ namespace ClinicReservation.Services
         {
             return Task.CompletedTask;
         }
+
+        // 用于向诊所人员发送短信
+        // 通知申请被用户主动关闭
+        public Task SendReservationClosedAsync(ReservationDetail reservation)
+        {
+            string phone = reservation.PosterPhone;
+            return Task.CompletedTask;
+        }
+
+        // 用于向诊所人员发送短信
+        // 通知申请被用户主动取消
+        public Task SendReservationCancelledAsync(ReservationDetail reservation)
+        {
+            string phone = reservation.PosterPhone;
+            return Task.CompletedTask;
+        }
+
+        // 用于向诊所人员发送短信
+        // 当预约更改时通知受理该问题的人员
+        public Task SendReservationUpdatedAsync(ReservationDetail reservation)
+        {
+            string phone = reservation.PosterPhone;
+            return Task.CompletedTask;
+        }
+
 
         // 发送短信底层
         private Task SendSMSAsync(string phone, string message)
