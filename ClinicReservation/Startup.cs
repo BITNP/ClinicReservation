@@ -22,8 +22,7 @@ namespace ClinicReservation
 {
     public class Startup
     {
-        private ILogger smsLogger;
-        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -33,8 +32,6 @@ namespace ClinicReservation
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-
-            smsLogger = loggerFactory.CreateLogger("sms");
         }
         public IConfigurationRoot Configuration { get; }
 
@@ -84,7 +81,7 @@ namespace ClinicReservation
                 return serv;
             });
 
-            services.AddSingleton<SMSService>(provider => new SMSService(serviceConfig, smsLogger));
+            services.AddSingleton<SMSService>();
 
             services.AddDNTCaptcha();
 

@@ -16,12 +16,12 @@ namespace ClinicReservation.Services
 
         private string smsuri;
         private ILogger logger;
-        public SMSService(ServiceConfig serviceConfig, ILogger smsLogger)
+        public SMSService(ServiceConfig serviceConfig, ILoggerFactory loggerFactory)
         {
             if (serviceConfig.SMSApi == null)
                 throw new Exception("SMS Api not configured");
             smsuri = serviceConfig.SMSApi;
-            this.logger = smsLogger;
+            this.logger = loggerFactory.CreateLogger<SMSService>();
         }
 
         // 用于向申请者发送短信
