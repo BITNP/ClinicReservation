@@ -6,9 +6,28 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Text;
+using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization;
 
 namespace ClinicReservation.Services
 {
+    [DataContract]
+    public class SMSResponse
+    {
+        [DataMember]
+        public int Code { get; set; }
+
+        [DataMember]
+        public string Msg { get; set; }
+
+        [DataMember]
+        public int Count { get; set; }
+
+        [DataMember]
+        public long Sid { get; set; }
+    }
+
     public sealed class SMSService
     {
         public static readonly EventId SUCCESS_EVENT = new EventId(0, "sms_success");
@@ -79,6 +98,16 @@ namespace ClinicReservation.Services
             {
                 HttpWebRequest request = HttpWebRequest.CreateHttp(smsuri);
                 // TODO: 填写发送短信逻辑
+                string apikey = " ";
+                string data_send_sms = "apikey=" + apikey + "&mobile=" + phone + "&text=" + message;
+                byte[] postdatabyte = Encoding.UTF8.GetBytes(data_send_sms);
+                request.ContentLength = postdatabyte.Length;
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                Stream requestStream = request.GetRequestStream();
+                requestStream.Write(postdatabyte, 0, postdatabyte.Length);
+                requestStream.Close();
 
                 try
                 {
@@ -88,11 +117,19 @@ namespace ClinicReservation.Services
                     string responseContent = await responseReader.ReadToEndAsync();
                     // TODO: 填写完成逻辑
 
-                    logger.LogInformation(SUCCESS_EVENT, $"to:{phone}");
+                    var ms = new MemoryStream(Encoding.Unicode.GetBytes(responseContent));
+                    DataContractJsonSerializer deseralizer = new DataContractJsonSerializer(typeof(SMSResponse));
+                    SMSResponse sMSResponse = (SMSResponse)deseralizer.ReadObject(ms); //反序列化ReadObject
+                    if(sMSResponse.Code != 0)
+                    {
+                        throw new Exception(sMSResponse.Msg);
+                    }
+
+                    logger.LogInformation(SUCCESS_EVENT, $"to:{phone},{sMSResponse.Msg}");
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(FAILED_EVENT, ex, $"to:{phone}");
+                    logger.LogError(FAILED_EVENT, ex, $"to:{phone},{ex}");
                 }
             });
         }
