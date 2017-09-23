@@ -12,6 +12,7 @@ using System.Text;
 using ClinicReservation.Services;
 using Microsoft.AspNetCore.Http;
 using ClinicReservation.Helpers;
+using DNTCaptcha.Core.Contracts;
 
 namespace ClinicReservation.Controllers
 {
@@ -22,7 +23,8 @@ namespace ClinicReservation.Controllers
         private readonly ReservationDbContext db;
         private readonly NPOLJwtTokenService tokenservice;
         private readonly SMSService smsService;
-
+        private readonly ICaptchaProtectionProvider captchaProtectionProvider;
+        private readonly IHumanReadableIntegerProvider humanReadableIntegerProvider;
         private TimeSpan cancelClosedTimeout = TimeSpan.FromDays(7);
         private static Dictionary<string, int> ACTION_CODES { get; } = new Dictionary<string, int>()
         {
@@ -35,11 +37,14 @@ namespace ClinicReservation.Controllers
             ["complete"] = 340,
         };
 
-        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice, SMSService smsService, CultureContext cultureContext) : base(cultureContext)
+        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice, SMSService smsService, CultureContext cultureContext,
+            ICaptchaProtectionProvider captchaProtectionProvider, IHumanReadableIntegerProvider humanReadableIntegerProvider) : base(cultureContext)
         {
             db = dbcontext;
             this.tokenservice = tokenservice;
             this.smsService = smsService;
+            this.captchaProtectionProvider = captchaProtectionProvider;
+            this.humanReadableIntegerProvider = humanReadableIntegerProvider;
         }
 
         // 在线预约首页
@@ -136,12 +141,30 @@ namespace ClinicReservation.Controllers
 
         // 处理提交预约请求
         [HttpPost]
-        public IActionResult SubmitCreate(string postername, string posterphone, string posteremail, string posterqq, string posterschool, string problemtype, string problemdetail, string location, string bookdate)
+        public IActionResult Create(string postername, string posterphone, string posteremail, string posterqq, string posterschool, string problemtype, string problemdetail, string location, string bookdate, string captchaText, string captchaToken)
         {
             string _postername = postername ?? "";
             string _posterphone = posterphone ?? "";
             string _posteremail = posteremail ?? "";
             string _posterqq = posterqq ?? "";
+
+            if (!IsCaptchaValidate(captchaText, captchaToken))
+            {
+                ViewData["CaptchaError"] = true;
+                ViewData["Name"] = _postername;
+                ViewData["Phone"] = _posterphone;
+                ViewData["Email"] = _posteremail;
+                ViewData["QQ"] = _posterqq;
+                ViewData["ProblemDetail"] = problemdetail;
+                ViewData["School"] = posterschool;
+                ViewData["ProblemType"] = problemtype;
+                ViewData["Location"] = location;
+                ViewData["BookDate"] = bookdate;
+                ViewData["SchoolTypes"] = db.SchoolTypes.OrderBy(type => type.Id);
+                ViewData["ProblemTypes"] = db.ProblemTypes.OrderBy(type => type.Id);
+                ViewData["LocationTypes"] = db.LocationTypes.OrderBy(type => type.Id);
+                return View();
+            }
 
             DateTime _reservationDate;
             DateTime now = DateTimeHelper.GetBeijingTime();
@@ -575,6 +598,16 @@ namespace ClinicReservation.Controllers
                 ["phone"] = detail.GetShortenPhone()
             };
             return tokenservice.Encrypt(option);
+        }
+
+        private bool IsCaptchaValidate(string captchaText, string captchaToken)
+        {
+            string token = captchaProtectionProvider.Decrypt(captchaToken);
+            int number;
+            if (!int.TryParse(captchaText, out number))
+                return false;
+            string text = humanReadableIntegerProvider.NumberToText(number, DNTCaptcha.Core.Providers.Language.English);
+            return text == token;
         }
 
     }

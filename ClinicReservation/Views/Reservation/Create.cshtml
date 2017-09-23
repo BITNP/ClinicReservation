@@ -3,6 +3,7 @@
 *@
 @using ClinicReservation.Models.Reservation
 @using ClinicReservation.Helpers
+@addTagHelper *, DNTCaptcha.Core
 @{
     ViewData["Title"] = "填写预约";
     ViewData["Controller"] = "reservation";
@@ -10,12 +11,75 @@
     ViewData["ImportScript"] = new List<string>() { "create" };
     ViewData["DisableLeftNavi"] = true;
 
+    IEnumerable<SchoolType> schools = ViewData["SchoolTypes"] as IEnumerable<SchoolType>;
+    IEnumerable<ProblemType> problemTypes = ViewData["ProblemTypes"] as IEnumerable<ProblemType>;
+    IEnumerable<LocationType> locationTypes = ViewData["LocationTypes"] as IEnumerable<LocationType>;
+
     // 生成日期
     DateTime currentDate = DateTimeHelper.GetBeijingTime();
     DateTime longestDate = currentDate + TimeSpan.FromDays(14);
     string[] datenames = ClinicReservation.Models.DateHelper.GetDateStrings();
-}
 
+    bool showCaptchaError = ViewData.ContainsKey("CaptchaError");
+    string name = "";
+    string phone = "";
+    string email = "";
+    string qq = "";
+    string problemdetail = "";
+    string bookdate = currentDate.ToString("yyyy/MM/dd");
+    int schoolIndex = 0;
+    int typeIndex = 0;
+    int locationIndex = 0;
+    int datediff = 0;
+    if (showCaptchaError)
+    {
+        name = ViewData["Name"] as string;
+        phone = ViewData["Phone"] as string;
+        email = ViewData["Email"] as string;
+        qq = ViewData["QQ"] as string;
+        bookdate = ViewData["BookDate"] as string;
+        DateTime formBookDate = DateTime.Parse(bookdate);
+        datediff = (int)Math.Ceiling((formBookDate - currentDate).TotalDays);
+        problemdetail = ViewData["ProblemDetail"] as string;
+        string schoolname = ViewData["School"] as string;
+        string typename = ViewData["ProblemType"] as string;
+        string locationname = ViewData["Location"] as string;
+        int index = 0;
+        foreach(SchoolType school in schools)
+        {
+            if (school.Name == schoolname)
+            {
+                schoolIndex = index;
+                break;
+            }
+            index++;
+        }
+        index = 0;
+        foreach (ProblemType pt in problemTypes)
+        {
+            if (pt.Name == typename)
+            {
+                typeIndex = index;
+                break;
+            }
+            index++;
+        }
+        index = 0;
+        foreach (LocationType lt in locationTypes)
+        {
+            if (lt.Name == locationname)
+            {
+                locationIndex = index;
+                break;
+            }
+            index++;
+        }
+    }
+}
+<script>
+    window.showCaptchaError = @(showCaptchaError.ToString().ToLower());
+    window.captchaErrorText = "验证码错误";
+</script>
 <div>
     <p class="smalltitle">我们的建议</p>
     <div>
@@ -26,23 +90,23 @@
     <p class="smalltitle">个人信息</p>
     <div>
         <p class="itemname">姓名</p>
-        <div id="input_name" data-control="input" class="input-item" data-type="text" ></div>
+        <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
         <p id="input_name_hint" class="info-base info-hint">[可选] 留下您的姓名以方便我们称呼您。</p>
         <p class="itemname">联系电话</p>
-        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number" ></div>
+        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
         <p id="input_phone_hint" class="info-base info-hint">[可选] 留下电话号码以便我们与您沟通。</p>
         <p id="input_phone_err" class="info-base info-error">[错误] 电话号码格式错误。</p>
         <p class="itemname">邮箱</p>
-        <div id="input_email" class="input-item" data-control="input" data-type="text" ></div>
+        <div id="input_email" class="input-item" data-control="input" data-type="text" data-value="@email"></div>
         <p id="input_mail_hint" class="info-base info-hint">[可选] 留下邮箱以便我们与您沟通。</p>
         <p id="input_mail_err" class="info-base info-error">[错误] 邮箱格式错误。</p>
-        <p class="itemname">QQ</p>
-        <div id="input_qqnumber" class="input-item" data-control="input" data-type="number" ></div>
+        <p class="itemname">QQ/Wechat</p>
+        <div id="input_qqnumber" class="input-item" data-control="input" data-type="number" data-value="@qq"></div>
         <p id="input_qq_hint" class="info-base info-hint">[可选] 留下QQ号码以便我们与您沟通。</p>
         <p id="input_qq_err" class="info-base info-error">[错误] QQ号码格式错误。</p>
         <p class="itemname">所属学院</p>
-        <div id="input_posterschool" data-control="select" data-selected-index="0">
-            @foreach (SchoolType school in ViewData["SchoolTypes"] as IEnumerable<SchoolType>)
+        <div id="input_posterschool" data-control="select" data-selected-index="@schoolIndex">
+            @foreach (SchoolType school in schools)
             {
                 <span>@school.Name</span>
             }
@@ -53,8 +117,8 @@
     <p class="smalltitle">问题描述</p>
     <div>
         <p class="itemname">问题类型</p>
-        <div id="input_questiontype" data-control="listbox" data-selected-index="0">
-            @foreach (ProblemType pt in ViewData["ProblemTypes"] as IEnumerable<ProblemType>)
+        <div id="input_questiontype" data-control="listbox" data-selected-index="@typeIndex">
+            @foreach (ProblemType pt in problemTypes)
             {
                 <span>@pt.Name</span>
             }
@@ -66,26 +130,53 @@
     <p class="smalltitle">预约信息</p>
     <div>
         <p class="itemname">预约地点</p>
-        <div id="input_location" data-control="listbox" data-selected-index="0">
-            @foreach (LocationType loc in ViewData["LocationTypes"] as IEnumerable<LocationType>)
+        <div id="input_location" data-control="listbox" data-selected-index="@locationIndex">
+            @foreach (LocationType loc in locationTypes)
             {
                 <span>@loc.Name</span>
             }
         </div>
         <p class="itemname">预约时间</p>
         <div class="date-quick-pick">
-            <p class="selected unselectable"><span>今天</span></p>
+            @if (datediff == 0)
+            {
+                <p class="selected unselectable"><span>今天</span></p>
+            }
+            else
+            {
+                <p class="unselectable"><span>今天</span></p>
+            }
+            
             @for (int i = 1; i < datenames.Length; i++)
             {
-                @Html.Raw("<p class='unselectable'><span>" + datenames[i] + "</span></p>");
+                @if (datediff == i)
+                {
+                    @Html.Raw("<p class='selected unselectable'><span>" + datenames[i] + "</span></p>");
+                }
+                else
+                {
+                    @Html.Raw("<p class='unselectable'><span>" + datenames[i] + "</span></p>");
+                }
+
             }
         </div>
-        <div id="input_bookdate" data-control="datepicker" data-value="@currentDate.ToString("yyyy/MM/dd")" data-mindate="@currentDate.ToString("yyyy/MM/dd")" data-maxdate="@longestDate.ToString("yyyy/MM/dd")"></div>
+        <div id="input_bookdate" data-control="datepicker" data-value="@bookdate" data-mindate="@currentDate.ToString("yyyy/MM/dd")" data-maxdate="@longestDate.ToString("yyyy/MM/dd")"></div>
     </div>
+    <p class='itemname'>验证码</p>
+    <dnt-captcha asp-captcha-generator-max="9876"
+                 asp-captcha-generator-min="1234"
+                 asp-captcha-generator-language="English"
+                 asp-font-name="Tahoma"
+                 asp-font-size="20"
+                 asp-fore-color="#333333"
+                 asp-back-color="#ccc"
+                 asp-text-box-template="<div id='input_captcha' class='input-item' data-control='input' data-type='number' data-placeholder='输入图片代表的数字'></div>"
+                 asp-refresh-button-class="no-display" />
     <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="提交申请"></div>
     <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
 
-    <form id="hidden_submiter" asp-action="SubmitCreate" asp-controller="Reservation" method="post" style="display:none">
+    <textarea id="hidden_problemdetail" style="display: none">@problemdetail</textarea>
+    <form id="hidden_submiter" asp-action="Create" asp-controller="Reservation" method="post" style="display:none">
         <input name="postername" />
         <input name="posterphone" />
         <input name="posteremail" />
@@ -95,6 +186,8 @@
         <textarea name="problemdetail"></textarea>
         <input name="location" />
         <input name="bookdate" />
+        <input name="captchaText" />
+        <input name="captchaToken" />
     </form>
     <br />
 </div>

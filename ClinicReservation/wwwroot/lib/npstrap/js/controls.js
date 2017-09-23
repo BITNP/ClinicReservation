@@ -377,10 +377,10 @@
             var index = parseInt(dataset_helper.read(box, "selected-index"));
             if (!index && index != 0) {
                 if (findrecord != undefined) {
-                    dataset_helper.set(box, "selectedindex", findrecord);
+                    dataset_helper.set(box, "selected-index", findrecord);
                     index = findrecord;
                 } else {
-                    dataset_helper.set(box, "selectedindex", -1);
+                    dataset_helper.set(box, "selected-index", -1);
                     index = -1;
                 }
             }

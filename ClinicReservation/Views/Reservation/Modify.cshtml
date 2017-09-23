@@ -20,7 +20,7 @@
     {
         bookedDate = currentDate;
     }
-    int datediff = (int)Math.Ceiling((bookedDate - currentDate).TotalDays);
+    int datediff = (int)Math.Floor((bookedDate - currentDate).TotalDays);
 
     string[] datenames = ClinicReservation.Models.DateHelper.GetDateStrings();
 }
@@ -28,28 +28,28 @@
 <div>
     <p class="smalltitle">预约信息</p>
     <div>
-        <p class="itemname">ID: @Model.Id</p>
+        <p class="itemname">标识ID: @Model.Id</p>
     </div>
 
     <p class="smalltitle">个人信息</p>
     <div>
         <p class="itemname">姓名</p>
-        <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@Model.PosterName"></div> <br />
+        <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@Model.PosterName"></div>
         <p id="input_name_hint" class="info-base info-hint">[可选] 留下您的姓名以方便我们称呼您。</p>
         <p class="itemname">联系电话</p>
-        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number" data-value="@Model.PosterPhone"></div> <br />
+        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number" data-value="@Model.PosterPhone"></div>
         <p id="input_phone_hint" class="info-base info-hint">[可选] 留下电话号码以便我们与您沟通。</p>
         <p id="input_phone_err" class="info-base info-error">[错误] 电话号码格式错误。</p>
         <p class="itemname">邮箱</p>
-        <div id="input_email" class="input-item" data-control="input" data-type="text" data-value="@Model.PosterEmail"></div> <br />
+        <div id="input_email" class="input-item" data-control="input" data-type="text" data-value="@Model.PosterEmail"></div>
         <p id="input_mail_hint" class="info-base info-hint">[可选] 留下邮箱以便我们与您沟通。</p>
         <p id="input_mail_err" class="info-base info-error">[错误] 邮箱格式错误。</p>
         <p class="itemname">QQ</p>
-        <div id="input_qqnumber" class="input-item" data-control="input" data-type="number" data-value="@Model.PosterQQ"></div> <br />
+        <div id="input_qqnumber" class="input-item" data-control="input" data-type="number" data-value="@Model.PosterQQ"></div>
         <p id="input_qq_hint" class="info-base info-hint">[可选] 留下QQ号码以便我们与您沟通。</p>
         <p id="input_qq_err" class="info-base info-error">[错误] QQ号码格式错误。</p>
         <p class="itemname">所属学院</p>
-        <div id="input_posterschool" data-control="listbox" data-selected-item="@Model.PosterSchoolType.Name">
+        <div id="input_posterschool" data-control="select" data-selected-item="@Model.PosterSchoolType.Name">
             @foreach (SchoolType school in ViewData["SchoolTypes"] as IEnumerable<SchoolType>)
             {
                 @Html.Raw("<span>" + school.Name + "</span>")
@@ -67,7 +67,7 @@
             }
         </div>
         <p class="itemname">详细信息（大于五个字）</p>
-        <textarea id="input_detail" class="input-item" style="resize: none; height: 8em">@Model.Detail</textarea>
+        <div id="input_detail" class="input-item" data-control="input" data-type="textarea" style="resize: none; height: 8em"></div>
     </div>
 
     <p class="smalltitle">预约信息</p>
@@ -98,7 +98,8 @@
     </div>
     <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="确认修改"></div>
     <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
-
+    
+    <textarea id="hidden_problemdetail" style="display: none">@Model.Detail</textarea>
     <form id="hidden_submiter" asp-action="SubmitModify" asp-controller="Reservation" method="post" style="display:none">
         <input name="id" value="@ViewData["id"]"/>
         <input name="phone" value="@ViewData["phone"]"/>

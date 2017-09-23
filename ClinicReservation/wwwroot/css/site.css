@@ -9,6 +9,9 @@ body {
   min-height: 100%;
   position: relative;
 }
+.no-display {
+  display: none;
+}
 .nppage-header,
 .nppage-footer {
   position: relative;
