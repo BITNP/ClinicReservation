@@ -13,7 +13,7 @@ namespace ClinicReservation.Services
         public string SecurityKey { get; set; }
         public string SMSApi { get; set; }
         public string RegisterationTicket { get; set; }
-
+        
         public static string ReadTicket()
         {
             try

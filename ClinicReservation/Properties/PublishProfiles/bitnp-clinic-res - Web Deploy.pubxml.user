@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 This file is used by the publish/package process of your Web project. You can customize the behavior of this process
 by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
@@ -6,12 +6,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAANCscRFE2CE2GKEOPedrA6QAAAAACAAAAAAAQZgAAAAEAACAAAAA38ym5g/1orkMtyt+OFT8NeZqhMqxBw8JTcqG1+lSFmAAAAAAOgAAAAAIAACAAAAAP/oMqUMGqzAv8vNOIn9dbi31H3u52ODICZWlgNLrd7IAAAAAqpx7GBHSzyVX6gNceyjmDEEGE5y72vSLiR02n+oguH1BrsuANf9e0vtlIQcYqFB7kN1ayWcuT4P+qBYescAPpXj6uXJC5SBLyiCesEFzg64s167sZbZ0EKsh2LjKVz90lSORtIQ1r+WqN57LAfoa0Kz0ocqslWI2oksQ3T2oRAUAAAADldBDiyYfV5cAdyMEoG0OoARTmqjxda+h20IXt7nzYtetHidq/qWGjckuWpjTufnO5za1nwKsB8BB24H9mjypX</EncryptedPassword>
-    <_NewBackgroundProfile>False</_NewBackgroundProfile>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAxzdIP6i/eU2o9hI8Zs0qjgAAAAACAAAAAAAQZgAAAAEAACAAAAD8hY4NwtgJ+v+ia2hWhbX8HKCivsozDdFA+JukB6I2NQAAAAAOgAAAAAIAACAAAADgd+O0wFshtUvU0zLtgIVKFfWkeWinepmtejV5XuGBIYAAAACrv/8jiPVvNdSbYY/6ZtoFJLsFrYOEG768c+I/8wqDN8HzvT+1Zrqa1MFT2vEaerZV2Dd7XCDi2sfnzzHgZksKA558BW22pLictRm6QsZfi4E4GMM6yBvOfRCvXITMybQJxbHD52OiWDYqmfepWxxpRqhB43WyuvAEdbpXmBxHm0AAAADqVEaXIp4E04jhmhx4mDjB1h367+zXGJ6GvL4HZOsbHbFKNtuRGRMkkdugbo70vjwKvKStrlu5eEps/G7/rH+/</EncryptedPassword>
   </PropertyGroup>
-  <ItemGroup>
-    <DestinationConnectionStrings Include="reservationData">
-      <Value>Server=aws-kr-mysql-5627.ct3t40831ye1.ap-northeast-2.rds.amazonaws.com;Port=3306;Database=bitnp_online_reservation;Uid=bitnp;Pwd=awsKRb1tNP2016;</Value>
-    </DestinationConnectionStrings>
-  </ItemGroup>
 </Project>

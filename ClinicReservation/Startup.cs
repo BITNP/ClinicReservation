@@ -14,6 +14,8 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using ClinicReservation.Models;
 using ClinicReservation.Services;
+using ClinicReservation.Middlewares;
+using ClinicReservation.Controllers;
 
 namespace ClinicReservation
 {
@@ -26,6 +28,7 @@ namespace ClinicReservation
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("lang.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -81,6 +84,13 @@ namespace ClinicReservation
             });
 
             services.AddSingleton<SMSService>(provider => new SMSService(serviceConfig, smsLogger));
+
+
+            string defaultLanguage = Configuration["Language:Default"];
+            IEnumerable<string> supportedLanguages = Configuration.GetSection("Language:Supported").AsEnumerable().Where(x => x.Value != null).Select(x => x.Value);
+            services.AddSingleton<CultureOptions>(provider => new CultureOptions(defaultLanguage, supportedLanguages));
+            services.AddScoped<CultureContext>();
+            services.AddSingleton<LocalizedViewFindExecutor>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -100,6 +110,8 @@ namespace ClinicReservation
             }
 
             app.UseStaticFiles();
+
+            app.UseLocalization();
 
             app.UseSession();
 

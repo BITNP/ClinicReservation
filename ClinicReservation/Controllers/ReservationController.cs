@@ -15,7 +15,7 @@ using ClinicReservation.Helpers;
 
 namespace ClinicReservation.Controllers
 {
-    public class ReservationController : Controller
+    public class ReservationController : LocalizedViewFindableController
     {
         public const int ITEMS_PER_PAGE = 10;
 
@@ -35,7 +35,7 @@ namespace ClinicReservation.Controllers
             ["complete"] = 340,
         };
 
-        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice, SMSService smsService)
+        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice, SMSService smsService, CultureContext cultureContext) : base(cultureContext)
         {
             db = dbcontext;
             this.tokenservice = tokenservice;

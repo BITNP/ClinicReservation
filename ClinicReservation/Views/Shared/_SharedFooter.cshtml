@@ -1,5 +1,22 @@
-﻿<div class="left">
+﻿@using ClinicReservation.Controllers
+@inject ClinicReservation.Services.CultureContext cultureContext
+@{
+    LanguageRequestResult language = null;
+    string requestedLanguage = "";
+    object langObj;
+    if (ViewData.TryGetValue("Language", out langObj) && langObj is LanguageRequestResult)
+    {
+        language = (LanguageRequestResult)langObj;
+        requestedLanguage = language.RequestedLanguage;
+    }
+    else
+    {
+        requestedLanguage = cultureContext.Culture.Language;
+    }
+}
+<div class="left">
     <span class="glyphicon glyphicon-globe" style="margin-right: 0.5em; font-size: 1.2em"></span>
+    <span>@requestedLanguage</span>
     <span>Copyright © 1997-@DateTime.Now.ToString("yyyy") NetPioneer Association All Rights Reserved.</span>
 </div>
 <div class="right">

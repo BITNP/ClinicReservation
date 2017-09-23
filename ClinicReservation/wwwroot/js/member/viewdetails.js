@@ -1,5 +1,10 @@
 ﻿(function () {
     "use strict";
+
+    var btn_msg_viewall_click = function () {
+        
+    };
+
     var btn_nextpage_click = function () {
         var loc = window.location.origin + window.location.pathname;
         var search = window.location.search;
@@ -186,6 +191,10 @@
         });
         $(".complete_detail").each(function () {
             this.context.events.add("flyout_showing", btn_markcomplete_flyoutshow);
+        });
+
+        $("#btn_msg_viewall").each(function () {
+            this.context.events.add("click", btn_msg_viewall_click);
         });
 
         $("#btn_id_filter")[0].context.events.add("click", btn_id_filter_click);

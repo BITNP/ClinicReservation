@@ -1,0 +1,39 @@
+﻿@*
+    在线预约系统首页
+
+    提供查询入口和创建预约入口
+*@
+
+@{
+    ViewData["Title"] = "预约系统";
+    ViewData["Controller"] = "reservation";
+    ViewData["ImportCSS"] = new List<string>() { "index" };
+    ViewData["ImportScript"] = new List<string>() { "index" };
+    ViewData["DisableLeftNavi"] = true;
+}
+<div style="display: flex; flex-direction:row; justify-content: center; flex-wrap: wrap;">
+    
+    <div class="np-section">
+        <p class="np-title">查询预约信息</p>
+        <form id="form_queryreservation" method="post" asp-action="Detail" asp-controller="Reservation" >
+            <p style="margin-bottom: 0">预约号</p>
+            <div id="input_id" data-control="input" data-type="number" data-name="id" style="width: calc(100% - 2em)"></div>
+            <p style="margin-top: 1em; margin-bottom: 0">电话后四位</p>
+            <div id="input_phonenum" data-control="input" data-type="number" data-name="phone" style="width: calc(100% - 2em)"></div>
+        </form>
+        
+        <br />
+        <div id="btn_query" data-control="button" data-text="查询" data-accent="true"></div>
+        <br />
+        <br />
+    </div>
+    <div class="np-section">
+        <p class="np-title">填写预约信息</p>
+        <p>向我们发起预约请求</p>
+        
+        <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
+        <div id="btn_create" data-control="button" data-text="填写预约"></div>
+        <br />
+        <br />
+    </div>
+</div>
