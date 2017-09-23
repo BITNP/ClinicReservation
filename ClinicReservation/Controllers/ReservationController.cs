@@ -67,6 +67,16 @@ namespace ClinicReservation.Controllers
             return View();
         }
 
+        /// 图形验证码
+        public IActionResult ValidateCode([FromServices]VierificationCodeServices _vierificationCodeServices)
+        {
+            string code = "";
+            System.IO.MemoryStream ms = _vierificationCodeServices.Create(out code);
+            HttpContext.Session.SetString("LoginValidateCode", code);
+            Response.Body.Dispose();
+            return File(ms.ToArray(), @"image/png");
+        }
+
         // 查看预约信息
         [HttpPost]
         public IActionResult Detail(string id, string phone)

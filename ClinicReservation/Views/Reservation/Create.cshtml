@@ -82,6 +82,15 @@
         </div>
         <div id="input_bookdate" data-control="datepicker" data-value="@currentDate.ToString("yyyy/MM/dd")" data-mindate="@currentDate.ToString("yyyy/MM/dd")" data-maxdate="@longestDate.ToString("yyyy/MM/dd")"></div>
     </div>
+
+    <p class="smalltitle">验证码</p>
+    <div>
+        <div id="input_captcha" class="input-item" data-control="input" data-type="number"></div>
+        <img id="imgVerify" src="/sysmanage/account/ValidateCode" alt="看不清？点击更换" onclick="this.src = this.src + '?'" style="vertical-align:middle;" />
+        <p id="input_captcha_hint" class="info-base info-hint">[必填] 请输入验证码。</p>
+        <p id="input_captcha_err" class="info-base info-error">[错误] 验证码输入错误。</p>
+    </div>
+
     <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="提交申请"></div>
     <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
 
@@ -95,6 +104,7 @@
         <textarea name="problemdetail"></textarea>
         <input name="location" />
         <input name="bookdate" />
+        <input name="captcha" />
     </form>
     <br />
 </div>
