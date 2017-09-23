@@ -16,6 +16,7 @@ using ClinicReservation.Models;
 using ClinicReservation.Services;
 using ClinicReservation.Middlewares;
 using ClinicReservation.Controllers;
+using DNTCaptcha.Core;
 
 namespace ClinicReservation
 {
@@ -85,6 +86,7 @@ namespace ClinicReservation
 
             services.AddSingleton<SMSService>(provider => new SMSService(serviceConfig, smsLogger));
 
+            services.AddDNTCaptcha();
 
             string defaultLanguage = Configuration["Language:Default"];
             IEnumerable<string> supportedLanguages = Configuration.GetSection("Language:Supported").AsEnumerable().Where(x => x.Value != null).Select(x => x.Value);

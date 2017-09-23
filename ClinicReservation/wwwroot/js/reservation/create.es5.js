@@ -67,6 +67,10 @@
         form.find("[name='problemtype']")[0].value = $("#input_questiontype")[0].context.selected_item().innerText;
         form.find("[name='problemdetail']")[0].value = $("#input_detail")[0].context.get_value();
         form.find("[name='location']")[0].value = $("#input_location")[0].context.selected_item().innerText;
+        if (form.find("[name='captchaToken']").length > 0) {
+            form.find("[name='captchaToken']")[0].value = $("#DNTCaptchaText")[0].value;
+            form.find("[name='captchaText']")[0].value = $("#input_captcha")[0].context.get_value();
+        }
         var date = $("#input_bookdate")[0].context.get_date();
         var date_str = date.year + "/" + date.month + "/" + date.day;
         form.find("[name='bookdate']")[0].value = date_str;
@@ -213,10 +217,16 @@
 
         $("#hidden_submiter").attr("action", siteLanguageSpecifier + $("#hidden_submiter").attr("action"));
 
-        read_personaldata();
+        if (!window.showCaptchaError) read_personaldata();
         $(".date-quick-pick > p").click(datepickclick);
         $("#input_bookdate")[0].context.events.add("changed", datechanged);
-        lastindex = 0;
+        var picks = $(".date-quick-pick > p");
+        for (var i = 0; i < picks.length; i++) {
+            if ($(picks[i]).hasClass("selected")) {
+                lastindex = i;
+                break;
+            }
+        }
 
         $($("#input_name")[0].context.input).focus(focus_name);
         $($("#input_name")[0].context.input).blur(blur_name);
@@ -247,6 +257,17 @@
         check_all();
 
         $("#btn_submit")[0].context.events.add("click", submit_click);
+
+        if (window.showCaptchaError) {
+            $("#btn_submit")[0].context.set_enabled(true);
+            $("#input_captcha")[0].context.set_error("验证码错误");
+            $($("#input_captcha")[0].context.input).focus();
+            $($("#input_captcha")[0].context.input).keydown(function () {
+                $("#input_captcha")[0].context.clear_error();
+                $($("#input_captcha")[0].context.input).unbind("keydown");
+            });
+        }
+        $("#input_detail")[0].context.set_value($("#hidden_problemdetail").val());
     };
 
     window.addEventListener("load", loaded, false);

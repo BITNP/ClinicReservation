@@ -23,9 +23,9 @@
     var setformdata = function (action, content) {
         $("#actionform input[name='action']").val(action);
         if (content)
-            $("#actionform input[name='content']").val(content);
+            $("#actionform textarea[name='content']").val(content);
         else
-            $("#actionform input[name='content']").val("");
+            $("#actionform textarea[name='content']").val("");
     };
     var btn_msg_viewall_click = function () {
         setformdata(map.viewmsg, "");

@@ -23,7 +23,7 @@ var detail_script = function detail_script(map) {
 
     var setformdata = function setformdata(action, content) {
         $("#actionform input[name='action']").val(action);
-        if (content) $("#actionform input[name='content']").val(content);else $("#actionform input[name='content']").val("");
+        if (content) $("#actionform textarea[name='content']").val(content);else $("#actionform textarea[name='content']").val("");
     };
     var btn_msg_viewall_click = function btn_msg_viewall_click() {
         setformdata(map.viewmsg, "");
