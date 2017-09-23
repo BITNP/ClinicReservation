@@ -1,0 +1,15 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "预约系统";
+    ViewData["Controller"] = "reservation";
+    ViewData["ImportCSS"] = new List<string>() {  };
+    ViewData["ImportScript"] = new List<string>() {  };
+    ViewData["DisableLeftNavi"] = true;
+
+    string source = (ViewData["Source"] as string).Substring(1);
+}
+
+<a href="/en-us/@source">English</a>
+<a href="/zh-cn/@source">简体中文</a>
