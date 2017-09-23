@@ -14,7 +14,7 @@ namespace ClinicReservation.Models.Reservation
     {
         public ReservationDbContext CreateDbContext(string[] args)
         {
-            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string basePath = AppDomain.CurrentDomain.BaseDirectory + "../../..";
             string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             IConfigurationRoot configurationRoot = new ConfigurationBuilder()
                 .SetBasePath(basePath)
