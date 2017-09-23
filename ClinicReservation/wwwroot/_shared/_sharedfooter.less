@@ -1,9 +1,11 @@
 ﻿@import "../css/include.less";
 
-.nppage-footer {
-    height: 3em;
+.nppage-footer, .nppage-copyright {
+    /*height: 5em;*/
     color: #666;
     font-size: 0.9em;
+    align-items: flex-start;
+    padding-top: 0.6em;
 
     > div.left {
         .flex-row(center);
@@ -18,9 +20,24 @@
         flex-shrink: 0;
         margin-right: 6em;
     }
+
+    .lang-link {
+        color: #666;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+.nppage-copyright {
+    padding-bottom: 0.6em;
+
+    p {
+        margin: 0;
+        font-size: 0.9em;
+    }
 }
 @media screen and (max-width: 800px) {
-    .nppage-footer {
+    .nppage-footer, .nppage-copyright {
         > div.left {
             margin-left: 3em;
         }
@@ -31,7 +48,7 @@
     }
 }
 @media screen and (max-width: 450px) {
-    .nppage-footer {
+    .nppage-footer, .nppage-copyright {
         > div.left {
             margin-left: 1em;
         }
