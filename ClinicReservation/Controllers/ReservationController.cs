@@ -76,7 +76,7 @@ namespace ClinicReservation.Controllers
 
             if (_detail == null)
                 return RedirectToAction(nameof(Index));
-            
+
             SetSessionTicket(id, phone);
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -88,9 +88,9 @@ namespace ClinicReservation.Controllers
             {
                 id = TempData["id"] as string;
                 phone = TempData["phone"] as string;
-                return Detail(id, phone);
             }
-            GetSessionTicket(out id, out phone);
+            else
+                GetSessionTicket(out id, out phone);
             ReservationDetail _detail = VerifyReservationDetail(id, phone);
             if (_detail == null)
                 return RedirectToAction(nameof(Index));
@@ -192,7 +192,7 @@ namespace ClinicReservation.Controllers
             phone = phone ?? "";
             ReservationDetail _detail = VerifyReservationDetailWithTicket(id, phone, token);
             if (_detail == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToActionPermanent(nameof(Index));
 
             TempData["id"] = id;
             TempData["phone"] = phone;
@@ -202,7 +202,7 @@ namespace ClinicReservation.Controllers
             int _action;
             int rate = -1;
             if (int.TryParse(action, out _action) == false)
-                return RedirectToAction(nameof(Detail));
+                return RedirectToActionPermanent(nameof(Detail));
 
             // action 解析失败，不采取动作
             IEnumerable<KeyValuePair<string, int>> actpairs = ACTION_CODES.Where(pair => pair.Value == _action);
@@ -213,7 +213,7 @@ namespace ClinicReservation.Controllers
                 if (rating >= 0 && rating <= 4)
                     rate = rating;
                 else
-                    return RedirectToAction(nameof(Detail));
+                    return RedirectToActionPermanent(nameof(Detail));
             }
 
             string act;
@@ -239,13 +239,18 @@ namespace ClinicReservation.Controllers
                 case "complete":
                     return ActionComplete(_detail, rate - 2, content ?? "");
                 default:
-                    return RedirectToAction(nameof(Detail));
+                    return RedirectToActionPermanent(nameof(Detail));
             }
         }
 
         [HttpPost]
         public IActionResult ViewMessage(string id, string phone, int page = 1)
         {
+            TempData["id"] = id;
+            TempData["phone"] = phone;
+            TempData["page"] = page;
+            return RedirectToActionPermanent(nameof(ViewMessage));
+
             ReservationDetail _detail = VerifyReservationDetail(id, phone);
 
             if (_detail == null)
@@ -289,9 +294,11 @@ namespace ClinicReservation.Controllers
             {
                 id = TempData["id"] as string;
                 phone = TempData["phone"] as string;
-                return ViewMessage(id, phone);
+                if (TempData.ContainsKey("page"))
+                    page = (int)TempData["page"];
             }
-            GetSessionTicket(out id, out phone);
+            else
+                GetSessionTicket(out id, out phone);
             ReservationDetail _detail = VerifyReservationDetail(id, phone);
             if (_detail == null)
                 return RedirectToAction(nameof(Index));
@@ -330,7 +337,7 @@ namespace ClinicReservation.Controllers
         private IActionResult ActionCancel(ReservationDetail _detail)
         {
             if (_detail == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToActionPermanent(nameof(Index));
 
             if (_detail.State == ReservationState.NewlyCreated || _detail.State == ReservationState.Answered)
             {
@@ -340,12 +347,12 @@ namespace ClinicReservation.Controllers
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction(nameof(Detail));
+            return RedirectToActionPermanent(nameof(Detail));
         }
         private IActionResult ActionStop(ReservationDetail _detail)
         {
             if (_detail == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToActionPermanent(nameof(Index));
 
             if (_detail.State == ReservationState.Cancelled)
             {
@@ -355,12 +362,12 @@ namespace ClinicReservation.Controllers
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction(nameof(Detail));
+            return RedirectToActionPermanent(nameof(Detail));
         }
         private IActionResult ActionRestore(ReservationDetail _detail)
         {
             if (_detail == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToActionPermanent(nameof(Index));
 
             if (_detail.State == ReservationState.Cancelled)
             {
@@ -370,7 +377,7 @@ namespace ClinicReservation.Controllers
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction(nameof(Detail));
+            return RedirectToActionPermanent(nameof(Detail));
         }
         private IActionResult ActionSubmitMessage(ReservationDetail _detail, string message)
         {
@@ -387,20 +394,20 @@ namespace ClinicReservation.Controllers
                 db.ReservationBoardMessages.Add(boardmessage);
                 db.SaveChanges();
             }
-            return RedirectToAction(nameof(Detail));
+            return RedirectToActionPermanent(nameof(Detail));
         }
         private IActionResult ActionModify()
         {
-            return RedirectToAction(nameof(Modify));
+            return RedirectToActionPermanent(nameof(Modify));
         }
         private IActionResult ActionViewMessage(ReservationDetail _detail)
         {
-            return RedirectToAction(nameof(ViewMessage));
+            return RedirectToActionPermanent(nameof(ViewMessage));
         }
         private IActionResult ActionComplete(ReservationDetail _detail, int rate, string content)
         {
             if (_detail == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToActionPermanent(nameof(Index));
 
             if (_detail.State == ReservationState.Answered)
             {
@@ -418,11 +425,11 @@ namespace ClinicReservation.Controllers
                 db.ServiceFeedBacks.Add(fb);
                 db.SaveChanges();
             }
-            return RedirectToAction(nameof(Detail));
+            return RedirectToActionPermanent(nameof(Detail));
         }
 
         [HttpPost]
-        public IActionResult Modify(string id, string phone, string token)
+        private IActionResult Modify(string id, string phone, string token)
         {
             ReservationDetail _detail = VerifyReservationDetailWithTicket(id, phone, token);
             if (_detail == null)
@@ -491,7 +498,7 @@ namespace ClinicReservation.Controllers
                 entry.Reload();
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
-                return RedirectToAction(nameof(Detail));
+                return RedirectToActionPermanent(nameof(Detail));
             }
             else
             {
