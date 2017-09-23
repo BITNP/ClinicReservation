@@ -95,8 +95,6 @@ namespace ClinicReservation
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            ILogger smsLogger = loggerFactory.CreateLogger("sms");
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 

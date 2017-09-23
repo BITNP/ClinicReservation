@@ -26,6 +26,7 @@ namespace ClinicReservation.Middlewares
                 cultureExpression = ExtractLanguageFromHeader(context, cultureContext);
             if (cultureExpression == null)
                 cultureExpression = cultureContext.Options.DefaultLanguage;
+            cultureContext.Action = context.Request.Path.Value;
             cultureContext.Culture = cultureExpression;
             if (urlSpecifier.Length <= 0)
                 return next(context);

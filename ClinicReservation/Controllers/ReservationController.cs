@@ -49,6 +49,13 @@ namespace ClinicReservation.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Language(string source)
+        {
+            ViewData["Source"] = source ?? "/";
+            return View();
+        }
+
 
         // 新建预约请求页面
         [HttpGet]
@@ -69,44 +76,9 @@ namespace ClinicReservation.Controllers
 
             if (_detail == null)
                 return RedirectToAction(nameof(Index));
-
-            db.Entry(_detail).EnsureReferencesLoaded(true);
-
-            if (_detail.ReservationBoardMessages.Count > 0)
-            {
-                List<ReservationBoardMessage> msgs = _detail.ReservationBoardMessages.Where(msg => msg.IsPublic == true).OrderByDescending(msg => msg.PostedTime).Take(5).ToList();
-                foreach (var msg in msgs)
-                {
-                    db.Entry(msg).EnsureReferencesLoaded(false);
-                }
-                ViewData["BoardMessages"] = msgs;
-            }
-            else
-                ViewData["BoardMessages"] = new List<ReservationBoardMessage>();
-
-            // 超期自动关闭
-            if (_detail.State == ReservationState.Cancelled && (DateTimeHelper.GetBeijingTime() - _detail.ActionDate) > cancelClosedTimeout)
-            {
-                _detail.State = ReservationState.ClosedWithoutComplete;
-                _detail.ActionDate = _detail.ActionDate + cancelClosedTimeout;
-                EntityEntry<ReservationDetail> entry = db.Entry(_detail);
-                entry.State = EntityState.Modified;
-                db.SaveChanges();
-                entry.Reload();
-                _detail = entry.Entity;
-            }
-            ViewData["token"] = EncryptDetailCredential(_detail);
-            ViewData["actionCode"] = ACTION_CODES;
-            if (TempData.ContainsKey("showhint"))
-            {
-                TempData.Remove("showhint");
-                ViewData["ShowHint"] = true;
-            }
-            else
-                ViewData["ShowHint"] = false;
-
+            
             SetSessionTicket(id, phone);
-            return View(_detail);
+            return RedirectToActionPermanent(nameof(Detail));
         }
         [HttpGet]
         public IActionResult Detail()
