@@ -207,7 +207,12 @@
         })();
     };
 
+    var siteLanguageSpecifier;
     var loaded = function loaded() {
+        if (!window.siteLanguageSpecifier) siteLanguageSpecifier = "";else siteLanguageSpecifier = window.siteLanguageSpecifier;
+
+        $("#hidden_submiter").attr("action", siteLanguageSpecifier + $("#hidden_submiter").attr("action"));
+
         read_personaldata();
         $(".date-quick-pick > p").click(datepickclick);
         $("#input_bookdate")[0].context.events.add("changed", datechanged);

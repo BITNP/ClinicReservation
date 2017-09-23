@@ -86,7 +86,14 @@
         });
     };
 
+    var siteLanguageSpecifier;
     var load = function () {
+        if (!window.siteLanguageSpecifier)
+            siteLanguageSpecifier = "";
+        else
+            siteLanguageSpecifier = window.siteLanguageSpecifier;
+        $("#actionform").attr("action", siteLanguageSpecifier + $("#actionform").attr("action"));
+
         $(".cmdbtns").click(btn_click);
         var btn_cancelpost = $("#btn_cancelpost");
         if (btn_cancelpost.length > 0)

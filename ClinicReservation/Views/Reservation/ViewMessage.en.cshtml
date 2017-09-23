@@ -3,7 +3,7 @@
 *@
 @using ClinicReservation.Models.Reservation
 @{
-    ViewData["Title"] = "查看留言消息";
+    ViewData["Title"] = "View Messages";
     ViewData["Controller"] = "reservation";
     ViewData["ImportCSS"] = new List<string>() { "create" };
     ViewData["ImportScript"] = new List<string>() { "message" };
@@ -22,8 +22,8 @@
 <script>
     window.actualLen = @msgs.Count();
     window.lang = {
-        last: "末页",
-        first: "首页"
+        last: "Last Page",
+        first: "First Page"
     }
 </script>
 <div>
@@ -36,7 +36,7 @@
                     {
                         <img src="~/images/resources/user.png" />
                         <div>
-                            <p>[@msg.PostedTime.ToString("yyyy/MM/dd HH:mm")] 用户</p>
+                            <p>[@msg.PostedTime.ToString("yyyy/MM/dd HH:mm")] User</p>
                             <pre class="preclear">@msg.Message</pre>
                         </div>
                     }
@@ -54,7 +54,7 @@
         <br />
         <div class="page-container">
             <div class="page-indicate">
-                <p>第@(page)/@(maxpage)页</p>
+                <p>Page @(page)/@(maxpage)</p>
             </div>
             <div class="pages">
             </div>

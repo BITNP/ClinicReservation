@@ -83,7 +83,11 @@ var detail_script = function detail_script(map) {
         });
     };
 
+    var siteLanguageSpecifier;
     var load = function load() {
+        if (!window.siteLanguageSpecifier) siteLanguageSpecifier = "";else siteLanguageSpecifier = window.siteLanguageSpecifier;
+        $("#actionform").attr("action", siteLanguageSpecifier + $("#actionform").attr("action"));
+
         $(".cmdbtns").click(btn_click);
         var btn_cancelpost = $("#btn_cancelpost");
         if (btn_cancelpost.length > 0) btn_cancelpost[0].context.events.add("flyout_showing", btn_cancel_flyoutshow);

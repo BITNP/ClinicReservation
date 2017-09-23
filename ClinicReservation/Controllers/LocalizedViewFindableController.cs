@@ -16,6 +16,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.ApplicationInsights.AspNetCore;
+using Microsoft.AspNetCore.Http;
 
 namespace ClinicReservation.Controllers
 {
@@ -181,10 +184,12 @@ namespace ClinicReservation.Controllers
     public abstract class LocalizedViewFindableController : Controller
     {
         private readonly string language;
+        private readonly CultureContext cultureContext;
+
         public LocalizedViewFindableController(CultureContext cultureContext)
         {
             language = cultureContext.Culture.Language;
-
+            this.cultureContext = cultureContext;
         }
 
         public override ViewResult View(string viewName, object model)
@@ -197,6 +202,11 @@ namespace ClinicReservation.Controllers
                 ViewName = viewName,
                 Language = language
             };
+        }
+
+        private string GetCultureDescribledUrl(string url)
+        {
+            return cultureContext.UrlCultureSpecifier + url;
         }
     }
 }

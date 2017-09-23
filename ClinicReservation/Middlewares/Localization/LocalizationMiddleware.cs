@@ -19,13 +19,25 @@ namespace ClinicReservation.Middlewares
 
         public Task Invoke(HttpContext context, CultureContext cultureContext)
         {
-            CultureExpression cultureExpression = ExtractLanguageFromUrl(context, cultureContext);
+            string urlSpecifier;
+            CultureExpression cultureExpression = ExtractLanguageFromUrl(context, cultureContext, out urlSpecifier);
+            cultureContext.UrlCultureSpecifier = urlSpecifier;
             if (cultureExpression == null)
                 cultureExpression = ExtractLanguageFromHeader(context, cultureContext);
             if (cultureExpression == null)
                 cultureExpression = cultureContext.Options.DefaultLanguage;
             cultureContext.Culture = cultureExpression;
-            return next(context);
+            if (urlSpecifier.Length <= 0)
+                return next(context);
+            else
+            {
+                return next(context).ContinueWith(tsk =>
+                {
+                    if (context.Response.Headers.ContainsKey("Location"))
+                        context.Response.Headers["Location"] = urlSpecifier + context.Response.Headers["Location"];
+                });
+            }
+
         }
 
         private CultureExpression ExtractLanguageFromHeader(HttpContext context, CultureContext cultureContext)
@@ -45,7 +57,7 @@ namespace ClinicReservation.Middlewares
             }
             return null;
         }
-        private CultureExpression ExtractLanguageFromUrl(HttpContext context, CultureContext cultureContext)
+        private CultureExpression ExtractLanguageFromUrl(HttpContext context, CultureContext cultureContext, out string urlSpecifier)
         {
             CultureOptions cultureOptions = cultureContext.Options;
 
@@ -56,9 +68,13 @@ namespace ClinicReservation.Middlewares
                 if (path[slashIndex] == '/') break;
             string lang = path.Substring(1, slashIndex - 1).ToLower();
             if (!CultureExpression.TryParse(lang, out CultureExpression cultureExpression))
+            {
+                urlSpecifier = "";
                 return null;
+            }
 
-            path = context.Request.Path.Value;
+            urlSpecifier = path.Substring(0, slashIndex);
+
             if (slashIndex < pathLength)
                 context.Request.Path = new PathString(path.Substring(slashIndex));
             else

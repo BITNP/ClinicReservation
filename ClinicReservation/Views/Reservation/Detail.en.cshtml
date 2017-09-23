@@ -1,0 +1,335 @@
+﻿@*
+    显示详细信息
+*@
+@using ClinicReservation.Models.Reservation
+@model ReservationDetail
+@{
+    ViewData["Title"] = "Reservation Detail";
+    ViewData["Controller"] = "reservation";
+    ViewData["ImportCSS"] = new List<string>() { "create" };
+    ViewData["ImportScript"] = new List<string>() { "detail" };
+    ViewData["DisableLeftNavi"] = true;
+    bool showHint = (bool)ViewData["ShowHint"];
+
+    string phone_ticket = Model.GetShortenPhone();
+    if (phone_ticket.Length <= 0)
+    {
+        phone_ticket = "Leave empty";
+    }
+    string FormatedPhone = "(...)" + Model.GetShortenPhone();
+    List<ReservationBoardMessage> boardmsgs = ViewData["BoardMessages"] as List<ReservationBoardMessage>;
+}
+@section scripts {
+    <script type="text/javascript">
+        window.addEventListener("load", function () {
+            detail_script({
+                @foreach(KeyValuePair<string, int> pair in ViewData["actionCode"] as Dictionary<string, int>)
+                {
+                    @Html.Raw($"'{pair.Key}': {pair.Value},")
+                }
+            });
+        }, false);
+    </script>
+}
+<form id="actionform" style="display: none" asp-controller="Reservation" asp-action="SubmitAction">
+    <input type="text" name="token" value="@ViewData["token"]" />
+    <input type="text" name="id" value="@Model.Id" />
+    <input type="text" name="phone" value="@Model.GetShortenPhone()" />
+    <input type="text" name="action" value="" />
+    <input type="text" name="content" value="" />
+</form>
+<div>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2"><p class="smalltitle">Identity @Model.Id</p></td>
+        </tr>
+        @if (showHint)
+        {
+            <tr>
+                <td colspan="2">
+                    <p class="itemname" style="word-break: break-word">Your credential is the combination of the identity and the phone number you provided.</p>
+                    <p class="itemname" style="word-break: break-word">A correct credential allows you return to this page in any time.</p>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Credential</p>
+            </td>
+            <td>
+                <p class="itemname">Identity: @Model.Id &nbsp;&nbsp; Phone: @phone_ticket</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd"><p class="smalltitle"></p></td>
+        </tr>
+        <tr>
+            <td colspan="2"><p class="smalltitle">Status</p></td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Reservation Status</p>
+            </td>
+            <td>
+                <div class="itemname" style="margin: 0">
+                    @switch (Model.State)
+                    {
+                        case ReservationState.Answered:
+                            <p class="itemname">Answered</p>
+                            <div class="btn_markdone" data-control="button" data-text="Mark as completed">
+                                <div data-control="flyout" style="width: 350px">
+                                    <p>Rate us</p>
+                                    <div class="rate" data-control="select" data-selected-index="2">
+                                        <span>Totally Bad</span>
+                                        <span>Not so nice</span>
+                                        <span>Just so so</span>
+                                        <span>Ok</span>
+                                        <span>Greate</span>
+                                    </div>
+                                    <p>Your comment</p>
+                                    <div data-control="input" data-type="textarea" class="textarea_msg"></div>
+                                    <div data-control="button" data-text="Send"></div>
+                                </div>
+                            </div>
+                            <div class="btn_postmessage" data-control="button" data-text="Leave a message">
+                                <div data-control="flyout" style="width: 350px">
+                                    <p>Content</p>
+                                    <div data-control="input" data-type="textarea" class="textarea_msg"></div>
+                                    <div data-control="button" data-text="Submit"></div>
+                                </div>
+                            </div>
+                            <div style="width: 2em; display: inline"></div>
+                            <div id="btn_cancelpost" data-control="button" data-text="Cancel">
+                                <div data-control="flyout" style="width: 350px">
+                                    <p>A temporary cancelled reservation will be reserved for 7 days. It can be recovered within this short period. The reservation will be permanently closed once the timelimit expires.</p>
+                                    <div class="cmdbtns" data-control="button" data-text="Cancel anyway"></div>
+                                </div>
+                            </div>
+                            break;
+                        case ReservationState.Cancelled:
+                            <p class="itemname">temporary cancelled</p>
+                            @Html.Raw("<p class='itemname'>This reservation is marked as temporary cancelled at " + Model.ActionDate.ToString("yyyy/MM/dd hh:mm") + " , and will be closed after " + (Model.ActionDate + TimeSpan.FromDays(7)).ToString("yyyy/MM/dd hh:mm") + "</p>")
+                            <div class="cmdbtns" data-control="button" data-text="Recover"></div>
+                            <div id="btn_stoppost" data-control="button" data-text="Close in advance">
+                                <div data-control="flyout" style="width: 350px">
+                                    <p>A closed reservation is not able to be answered or modified.</p>
+                                    <div class="cmdbtns" data-control="button" data-text="Continue to close"></div>
+                                </div>
+                            </div>
+                            break;
+                        case ReservationState.ClosedWithoutComplete:
+                            <p class="itemname">Closed</p>
+                            break;
+                        case ReservationState.Completed:
+                            <p class="itemname">Completed</p>
+                            break;
+                        case ReservationState.NewlyCreated:
+                            <p class="itemname">Waiting for answer</p>
+                            <div class="cmdbtns" data-control="button" data-text="Modify my reservation"></div>
+                            <div class="btn_postmessage" data-control="button" data-text="Leave a message">
+                                <div data-control="flyout" style="width: 350px">
+                                    <p>Content</p>
+                                    <div data-control="input" data-type="textarea" class="textarea_msg"></div>
+                                    <div data-control="button" data-text="Submit"></div>
+                                </div>
+                            </div>
+                            <div style="width: 2em; display: inline; margin-left:1em; margin-right: 1em;"></div>
+                            <div id="btn_cancelpost" data-control="button" data-text="Cancel">
+                                <div data-control="flyout" style="width: 350px">
+                                    <p>A temporary cancelled reservation will be reserved for 7 days. It can be recovered within this short period. The reservation will be permanently closed once the timelimit expires.</p>
+                                    <div data-control="button" data-text="Cancel anyway"></div>
+                                </div>
+                            </div>
+                            break;
+                    }
+                </div>
+            </td>
+        </tr>
+        @switch (Model.State)
+            {
+                case ReservationState.ClosedWithoutComplete:
+                <tr>
+                    <td class="titletd" valign="top">
+                        <p class="itemname">Closed Time</p>
+                    </td>
+                    <td>
+                        <p class="itemname">@Model.ActionDate</p>
+                    </td>
+                </tr>
+                break;
+            case ReservationState.Completed:
+                <tr>
+                    <td class="titletd" valign="top">
+                        <p class="itemname">Completed Time</p>
+                    </td>
+                    <td>
+                        <p class="itemname">@Model.ActionDate</p>
+                    </td>
+                </tr>
+                break;
+        }
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Messages</p>
+            </td>
+            <td>
+                @if ((Model.ReservationBoardMessages == null || Model.ReservationBoardMessages.Count == 0) && (Model.State == ReservationState.NewlyCreated || Model.State == ReservationState.Answered))
+                {
+                    <p class="itemname">No message</p>
+                    <div class="btn_postmessage cmdbtns" data-control="button" data-text="Leave a message">
+                        <div data-control="flyout" style="width: 350px">
+                            <p>Content</p>
+                            <div data-control="input" data-type="textarea" class="textarea_msg"></div>
+                            <div data-control="button" data-text="Submit"></div>
+                        </div>
+                    </div>
+                }
+                else if (boardmsgs.Count > 0)
+                {
+                    <p class="itemname">@Model.ReservationBoardMessages.Count messages in total</p>
+                    <div class="boardct">
+                        @foreach (ReservationBoardMessage msg in boardmsgs)
+                        {
+                            <div>
+                                @if (msg.FromUser == true)
+                                {
+                                    <img src="~/images/resources/user.png" />
+                                    <div>
+                                        <p>[@msg.PostedTime.ToString("yyyy/MM/dd HH:mm")] User</p>
+                                        <pre class="preclear">@msg.Message</pre>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content(string.Format("~/images/members/{0}", msg.DutyMember.IconName))">
+                                    <div>
+                                        <p>[@msg.PostedTime.ToString("yyyy/MM/dd HH:mm")] @msg.DutyMember.Name</p>
+                                        <pre class="preclear">@msg.Message</pre>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div id="btn_msg_viewall" data-control="button" data-text="View all messages"></div>
+                }
+                else
+                {
+                    <p class="itemname">No message</p>
+                }
+
+            </td>
+
+        </tr>
+        <tr>
+            <td class="titletd"><p class="smalltitle"></p></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"><p class="smalltitle">Personal Information</p></td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Name</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.PosterName</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Contact</p>
+            </td>
+            <td>
+                <p class="itemname">@FormatedPhone</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">E-Mail</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.PosterEmail</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">QQ/Wechat</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.PosterQQ</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">School</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.PosterSchoolType.Name</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd"><p class="smalltitle"></p></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"><p class="smalltitle">Reservation Information</p></td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Submit Time</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.CreateDate.ToString("yyyy/MM/dd HH:mm")</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Last Modified</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.ModifiedDate.ToString("yyyy/MM/dd HH:mm")</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Booked Date</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.ReservationDate.ToString("yyyy/MM/dd ddd")</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Booked Place</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.LocationType.Name</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd"><p class="smalltitle"></p></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"><p class="smalltitle">Problem Detail</p></td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Problem Type</p>
+            </td>
+            <td>
+                <p class="itemname">@Model.ProblemType.Name</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="titletd" valign="top">
+                <p class="itemname">Problem Information</p>
+            </td>
+            <td>
+                <div class="itemname"><pre class="preclear">@Model.Detail</pre></div>
+            </td>
+        </tr>
+    </table>
+
+
+</div>

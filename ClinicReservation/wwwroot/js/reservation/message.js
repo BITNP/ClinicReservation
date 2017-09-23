@@ -13,7 +13,7 @@
             pages.innerHTML = "";
             var p;
             p = document.createElement("p");
-            p.innerText = "首页";
+            p.innerText = window.lang.first;
             p.setAttribute("data-for", 1);
             if (current === min)
                 p.className = "disabled";
@@ -36,7 +36,7 @@
             }
 
             p = document.createElement("p");
-            p.innerText = "末页";
+            p.innerText = window.lang.last;
             p.setAttribute("data-for", max);
             if (current === max)
                 p.className = "disabled";
@@ -52,8 +52,14 @@
         };
     })();
 
-
+    var siteLanguageSpecifier;
     var load = function () {
+        if (!window.siteLanguageSpecifier)
+            siteLanguageSpecifier = "";
+        else
+            siteLanguageSpecifier = window.siteLanguageSpecifier;
+        $("#actionform").attr("action", siteLanguageSpecifier + $("#actionform").attr("action"));
+
         pages.load();
     };
 

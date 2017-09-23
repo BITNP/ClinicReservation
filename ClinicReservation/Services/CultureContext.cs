@@ -126,6 +126,7 @@ namespace ClinicReservation.Services
         public CultureOptions Options { get; }
 
         public CultureExpression Culture { get; set; }
+        public string UrlCultureSpecifier { get; set; }
 
         public CultureContext(CultureOptions options)
         {

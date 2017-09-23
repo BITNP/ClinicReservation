@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject ClinicReservation.Services.CultureContext cultureContext
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>@ViewData["Title"]</title>
 
+    <script type="text/javascript">
+        window.siteLanguageSpecifier = "@cultureContext.UrlCultureSpecifier";
+    </script>
     @Html.Partial("_StyleImport", ViewData)
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
@@ -38,7 +42,7 @@
             </div>
 
         }
-        
+
     </div>
     <div class="nppage-footer">
         @if (IsSectionDefined("footer"))
