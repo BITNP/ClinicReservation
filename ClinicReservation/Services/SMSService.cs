@@ -51,21 +51,35 @@ namespace ClinicReservation.Services
         // 通知创建申请成功
         public Task SendCreationSuccessAsync(ReservationDetail reservation, CultureExpression culture)
         {
-            string phone = reservation.PosterPhone;
-            string name = reservation.PosterName;
-            int ID = reservation.Id;
-            string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号(标识ID)为" + ID + "，请耐心等待维修人员受理，若有变动请及时登录平台更改，谢谢。";
-            return SendSMSAsync(phone, message);
+            if (reservation.PosterPhone != null && reservation.PosterName != null)
+            {
+                string phone = reservation.PosterPhone;
+                string name = reservation.PosterName;
+                int ID = reservation.Id;
+                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号(标识ID)为" + ID + "，请耐心等待维修人员受理，若有变动请及时登录平台更改，谢谢。";
+                return SendSMSAsync(phone, message);
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
 
         // 用于向申请者发送短信
         // 通知已受理
         public Task SendAnsweredAsync(ReservationDetail reservation)
         {
-            string phone = reservation.PosterPhone;
-            string name = reservation.PosterName;
-            string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被受理，请按预约时间地点前往维修，若有变动请及时登录平台更改，谢谢。";
-            return SendSMSAsync(phone, message);
+            if (reservation.PosterPhone != null && reservation.PosterName != null)
+            {
+                string phone = reservation.PosterPhone;
+                string name = reservation.PosterName;
+                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被受理，请按预约时间地点前往维修，若有变动请及时登录平台更改，谢谢。";
+                return SendSMSAsync(phone, message);
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
 
         // 用于向诊所人员发送短信
@@ -79,33 +93,54 @@ namespace ClinicReservation.Services
         // 通知申请被用户主动关闭
         public Task SendReservationClosedAsync(ReservationDetail reservation)
         {
-            string phone = reservation.DutyMember.Contact;
-            string postername = reservation.PosterName;
-            int ID = reservation.Id;
-            string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动关闭。";
-            return SendSMSAsync(phone, message);
+            if (reservation.DutyMember != null)
+            {
+                string phone = reservation.DutyMember.Contact;
+                string postername = reservation.PosterName;
+                int ID = reservation.Id;
+                string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动关闭。";
+                return SendSMSAsync(phone, message);
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
 
         // 用于向诊所人员发送短信
         // 通知申请被用户主动取消
         public Task SendReservationCancelledAsync(ReservationDetail reservation)
         {
-            string phone = reservation.DutyMember.Contact;
-            string postername = reservation.PosterName;
-            int ID = reservation.Id;
-            string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动取消。";
-            return SendSMSAsync(phone, message);
+            if (reservation.DutyMember != null)
+            {
+                string phone = reservation.DutyMember.Contact;
+                string postername = reservation.PosterName;
+                int ID = reservation.Id;
+                string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动取消。";
+                return SendSMSAsync(phone, message);
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
 
         // 用于向诊所人员发送短信
         // 当预约更改时通知受理该问题的人员
         public Task SendReservationUpdatedAsync(ReservationDetail reservation)
         {
-            string phone = reservation.DutyMember.Contact;
-            string postername = reservation.PosterName;
-            int ID = reservation.Id;
-            string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "作出更改，请及时登录平台查看。";
-            return SendSMSAsync(phone, message);
+            if (reservation.DutyMember != null)
+            {
+                string phone = reservation.DutyMember.Contact;
+                string postername = reservation.PosterName;
+                int ID = reservation.Id;
+                string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "作出更改，请及时登录平台查看。";
+                return SendSMSAsync(phone, message);
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
 
 
