@@ -41,7 +41,8 @@ namespace ClinicReservation
             {
                 SecurityKey = Configuration["SecurityKey"],
                 SessionName = Configuration["SessionName"],
-                SMSApi = Configuration["SMSService"],
+                SMSUrl = Configuration["SMSUrl"],
+                SMSApiKey = Configuration["SMSApiKey"],
                 ConnectionString = Configuration.GetConnectionString("reservationData"),
                 RegisterationTicket = ServiceConfig.ReadTicket()
             };

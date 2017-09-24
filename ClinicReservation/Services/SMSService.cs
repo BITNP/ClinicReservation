@@ -33,13 +33,17 @@ namespace ClinicReservation.Services
         public static readonly EventId SUCCESS_EVENT = new EventId(0, "sms_success");
         public static readonly EventId FAILED_EVENT = new EventId(1, "sms_failed");
 
-        private string smsuri;
+        private string smsurl;
+        private string smsapikey;
         private ILogger logger;
         public SMSService(ServiceConfig serviceConfig, ILoggerFactory loggerFactory)
         {
-            if (serviceConfig.SMSApi == null)
-                throw new Exception("SMS Api not configured");
-            smsuri = serviceConfig.SMSApi;
+            if (serviceConfig.SMSUrl == null)
+                throw new Exception("SMS URL not configured");
+            smsurl = serviceConfig.SMSUrl;
+            if (serviceConfig.SMSApiKey == null)
+                throw new Exception("SMS API Key not configured");
+            smsapikey = serviceConfig.SMSApiKey;
             this.logger = loggerFactory.CreateLogger<SMSService>();
         }
 
@@ -48,7 +52,10 @@ namespace ClinicReservation.Services
         public Task SendCreationSuccessAsync(ReservationDetail reservation, CultureExpression culture)
         {
             string phone = reservation.PosterPhone;
-            return Task.CompletedTask;
+            string name = reservation.PosterName;
+            int ID = reservation.Id;
+            string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号(标识ID)为" + ID + "，请耐心等待维修人员受理，若有变动请及时登录平台更改，谢谢。";
+            return SendSMSAsync(phone, message);
         }
 
         // 用于向申请者发送短信
@@ -56,7 +63,9 @@ namespace ClinicReservation.Services
         public Task SendAnsweredAsync(ReservationDetail reservation)
         {
             string phone = reservation.PosterPhone;
-            return Task.CompletedTask;
+            string name = reservation.PosterName;
+            string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被受理，请按预约时间地点前往维修，若有变动请及时登录平台更改，谢谢。";
+            return SendSMSAsync(phone, message);
         }
 
         // 用于向诊所人员发送短信
@@ -70,24 +79,33 @@ namespace ClinicReservation.Services
         // 通知申请被用户主动关闭
         public Task SendReservationClosedAsync(ReservationDetail reservation)
         {
-            string phone = reservation.PosterPhone;
-            return Task.CompletedTask;
+            string phone = reservation.DutyMember.Contact;
+            string postername = reservation.PosterName;
+            int ID = reservation.Id;
+            string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动关闭。";
+            return SendSMSAsync(phone, message);
         }
 
         // 用于向诊所人员发送短信
         // 通知申请被用户主动取消
         public Task SendReservationCancelledAsync(ReservationDetail reservation)
         {
-            string phone = reservation.PosterPhone;
-            return Task.CompletedTask;
+            string phone = reservation.DutyMember.Contact;
+            string postername = reservation.PosterName;
+            int ID = reservation.Id;
+            string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动取消。";
+            return SendSMSAsync(phone, message);
         }
 
         // 用于向诊所人员发送短信
         // 当预约更改时通知受理该问题的人员
         public Task SendReservationUpdatedAsync(ReservationDetail reservation)
         {
-            string phone = reservation.PosterPhone;
-            return Task.CompletedTask;
+            string phone = reservation.DutyMember.Contact;
+            string postername = reservation.PosterName;
+            int ID = reservation.Id;
+            string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "作出更改，请及时登录平台查看。";
+            return SendSMSAsync(phone, message);
         }
 
 
@@ -96,10 +114,8 @@ namespace ClinicReservation.Services
         {
             return Task.Run(async () =>
             {
-                HttpWebRequest request = HttpWebRequest.CreateHttp(smsuri);
-                // TODO: 填写发送短信逻辑
-                string apikey = " ";
-                string data_send_sms = "apikey=" + apikey + "&mobile=" + phone + "&text=" + message;
+                HttpWebRequest request = HttpWebRequest.CreateHttp(smsurl);
+                string data_send_sms = "apikey=" + smsapikey + "&mobile=" + phone + "&text=" + message;
                 byte[] postdatabyte = Encoding.UTF8.GetBytes(data_send_sms);
                 request.ContentLength = postdatabyte.Length;
                 request.Method = "POST";
@@ -115,7 +131,6 @@ namespace ClinicReservation.Services
                     Stream responseStream = response.GetResponseStream();
                     StreamReader responseReader = new StreamReader(responseStream);
                     string responseContent = await responseReader.ReadToEndAsync();
-                    // TODO: 填写完成逻辑
 
                     var ms = new MemoryStream(Encoding.Unicode.GetBytes(responseContent));
                     DataContractJsonSerializer deseralizer = new DataContractJsonSerializer(typeof(SMSResponse));
