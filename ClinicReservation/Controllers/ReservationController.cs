@@ -23,6 +23,7 @@ namespace ClinicReservation.Controllers
         private readonly ReservationDbContext db;
         private readonly NPOLJwtTokenService tokenservice;
         private readonly SMSService smsService;
+        private readonly CultureContext cultureContext;
         private readonly ICaptchaProtectionProvider captchaProtectionProvider;
         private readonly IHumanReadableIntegerProvider humanReadableIntegerProvider;
         private TimeSpan cancelClosedTimeout = TimeSpan.FromDays(7);
@@ -43,6 +44,7 @@ namespace ClinicReservation.Controllers
             db = dbcontext;
             this.tokenservice = tokenservice;
             this.smsService = smsService;
+            this.cultureContext = cultureContext;
             this.captchaProtectionProvider = captchaProtectionProvider;
             this.humanReadableIntegerProvider = humanReadableIntegerProvider;
         }
@@ -191,12 +193,13 @@ namespace ClinicReservation.Controllers
                     CreateDate = now,
                     ModifiedDate = now,
                     ReservationDate = _reservationDate,
-                    State = ReservationState.NewlyCreated
+                    State = ReservationState.NewlyCreated,
+                    LastUpdatedLanguage = cultureContext.Culture.Language
                 };
                 EntityEntry<ReservationDetail> entry = db.ReservationDetails.Add(detail);
                 db.SaveChanges();
-                entry.Reload();
-                smsService.SendCreationSuccessAsync(entry.Entity);
+                smsService.SendCreationSuccessAsync(entry.Entity, cultureContext.Culture);
+                smsService.SendReservationCreatedAsync(entry.Entity);
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
                 TempData["showhint"] = true;
@@ -365,10 +368,12 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.NewlyCreated || _detail.State == ReservationState.Answered)
             {
                 _detail.State = ReservationState.Cancelled;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
+                smsService.SendReservationCancelledAsync(entry.Entity);
             }
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -380,10 +385,12 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Cancelled)
             {
                 _detail.State = ReservationState.ClosedWithoutComplete;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
+                smsService.SendReservationClosedAsync(entry.Entity);
             }
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -395,6 +402,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Cancelled)
             {
                 _detail.State = ReservationState.NewlyCreated;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -416,6 +424,7 @@ namespace ClinicReservation.Controllers
                 };
                 db.ReservationBoardMessages.Add(boardmessage);
                 db.SaveChanges();
+
             }
             return RedirectToActionPermanent(nameof(Detail));
         }
@@ -435,6 +444,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Answered)
             {
                 _detail.State = ReservationState.Completed;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -514,11 +524,13 @@ namespace ClinicReservation.Controllers
                 _detail.ProblemType = _problemType;
                 _detail.Detail = problemdetail;
                 _detail.ModifiedDate = now;
+                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
                 _detail.ReservationDate = _reservationDate;
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
                 db.SaveChanges();
                 entry.Reload();
+                smsService.SendReservationUpdatedAsync(entry.Entity);
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
                 return RedirectToActionPermanent(nameof(Detail));

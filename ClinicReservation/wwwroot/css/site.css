@@ -13,11 +13,11 @@ body {
   display: none;
 }
 .nppage-header,
-.nppage-footer {
+.nppage-footer,
+.nppage-copyright {
   position: relative;
   left: 0;
   right: 0;
-  height: 4em;
   background: #EEE;
   display: flex;
   flex: 0 0 auto;

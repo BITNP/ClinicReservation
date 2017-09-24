@@ -11,9 +11,11 @@ namespace ClinicReservation.Services
         public string ConnectionString { get; set; }
         public string SessionName { get; set; }
         public string SecurityKey { get; set; }
-        public string SMSApi { get; set; }
+        public string SMSUrl { get; set; }
+        public string SMSApiKey { get; set; }
         public string RegisterationTicket { get; set; }
         
+
         public static string ReadTicket()
         {
             try

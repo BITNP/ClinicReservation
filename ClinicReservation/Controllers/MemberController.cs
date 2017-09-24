@@ -229,9 +229,9 @@ namespace ClinicReservation.Controllers
             detail.State = ReservationState.Answered;
             detail.DutyMember = member;
             detail.ActionDate = DateTimeHelper.GetBeijingTime();
-            db.Entry(detail).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            db.Entry(detail).State = EntityState.Modified;
             db.SaveChanges();
-
+            smsService.SendAnsweredAsync(detail);
             return new JsonResult(new { result = true });
         }
 
@@ -258,7 +258,7 @@ namespace ClinicReservation.Controllers
                 detail.State = ReservationState.Cancelled;
 
             detail.DutyMember = null;
-            db.Entry(detail).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            db.Entry(detail).State = EntityState.Modified;
             db.SaveChanges();
 
             return new JsonResult(new { result = true });
@@ -282,7 +282,7 @@ namespace ClinicReservation.Controllers
             {
                 detail.State = ReservationState.Completed;
                 detail.ActionDate = DateTimeHelper.GetBeijingTime();
-                db.Entry(detail).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                db.Entry(detail).State = EntityState.Modified;
                 db.SaveChanges();
                 return new JsonResult(new { result = true });
             }

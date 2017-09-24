@@ -37,6 +37,9 @@ namespace ClinicReservation.Models.Reservation
 
         public SchoolType School { get; set; }
 
+        [MaxLength(32)]
+        public string Contact { get; set; }
+
 
         public IList<ReservationBoardMessage> ReservationBoardMessages { get; set; }
         public IList<ReservationDetail> ReservationDetails { get; set; }

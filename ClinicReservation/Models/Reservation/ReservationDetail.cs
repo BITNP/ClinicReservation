@@ -29,6 +29,9 @@ namespace ClinicReservation.Models.Reservation
 
         public ProblemType ProblemType { get; set; }
 
+        [MaxLength(8)]
+        public string LastUpdatedLanguage { get; set; }
+
         [MaxLength(512)]
         public string Detail { get; set; }
 
