@@ -65,26 +65,27 @@ namespace ClinicReservation.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateMember(string ticket, string name, string loginname, string password, string grade, Sexual sexual, string school, IList<IFormFile> userpic)
+        public IActionResult CreateMember(string ticket, string name, string contact, string loginname, string password, string grade, Sexual sexual, string school, IList<IFormFile> userpic)
         {
             DutyMember member = VerifyDutyMemberLogIn();
             if (member == null ||
                 (ticket == null || ticket.Length <= 0) ||
                 (name == null || name.Length <= 0) ||
+                (contact == null || contact.Length <= 0) ||
                 (loginname == null || loginname.Length <= 0) ||
                 (password == null || password.Length != 32) ||
                 (school == null) ||
                 (userpic.Count <= 0))
-                return new JsonResult(new { result = false, reason = "auth failed" });
+                return new JsonResult(new { result = false, reason = "信息填写不完整" });
             if (ticket != serviceConfig.RegisterationTicket)
-                return new JsonResult(new { result = false, reason = "auth failed" });
+                return new JsonResult(new { result = false, reason = "创建秘钥认证失败" });
 
             SchoolType sch = (from s in db.SchoolTypes where s.Name == school select s).FirstOrDefault();
             if (sch == null)
-                return new JsonResult(new { result = false, reason = "school type invalied" });
+                return new JsonResult(new { result = false, reason = "学校类型错误" });
             DutyMember check = (from m in db.DutyMembers where m.LoginName == loginname select m).FirstOrDefault();
             if (check != null)
-                return new JsonResult(new { result = false, reason = "login name exists" });
+                return new JsonResult(new { result = false, reason = "登录名已存在" });
 
             string path = Path.Combine(membersPath, loginname + ".jpg");
             FileStream stream = System.IO.File.Open(path, FileMode.OpenOrCreate, FileAccess.Write);
@@ -101,6 +102,7 @@ namespace ClinicReservation.Controllers
                 Grade = grade,
                 Sexual = sexual,
                 School = sch,
+                Contact = contact,
                 IconName = loginname + ".jpg",
             };
             db.DutyMembers.Add(memcreate);

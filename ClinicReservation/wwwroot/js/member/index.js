@@ -6,7 +6,7 @@
         $("#form_memberlogin").submit();
     };
     var apply_click = function () {
-        window.location.href = "/member/application";
+        window.location.href = "member/createmember";
     };
 
     var load = function () {
