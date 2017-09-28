@@ -12,7 +12,7 @@
 <div>
     <p class="smalltitle">创建内部成员</p>
     <div>
-        <p class="itemname">通行证</p>
+        <p class="itemname">请输入创建秘钥</p>
         <div id="input_ticket" class="input-item" data-control="input" data-type="text" ></div>
     </div>
     <br />
@@ -29,6 +29,8 @@
     <div>
         <p class="itemname">姓名</p>
         <div id="input_name" class="input-item" data-control="input" data-type="text"></div>
+        <p class="itemname">电话</p>
+        <div id="input_contact" class="input-item" data-control="input" data-type="number"></div>
         <p class="itemname">年级</p>
         <div id="input_grade" class="input-item" data-control="input" data-type="number" data-value="2015"></div>
         <p class="itemname">性别</p>
@@ -58,6 +60,7 @@
     <form id="hidden_submiter" asp-action="CreateMember" asp-controller="Member" enctype="multipart/form-data" method="post" style="display:none">
         <input name="ticket" />
         <input name="name" />
+        <input name="contact" />
         <input name="loginname" />
         <input name="password" />
         <input name="grade" />

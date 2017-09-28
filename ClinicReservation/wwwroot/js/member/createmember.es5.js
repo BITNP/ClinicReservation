@@ -119,6 +119,7 @@
         form.find("[name='loginname']")[0].value = $("#input_loginname")[0].context.get_value();
         form.find("[name='password']")[0].value = $.md5($("#input_pwd")[0].context.get_value());
         form.find("[name='name']")[0].value = $("#input_name")[0].context.get_value();
+        form.find("[name='contact']")[0].value = $("#input_contact")[0].context.get_value();
         form.find("[name='grade']")[0].value = $("#input_grade")[0].context.get_value();
         form.find("[name='sexual']")[0].value = $("#input_sexual")[0].context.selected_item().innerText;
         form.find("[name='school']")[0].value = $("#input_school")[0].context.selected_item().innerText;
