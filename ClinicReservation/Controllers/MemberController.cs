@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿#define NO_MEMBER_LOGIN_REQUIRED_FOR_CREATE_MEMBER
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ClinicReservation.Services;
 using ClinicReservation.Models;
@@ -67,6 +69,15 @@ namespace ClinicReservation.Controllers
         [HttpPost]
         public IActionResult CreateMember(string ticket, string name, string contact, string loginname, string password, string grade, Sexual sexual, string school, IList<IFormFile> userpic)
         {
+#if NO_MEMBER_LOGIN_REQUIRED_FOR_CREATE_MEMBER
+            if ((ticket == null || ticket.Length <= 0) ||
+                (name == null || name.Length <= 0) ||
+                (contact == null || contact.Length <= 0) ||
+                (loginname == null || loginname.Length <= 0) ||
+                (password == null || password.Length != 32) ||
+                (school == null) ||
+                (userpic.Count <= 0))
+#else
             DutyMember member = VerifyDutyMemberLogIn();
             if (member == null ||
                 (ticket == null || ticket.Length <= 0) ||
@@ -76,6 +87,8 @@ namespace ClinicReservation.Controllers
                 (password == null || password.Length != 32) ||
                 (school == null) ||
                 (userpic.Count <= 0))
+#endif
+
                 return new JsonResult(new { result = false, reason = "信息填写不完整" });
             if (ticket != serviceConfig.RegisterationTicket)
                 return new JsonResult(new { result = false, reason = "创建秘钥认证失败" });
@@ -112,9 +125,11 @@ namespace ClinicReservation.Controllers
         [HttpGet]
         public IActionResult CreateMember()
         {
+#if !NO_MEMBER_LOGIN_REQUIRED_FOR_CREATE_MEMBER
             DutyMember member = VerifyDutyMemberLogIn();
             if (member == null)
                 return RedirectToAction(nameof(Index));
+#endif
             ViewData["SchoolTypes"] = db.SchoolTypes.OrderBy(type => type.Id);
             return View();
         }
