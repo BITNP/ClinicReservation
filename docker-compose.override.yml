@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  clinicreservation:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"

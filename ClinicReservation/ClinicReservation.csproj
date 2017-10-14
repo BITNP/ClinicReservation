@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/c702710e-a3bb-464e-abf9-f4d881c3d25c/resourcegroups/bitnp-clinic-res/providers/microsoft.insights/components/bitnp-clinic-res</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/c702710e-a3bb-464e-abf9-f4d881c3d25c/resourcegroups/bitnp-clinic-res/providers/microsoft.insights/components/bitnp-clinic-res</ApplicationInsightsAnnotationResourceId>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
