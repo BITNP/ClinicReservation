@@ -1,6 +1,6 @@
 FROM bitnp/aspnetcore:2.0
 ARG source
 WORKDIR /app
-EXPOSE 5001
+EXPOSE 80
 COPY ${source:-obj/Docker/publish} .
 ENTRYPOINT ["dotnet", "ClinicReservation.dll"]

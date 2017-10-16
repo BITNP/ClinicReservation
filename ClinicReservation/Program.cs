@@ -14,7 +14,7 @@ namespace ClinicReservation
         {
             var host = WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://*:5001")
+                .UseUrls("http://*:80")
                 .UseApplicationInsights()
                 .Build();
             host.Run();
