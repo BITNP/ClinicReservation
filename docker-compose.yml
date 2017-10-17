@@ -2,7 +2,7 @@ version: '3'
 
 services:
   clinicreservation:
-    image: clinicreservation
+    image: bitnp/clinicreservation${TAG}
     build:
       context: ./ClinicReservation
       dockerfile: Dockerfile
