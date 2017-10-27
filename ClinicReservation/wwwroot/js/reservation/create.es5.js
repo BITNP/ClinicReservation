@@ -254,6 +254,8 @@
         $($("#input_detail")[0].context.input).change(check_all);
         $($("#input_detail")[0].context.input).keyup($.debounce(check_delay, check_all));
 
+        $("#input_detail")[0].context.set_value($("#hidden_problemdetail").val());
+
         check_all();
 
         $("#btn_submit")[0].context.events.add("click", submit_click);
@@ -267,7 +269,7 @@
                 $($("#input_captcha")[0].context.input).unbind("keydown");
             });
         }
-        $("#input_detail")[0].context.set_value($("#hidden_problemdetail").val());
+        
     };
 
     window.addEventListener("load", loaded, false);
