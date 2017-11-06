@@ -56,7 +56,7 @@ namespace ClinicReservation.Services
                 string phone = reservation.PosterPhone;
                 string name = reservation.PosterName;
                 int ID = reservation.Id;
-                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号(标识ID)为" + ID + "，请耐心等待维修人员受理，若有变动请及时登录平台更改，谢谢。";
+                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号为" + ID + "，请耐心等待受理，并留意系统留言，若有变动请及时更改，谢谢。";
                 return SendSMSAsync(phone, message);
             }
             else
@@ -71,9 +71,11 @@ namespace ClinicReservation.Services
         {
             if (reservation.PosterPhone != null && reservation.PosterName != null)
             {
+
                 string phone = reservation.PosterPhone;
                 string name = reservation.PosterName;
-                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被受理，请按预约时间地点前往维修，若有变动请及时登录平台更改，谢谢。";
+                string workerName = reservation.DutyMember.Name;
+                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被工作人员" + workerName + "受理，请按预约时间地点前往维修，若有变动请及时更改，谢谢。";
                 return SendSMSAsync(phone, message);
             }
             else
