@@ -36,6 +36,14 @@ namespace ClinicReservation.Services
         private string smsurl;
         private string smsapikey;
         private ILogger logger;
+
+        public string SMSCreationSuccess;
+        public string SMSAnswered;
+        //public string SMSReservationCreated;
+        public string SMSReservationClosed;
+        public string SMSReservationCancelled;
+        public string SMSReservationUpdated;
+
         public SMSService(ServiceConfig serviceConfig, ILoggerFactory loggerFactory)
         {
             if (serviceConfig.SMSUrl == null)
@@ -45,18 +53,25 @@ namespace ClinicReservation.Services
                 throw new Exception("SMS API Key not configured");
             smsapikey = serviceConfig.SMSApiKey;
             this.logger = loggerFactory.CreateLogger<SMSService>();
+
+            SMSCreationSuccess = serviceConfig.SMSCreationSuccess;
+            SMSAnswered = serviceConfig.SMSAnswered;
+            //SMSReservationCreated = serviceConfig.SMSReservationCreated;
+            SMSReservationClosed = serviceConfig.SMSReservationClosed;
+            SMSReservationCancelled = serviceConfig.SMSReservationCancelled;
+            SMSReservationUpdated = serviceConfig.SMSReservationUpdated;
         }
 
         // 用于向申请者发送短信
         // 通知创建申请成功
         public Task SendCreationSuccessAsync(ReservationDetail reservation, CultureExpression culture)
         {
-            if (reservation.PosterPhone != null && reservation.PosterName != null)
+            if (reservation.PosterPhone != null && reservation.PosterName != null && SMSCreationSuccess != null)
             {
                 string phone = reservation.PosterPhone;
                 string name = reservation.PosterName;
                 int ID = reservation.Id;
-                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号为" + ID + "，请耐心等待受理，并留意系统留言，若有变动请及时更改，谢谢。";
+                string message = SMSCreationSuccess.Replace("#name#", name).Replace("#id#", ID + "");
                 return SendSMSAsync(phone, message);
             }
             else
@@ -69,13 +84,13 @@ namespace ClinicReservation.Services
         // 通知已受理
         public Task SendAnsweredAsync(ReservationDetail reservation)
         {
-            if (reservation.PosterPhone != null && reservation.PosterName != null)
+            if (reservation.PosterPhone != null && reservation.PosterName != null && SMSAnswered != null)
             {
 
                 string phone = reservation.PosterPhone;
                 string name = reservation.PosterName;
                 string workerName = reservation.DutyMember.Name;
-                string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被工作人员" + workerName + "受理，请按预约时间地点前往维修，若有变动请及时更改，谢谢。";
+                string message = SMSAnswered.Replace("#name#", name).Replace("#workerName#", workerName);
                 return SendSMSAsync(phone, message);
             }
             else
@@ -88,6 +103,21 @@ namespace ClinicReservation.Services
         // 通知有新的申请
         public Task SendReservationCreatedAsync(ReservationDetail reservation)
         {
+            //if (reservation.PosterPhone != null && reservation.PosterName != null && SMSReservationCreated != null)
+            //{
+
+            //    string phone = reservation.DutyMember.Contact;
+            //    string name = reservation.PosterName;
+            //    string workerName = reservation.DutyMember.Name;
+            //    string message = SMSAnswered.Replace("#name#", name).Replace("#workerName#", workerName);
+            //    //string message = "【北理网协】" + workerName + "您好，您有来自" + name + "的新预约，请及时登录系统受理，谢谢。";
+            //    return SendSMSAsync(phone, message);
+            //}
+            //else
+            //{
+            //    return Task.CompletedTask;
+            //}
+
             return Task.CompletedTask;
         }
 
@@ -95,12 +125,12 @@ namespace ClinicReservation.Services
         // 通知申请被用户主动关闭
         public Task SendReservationClosedAsync(ReservationDetail reservation)
         {
-            if (reservation.DutyMember != null)
+            if (reservation.DutyMember != null && SMSReservationClosed != null)
             {
                 string phone = reservation.DutyMember.Contact;
-                string postername = reservation.PosterName;
+                string name = reservation.PosterName;
                 int ID = reservation.Id;
-                string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动关闭。";
+                string message = SMSReservationClosed.Replace("#id#", ID + "").Replace("#name#", name);
                 return SendSMSAsync(phone, message);
             }
             else
@@ -113,12 +143,12 @@ namespace ClinicReservation.Services
         // 通知申请被用户主动取消
         public Task SendReservationCancelledAsync(ReservationDetail reservation)
         {
-            if (reservation.DutyMember != null)
+            if (reservation.DutyMember != null && SMSReservationCancelled != null)
             {
                 string phone = reservation.DutyMember.Contact;
-                string postername = reservation.PosterName;
+                string name = reservation.PosterName;
                 int ID = reservation.Id;
-                string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动取消。";
+                string message = SMSReservationCancelled.Replace("#id#", ID + "").Replace("#name#", name);
                 return SendSMSAsync(phone, message);
             }
             else
@@ -131,12 +161,12 @@ namespace ClinicReservation.Services
         // 当预约更改时通知受理该问题的人员
         public Task SendReservationUpdatedAsync(ReservationDetail reservation)
         {
-            if (reservation.DutyMember != null)
+            if (reservation.DutyMember != null && SMSReservationUpdated != null)
             {
                 string phone = reservation.DutyMember.Contact;
-                string postername = reservation.PosterName;
+                string name = reservation.PosterName;
                 int ID = reservation.Id;
-                string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "作出更改，请及时登录平台查看。";
+                string message = SMSReservationUpdated.Replace("#id#", ID + "").Replace("#name#", name);
                 return SendSMSAsync(phone, message);
             }
             else

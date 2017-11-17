@@ -44,7 +44,15 @@ namespace ClinicReservation
                 SMSUrl = Configuration["SMSUrl"],
                 SMSApiKey = Configuration["SMSApiKey"],
                 ConnectionString = Configuration.GetConnectionString("reservationData"),
-                RegisterationTicket = ServiceConfig.ReadTicket()
+                RegisterationTicket = ServiceConfig.ReadTicket(),
+
+                Notice = Configuration["Notice"],
+                SMSCreationSuccess = Configuration["SMSCreationSuccess"],
+                SMSAnswered = Configuration["SMSAnswered"],
+                SMSReservationCreated = Configuration["SMSReservationCreated"],
+                SMSReservationClosed = Configuration["SMSReservationClosed"],
+                SMSReservationCancelled = Configuration["SMSReservationCancelled"],
+                SMSReservationUpdated = Configuration["SMSReservationUpdated"]
             };
             services.AddSingleton<ServiceConfig>(serviceConfig);
 
