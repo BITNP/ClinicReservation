@@ -3,7 +3,8 @@
 
     提供查询入口和创建预约入口
 *@
-
+@using ClinicReservation.Services
+@inject IServiceState state
 @{
     ViewData["Title"] = "Online Clinic Reservation";
     ViewData["Controller"] = "reservation";
@@ -12,16 +13,16 @@
     ViewData["DisableLeftNavi"] = true;
 }
 <div style="display: flex; flex-direction:row; justify-content: center; flex-wrap: wrap;">
-    
+
     <div class="np-section">
         <p class="np-title">Query Detail</p>
-        <form id="form_queryreservation" method="post" asp-action="Detail" asp-controller="Reservation" >
+        <form id="form_queryreservation" method="post" asp-action="Detail" asp-controller="Reservation">
             <p style="margin-bottom: 0">ID Number</p>
             <div id="input_id" data-control="input" data-type="number" data-name="id" style="width: calc(100% - 2em)"></div>
             <p style="margin-top: 1em; margin-bottom: 0">Last four digits of phone number</p>
             <div id="input_phonenum" data-control="input" data-type="number" data-name="phone" style="width: calc(100% - 2em)"></div>
         </form>
-        
+
         <br />
         <div id="btn_query" data-control="button" data-text="Query" data-accent="true"></div>
         <br />
@@ -30,9 +31,16 @@
     <div class="np-section">
         <p class="np-title">New reservation</p>
         <p>Create a reservation to let us know what you are currently stucked.</p>
-        
+
         <p>The Clinic Department of BITNP, which is one of the most useful friends for each of our schoolmates, is always ready to help dealing with problems caused by all kinds including your personal devices、softwares, hardwares、<span style="text-decoration: line-through">motions</span>.</p>
-        <div id="btn_create" data-control="button" data-text="Fill a form"></div>
+        @if (state.AllowCreate)
+        {
+            <div id="btn_create" data-control="button" data-text="Fill a form"></div>
+        }
+        else
+        {
+            <p style="color:#ff6a00; font-weight:bold">Service not available</p>
+        }
         <br />
         <br />
     </div>

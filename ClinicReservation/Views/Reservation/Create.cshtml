@@ -3,6 +3,9 @@
 *@
 @using ClinicReservation.Models.Reservation
 @using ClinicReservation.Helpers
+@using ClinicReservation.Services
+@inject INotificationProvider notificationProvider
+@inject CultureContext culture
 @addTagHelper *, DNTCaptcha.Core
 @{
     ViewData["Title"] = "填写预约";
@@ -45,7 +48,7 @@
         string typename = ViewData["ProblemType"] as string;
         string locationname = ViewData["Location"] as string;
         int index = 0;
-        foreach(SchoolType school in schools)
+        foreach (SchoolType school in schools)
         {
             if (school.Name == schoolname)
             {
@@ -83,8 +86,7 @@
 <div>
     <p class="smalltitle">我们的建议</p>
     <div>
-        <p>中关村电脑诊所仍在筹备中，暂无人员受理预约，将于近期正式上线，敬请期待。</p>
-        <p>由于电脑诊所周六日不安排值班，不建议预约周六日的维修，受理率较低。</p>
+        @Html.Raw(notificationProvider[culture.Culture])
     </div>
     <br />
     <p class="smalltitle">个人信息</p>
@@ -146,7 +148,7 @@
             {
                 <p class="unselectable"><span>今天</span></p>
             }
-            
+
             @for (int i = 1; i < datenames.Length; i++)
             {
                 @if (datediff == i)

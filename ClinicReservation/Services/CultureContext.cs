@@ -47,6 +47,9 @@ namespace ClinicReservation.Services
         public string RegionName { get; set; }
         public bool IsAllRegion { get; set; }
 
+        public CultureExpression()
+        { }
+
         public static bool TryParse(string language, out CultureExpression expression)
         {
             if (language.Length == 2)

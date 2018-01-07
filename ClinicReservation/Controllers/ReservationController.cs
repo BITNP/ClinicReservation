@@ -66,12 +66,19 @@ namespace ClinicReservation.Controllers
 
         // 新建预约请求页面
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create([FromServices] IServiceState serviceState)
         {
-            ViewData["SchoolTypes"] = db.SchoolTypes.OrderBy(type => type.Id);
-            ViewData["ProblemTypes"] = db.ProblemTypes.OrderBy(type => type.Id);
-            ViewData["LocationTypes"] = db.LocationTypes.OrderBy(type => type.Id);
-            return View();
+            if (serviceState.AllowCreate)
+            {
+                ViewData["SchoolTypes"] = db.SchoolTypes.OrderBy(type => type.Id);
+                ViewData["ProblemTypes"] = db.ProblemTypes.OrderBy(type => type.Id);
+                ViewData["LocationTypes"] = db.LocationTypes.OrderBy(type => type.Id);
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(ServiceNotAvailable));
+            }
         }
 
         // 查看预约信息
@@ -143,8 +150,13 @@ namespace ClinicReservation.Controllers
 
         // 处理提交预约请求
         [HttpPost]
-        public IActionResult Create(string postername, string posterphone, string posteremail, string posterqq, string posterschool, string problemtype, string problemdetail, string location, string bookdate, string captchaText, string captchaToken)
+        public IActionResult Create(string postername, string posterphone, string posteremail, string posterqq, string posterschool, string problemtype, string problemdetail, string location, string bookdate, string captchaText, string captchaToken, [FromServices] IServiceState serviceState)
         {
+            if (!serviceState.AllowCreate)
+            {
+                return RedirectToAction(nameof(ServiceNotAvailable));
+            }
+
             string _postername = postername ?? "";
             string _posterphone = posterphone ?? "";
             string _posteremail = posteremail ?? "";
@@ -542,6 +554,17 @@ namespace ClinicReservation.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public IActionResult ServiceNotAvailable([FromServices] IServiceState serviceState)
+        {
+            if (serviceState.AllowCreate)
+            {
+                return RedirectToActionPermanent(nameof(Index));
+            }
+
+            return View();
+        }
 
         private void SetSessionTicket(string id, string phone)
         {

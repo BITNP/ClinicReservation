@@ -44,7 +44,10 @@ namespace ClinicReservation
                 SMSUrl = Configuration["SMSUrl"],
                 SMSApiKey = Configuration["SMSApiKey"],
                 ConnectionString = Configuration.GetConnectionString("reservationData"),
-                RegisterationTicket = ServiceConfig.ReadTicket()
+                RegisterationTicket = ServiceConfig.ReadTicket(),
+                NotificationPath = "notification.json",
+                ServiceStatePath = "state.txt",
+                ServiceReasonPath = "service_reason.json"
             };
             services.AddSingleton<ServiceConfig>(serviceConfig);
 
@@ -91,6 +94,10 @@ namespace ClinicReservation
             services.AddSingleton<CultureOptions>(provider => new CultureOptions(defaultLanguage, supportedLanguages));
             services.AddScoped<CultureContext>();
             services.AddSingleton<LocalizedViewFindExecutor>();
+
+            services.AddSingleton<INotificationProvider, NotificationProvider>(service => new NotificationProvider(serviceConfig.NotificationPath));
+            services.AddSingleton<IServiceState, ServiceState>(service => new ServiceState(serviceConfig.ServiceStatePath));
+            services.AddSingleton<IServiceNotAvailableReasonProvider, ServiceNotAvailableReasonProvider>(service => new ServiceNotAvailableReasonProvider(serviceConfig.ServiceReasonPath));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

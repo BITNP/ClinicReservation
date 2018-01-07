@@ -14,7 +14,11 @@ namespace ClinicReservation.Services
         public string SMSUrl { get; set; }
         public string SMSApiKey { get; set; }
         public string RegisterationTicket { get; set; }
-        
+        public string NotificationPath { get; set; }
+        public string ServiceStatePath { get; set; }
+        public string ServiceReasonPath { get; set; }
+
+
 
         public static string ReadTicket()
         {

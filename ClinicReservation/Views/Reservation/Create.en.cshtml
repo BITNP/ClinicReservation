@@ -3,6 +3,9 @@
 *@
 @using ClinicReservation.Models.Reservation
 @using ClinicReservation.Helpers
+@using ClinicReservation.Services
+@inject INotificationProvider notificationProvider
+@inject CultureContext culture
 @{
     ViewData["Title"] = "Create Reservation";
     ViewData["Controller"] = "reservation";
@@ -19,25 +22,24 @@
 <div>
     <p class="smalltitle">Our suggestions</p>
     <div>
-        <p>中关村电脑诊所仍在筹备中，暂无人员受理预约，将于近期正式上线，敬请期待。</p>
-        <p>由于电脑诊所周六日不安排值班，不建议预约周六日的维修，受理率较低。</p>
+        @Html.Raw(notificationProvider[culture.Culture])
     </div>
     <br />
     <p class="smalltitle">Personal Information</p>
     <div>
         <p class="itemname">Name</p>
-        <div id="input_name" data-control="input" class="input-item" data-type="text" ></div>
+        <div id="input_name" data-control="input" class="input-item" data-type="text"></div>
         <p id="input_name_hint" class="info-base info-hint">[Optional] 留下您的姓名以方便我们称呼您。</p>
         <p class="itemname">Contact Number</p>
-        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number" ></div>
+        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number"></div>
         <p id="input_phone_hint" class="info-base info-hint">[Optional] 留下电话号码以便我们与您沟通。</p>
         <p id="input_phone_err" class="info-base info-error">[Error] Invalid format.</p>
         <p class="itemname">E-Mail</p>
-        <div id="input_email" class="input-item" data-control="input" data-type="text" ></div>
+        <div id="input_email" class="input-item" data-control="input" data-type="text"></div>
         <p id="input_mail_hint" class="info-base info-hint">[Optional] 留下邮箱以便我们与您沟通。</p>
         <p id="input_mail_err" class="info-base info-error">[Error] Invalid format.</p>
         <p class="itemname">QQ/WeChat</p>
-        <div id="input_qqnumber" class="input-item" data-control="input" data-type="text" ></div>
+        <div id="input_qqnumber" class="input-item" data-control="input" data-type="text"></div>
         <p id="input_qq_hint" class="info-base info-hint">[Optional] 留下QQ或微信以便我们与您沟通。</p>
         <p id="input_qq_err" class="info-base info-error">[Error] Invalid format.</p>
         <p class="itemname">School</p>

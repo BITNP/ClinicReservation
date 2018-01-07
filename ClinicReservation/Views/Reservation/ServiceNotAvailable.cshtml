@@ -1,0 +1,14 @@
+﻿
+@using ClinicReservation.Services
+@inject IServiceNotAvailableReasonProvider reasonProvider
+@inject CultureContext culture
+@{
+    ViewData["Title"] = "服务关闭";
+    ViewData["Controller"] = "reservation";
+    ViewData["ImportCSS"] = new List<string>() { };
+    ViewData["ImportScript"] = new List<string>() { };
+    ViewData["DisableLeftNavi"] = true;
+}
+
+<h2>啊哦。我们的服务暂时不可用哦。</h2>
+<p>@reasonProvider[culture.Culture]</p>

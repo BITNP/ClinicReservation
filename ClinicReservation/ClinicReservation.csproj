@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="notification.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Properties\PublishProfiles\bitnp-clinic-res - FTP.pubxml" />
     <None Remove="Properties\PublishProfiles\bitnp-clinic-res - Web Deploy.pubxml" />
   </ItemGroup>
@@ -19,10 +23,12 @@
 
   <ItemGroup>
     <PackageReference Include="DNTCaptcha.Core" Version="1.3.0" />
+    <PackageReference Include="Hake.Extension.ValueRecord" Version="1.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,5 +37,9 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="notification.json" />
   </ItemGroup>
 </Project>
