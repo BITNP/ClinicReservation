@@ -1,0 +1,3 @@
+[submodule "MvcAuthentication"]
+	path = MvcAuthentication
+	url = https://github.com/lzl1918/MvcAuthentication
