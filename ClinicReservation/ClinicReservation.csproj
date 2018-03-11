@@ -42,4 +42,8 @@
   <ItemGroup>
     <None Include="notification.json" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MvcAuthentication\AuthenticationCore\AuthenticationCore.csproj" />
+  </ItemGroup>
 </Project>
