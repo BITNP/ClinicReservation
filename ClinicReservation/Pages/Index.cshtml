@@ -1,0 +1,49 @@
+﻿@page
+@model IndexModel
+@inject IServiceState state
+@{
+    // 在线预约系统首页
+    // 提供查询入口和创建预约入口
+
+    ViewData["Title"] = "预约系统";
+    ViewData["Controller"] = "reservation";
+    ViewData["ImportCSS"] = new List<string>() { "index" };
+    ViewData["ImportScript"] = new List<string>() { "index" };
+    ViewData["DisableLeftNavi"] = true;
+}
+@section styles
+{
+    <link href="~/css/reservation/index.css" rel="stylesheet" />
+}
+
+<div style="display: flex; flex-direction:row; justify-content: center; flex-wrap: wrap;">
+
+    <div class="np-section">
+        <p class="np-title">登陆</p>
+        <p>跳转到网协CAS服务进行登陆</p>
+
+        <p>登陆后可以看到更多个人化信息。</p>
+        <div id="btn_login" data-control="button" data-text="登陆CAS系统"></div>
+
+        <br />
+        <br />
+    </div>
+    <div class="np-section">
+        <p class="np-title">填写预约信息</p>
+        <p>向我们发起预约请求</p>
+
+        <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
+        @if (state.AllowCreate)
+        {
+            <div id="btn_create" data-control="button" data-text="填写预约"></div>
+        }
+        else
+        {
+            <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
+        }
+        <br />
+        <br />
+    </div>
+</div>
+
+

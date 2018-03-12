@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicReservation", "Clinic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationCore", "MvcAuthentication\AuthenticationCore\AuthenticationCore.csproj", "{5989E91B-AC1E-4702-A48B-B04BB7E79E82}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalizationCore", "MvcLocalization\LocalizationCore\LocalizationCore.csproj", "{958C8BDD-928B-4674-91CB-88C15D05B65E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{5989E91B-AC1E-4702-A48B-B04BB7E79E82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5989E91B-AC1E-4702-A48B-B04BB7E79E82}.Release|x86.ActiveCfg = Release|Any CPU
 		{5989E91B-AC1E-4702-A48B-B04BB7E79E82}.Release|x86.Build.0 = Release|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Debug|x86.Build.0 = Debug|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Release|x86.ActiveCfg = Release|Any CPU
+		{958C8BDD-928B-4674-91CB-88C15D05B65E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

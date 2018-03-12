@@ -1,0 +1,92 @@
+﻿@using LocalizationCore
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject ICultureContext cultureContext
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>@ViewData["Title"]</title>
+
+    <script type="text/javascript">
+        window.siteLanguageSpecifier = "@cultureContext.UrlCultureSpecifier";
+    </script>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/npstrap/css/controls.css" />
+        <link rel="stylesheet" href="~/lib/npstrap/css/general.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/npstrap/css/controls.min.css" />
+        <link rel="stylesheet" href="~/lib/npstrap/css/general.min.css" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("styles", required: false)
+
+    @Html.Raw(JavaScriptSnippet.FullScript)
+</head>
+<body>
+    <div class="nppage-header">
+        @if (IsSectionDefined("header"))
+        {
+            @RenderSection("header")
+        }
+        else
+        {
+            @Html.Partial("_SharedHeader")
+
+        }
+    </div>
+    <div class="nppage-content-container">
+        @if (ViewData.ContainsKey("DisableLeftNavi") == false)
+        {
+            <div class="left-navi">
+                @RenderSection("leftnavi", required: false)
+            </div>
+            <div class="nppage-content">
+                @RenderBody()
+            </div>
+        }
+        else
+        {
+            <div class="nppage-content no-navibar">
+                @RenderBody()
+            </div>
+
+        }
+
+    </div>
+    <div class="nppage-footer">
+        @if (IsSectionDefined("footer"))
+        {
+            @RenderSection("footer")
+        }
+        else
+        {
+            @Html.Partial("_SharedFooter")
+
+        }
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-ext/jquery.mousewheel.min.js"></script>
+        <script src="~/lib/jquery-ext/jquery.throttle-debounce.min.js"></script>
+        <script src="~/lib/jquery-ext/jquery.md5.js"></script>
+        <script src="~/lib/npstrap/js/controls.js"></script>
+        <script src="~/js/site.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-ext/jquery.mousewheel.min.js"></script>
+        <script src="~/lib/jquery-ext/jquery.throttle-debounce.min.js"></script>
+        <script src="~/lib/jquery-ext/jquery.md5.js"></script>
+        <script src="~/lib/npstrap/js/controls.min.js"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

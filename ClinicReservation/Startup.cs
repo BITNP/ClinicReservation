@@ -14,26 +14,20 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using ClinicReservation.Models;
 using ClinicReservation.Services;
-using ClinicReservation.Middlewares;
 using ClinicReservation.Controllers;
 using DNTCaptcha.Core;
+using LocalizationCore;
+using AuthenticationCore;
 
 namespace ClinicReservation
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("lang.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -89,11 +83,14 @@ namespace ClinicReservation
 
             services.AddDNTCaptcha();
 
-            string defaultLanguage = Configuration["Language:Default"];
-            IEnumerable<string> supportedLanguages = Configuration.GetSection("Language:Supported").AsEnumerable().Where(x => x.Value != null).Select(x => x.Value);
-            services.AddSingleton<CultureOptions>(provider => new CultureOptions(defaultLanguage, supportedLanguages));
-            services.AddScoped<CultureContext>();
-            services.AddSingleton<LocalizedViewFindExecutor>();
+            string defaultLanguage = Configuration["Culture:Default"];
+            IEnumerable<string> supportedLanguages = Configuration.GetSection("Culture:Supported").AsEnumerable().Where(x => x.Value != null).Select(x => x.Value);
+            services.AddMvcLocalization(defaultLanguage, supportedLanguages);
+
+            services.AddMvcAuthentication(
+                redirectUrl: Configuration["CAS:redirectUrl"],
+                validateUrl: Configuration["CAS:validateUrl"],
+                sessionName: Configuration["CAS:sessionName"]);
 
             services.AddSingleton<INotificationProvider, NotificationProvider>(service => new NotificationProvider(serviceConfig.NotificationPath));
             services.AddSingleton<IServiceState, ServiceState>(service => new ServiceState(serviceConfig.ServiceStatePath));
@@ -102,9 +99,6 @@ namespace ClinicReservation
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -116,14 +110,18 @@ namespace ClinicReservation
 
             app.UseStaticFiles();
 
-            app.UseLocalization();
-
             app.UseSession();
+
+            app.UseMvcLocalization(checkCultureSupported: false);
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
+                    template: "{page=Index}");
+
+                routes.MapRoute(
+                    name: "mvc",
                     template: "{controller=Reservation}/{action=Index}/{id?}");
             });
         }

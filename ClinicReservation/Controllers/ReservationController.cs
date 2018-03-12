@@ -13,19 +13,21 @@ using ClinicReservation.Services;
 using Microsoft.AspNetCore.Http;
 using ClinicReservation.Helpers;
 using DNTCaptcha.Core.Contracts;
+using LocalizationCore;
 
 namespace ClinicReservation.Controllers
 {
-    public class ReservationController : LocalizedViewFindableController
+    public class ReservationController : CultureMatchingController
     {
         public const int ITEMS_PER_PAGE = 10;
 
         private readonly ReservationDbContext db;
         private readonly NPOLJwtTokenService tokenservice;
         private readonly SMSService smsService;
-        private readonly CultureContext cultureContext;
+        private readonly ICultureContext cultureContext;
         private readonly ICaptchaProtectionProvider captchaProtectionProvider;
         private readonly IHumanReadableIntegerProvider humanReadableIntegerProvider;
+        private readonly IServiceState serviceState;
         private TimeSpan cancelClosedTimeout = TimeSpan.FromDays(7);
         private static Dictionary<string, int> ACTION_CODES { get; } = new Dictionary<string, int>()
         {
@@ -38,8 +40,14 @@ namespace ClinicReservation.Controllers
             ["complete"] = 340,
         };
 
-        public ReservationController(ReservationDbContext dbcontext, NPOLJwtTokenService tokenservice, SMSService smsService, CultureContext cultureContext,
-            ICaptchaProtectionProvider captchaProtectionProvider, IHumanReadableIntegerProvider humanReadableIntegerProvider) : base(cultureContext)
+        public ReservationController(
+            ReservationDbContext dbcontext,
+            NPOLJwtTokenService tokenservice,
+            SMSService smsService,
+            ICultureContext cultureContext,
+            ICaptchaProtectionProvider captchaProtectionProvider,
+            IHumanReadableIntegerProvider humanReadableIntegerProvider,
+            IServiceState serviceState)
         {
             db = dbcontext;
             this.tokenservice = tokenservice;
@@ -47,6 +55,7 @@ namespace ClinicReservation.Controllers
             this.cultureContext = cultureContext;
             this.captchaProtectionProvider = captchaProtectionProvider;
             this.humanReadableIntegerProvider = humanReadableIntegerProvider;
+            this.serviceState = serviceState;
         }
 
         // 在线预约首页
@@ -66,7 +75,7 @@ namespace ClinicReservation.Controllers
 
         // 新建预约请求页面
         [HttpGet]
-        public IActionResult Create([FromServices] IServiceState serviceState)
+        public IActionResult Create()
         {
             if (serviceState.AllowCreate)
             {
@@ -206,11 +215,11 @@ namespace ClinicReservation.Controllers
                     ModifiedDate = now,
                     ReservationDate = _reservationDate,
                     State = ReservationState.NewlyCreated,
-                    LastUpdatedLanguage = cultureContext.Culture.Language
+                    LastUpdatedLanguage = cultureContext.CurrentCulture.Language
                 };
                 EntityEntry<ReservationDetail> entry = db.ReservationDetails.Add(detail);
                 db.SaveChanges();
-                smsService.SendCreationSuccessAsync(entry.Entity, cultureContext.Culture);
+                smsService.SendCreationSuccessAsync(entry.Entity, cultureContext.CurrentCulture);
                 smsService.SendReservationCreatedAsync(entry.Entity);
                 TempData["id"] = entry.Entity.Id.ToString();
                 TempData["phone"] = entry.Entity.GetShortenPhone();
@@ -380,7 +389,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.NewlyCreated || _detail.State == ReservationState.Answered)
             {
                 _detail.State = ReservationState.Cancelled;
-                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
+                _detail.LastUpdatedLanguage = cultureContext.CurrentCulture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -397,7 +406,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Cancelled)
             {
                 _detail.State = ReservationState.ClosedWithoutComplete;
-                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
+                _detail.LastUpdatedLanguage = cultureContext.CurrentCulture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -414,7 +423,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Cancelled)
             {
                 _detail.State = ReservationState.NewlyCreated;
-                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
+                _detail.LastUpdatedLanguage = cultureContext.CurrentCulture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -456,7 +465,7 @@ namespace ClinicReservation.Controllers
             if (_detail.State == ReservationState.Answered)
             {
                 _detail.State = ReservationState.Completed;
-                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
+                _detail.LastUpdatedLanguage = cultureContext.CurrentCulture.Language;
                 _detail.ActionDate = DateTimeHelper.GetBeijingTime();
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;
@@ -536,7 +545,7 @@ namespace ClinicReservation.Controllers
                 _detail.ProblemType = _problemType;
                 _detail.Detail = problemdetail;
                 _detail.ModifiedDate = now;
-                _detail.LastUpdatedLanguage = cultureContext.Culture.Language;
+                _detail.LastUpdatedLanguage = cultureContext.CurrentCulture.Language;
                 _detail.ReservationDate = _reservationDate;
                 EntityEntry<ReservationDetail> entry = db.Entry(_detail);
                 entry.State = EntityState.Modified;

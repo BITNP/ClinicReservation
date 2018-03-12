@@ -1,4 +1,5 @@
 ﻿using ClinicReservation.Services;
+using LocalizationCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace ClinicReservation.Helpers
 {
     public static class CultureHelper
     {
-        public static T MatchCulture<T>(Dictionary<string, T> dictionary, CultureExpression culture, out CultureExpression matchedCulture)
+        public static T MatchCulture<T>(Dictionary<string, T> dictionary, ICultureExpression culture, out ICultureExpression matchedCulture)
         {
             string requestedLanguage = culture.Language;
             string lang = requestedLanguage;
@@ -16,14 +17,14 @@ namespace ClinicReservation.Helpers
             if (!culture.IsAllRegion && dictionary.TryGetValue(lang, out result))
             {
                 // exact match
-                matchedCulture = CultureExpression.Parse(lang);
+                matchedCulture = lang.ParseCultureExpression();
                 return result;
             }
-            lang = culture.LanguageName;
+            lang = culture.Language;
             if (dictionary.TryGetValue(lang, out result))
             {
                 // language name match
-                matchedCulture = CultureExpression.Parse(lang);
+                matchedCulture = lang.ParseCultureExpression();
                 return result;
             }
             else

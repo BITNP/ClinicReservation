@@ -1,5 +1,6 @@
 ﻿using ClinicReservation.Helpers;
 using Hake.Extension.ValueRecord;
+using LocalizationCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ namespace ClinicReservation.Services
 {
     public interface IServiceNotAvailableReasonProvider
     {
-        string this[CultureExpression culture] { get; }
+        string this[ICultureExpression culture] { get; }
 
         void SetReason(string notification, string culture);
 
@@ -21,11 +22,11 @@ namespace ClinicReservation.Services
     {
         private object locker;
         private Dictionary<string, string> reasons;
-        public string this[CultureExpression culture]
+        public string this[ICultureExpression culture]
         {
             get
             {
-                string result = CultureHelper.MatchCulture(reasons, culture, out CultureExpression matchedCulture);
+                string result = CultureHelper.MatchCulture(reasons, culture, out ICultureExpression matchedCulture);
                 if (matchedCulture == null)
                     throw new Exception("language resource not found");
                 return result;

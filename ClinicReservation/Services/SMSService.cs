@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Runtime.Serialization.Json;
 using System.Runtime.Serialization;
+using LocalizationCore;
 
 namespace ClinicReservation.Services
 {
@@ -49,7 +50,7 @@ namespace ClinicReservation.Services
 
         // 用于向申请者发送短信
         // 通知创建申请成功
-        public Task SendCreationSuccessAsync(ReservationDetail reservation, CultureExpression culture)
+        public Task SendCreationSuccessAsync(ReservationDetail reservation, ICultureExpression culture)
         {
             if (reservation.PosterPhone != null && reservation.PosterName != null)
             {

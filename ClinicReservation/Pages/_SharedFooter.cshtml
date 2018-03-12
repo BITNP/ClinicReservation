@@ -1,0 +1,35 @@
+﻿@using ClinicReservation.Controllers
+@using LocalizationCore
+@inject ICultureContext cultureContext
+@inject ILocalizedViewRenderContext renderContext
+@{
+    string requestedLanguage = "";
+    if (renderContext != null)
+    {
+        requestedLanguage = renderContext.RequestedCulture.DisplayName;
+    }
+    else
+    {
+        requestedLanguage = cultureContext.CurrentCulture.DisplayName;
+    }
+    string source = cultureContext.Action;
+    string url = $"{cultureContext.UrlCultureSpecifier}/Reservation/{nameof(ReservationController.Language)}?source={source}";
+}
+<div class="left">
+    <span class="glyphicon glyphicon-globe" style="margin-right: 0.5em; font-size: 1.2em"></span>
+    <a href="@url" class="lang-link">@requestedLanguage</a>
+</div>
+<div class="right">
+    <div>
+        <p><span>© @DateTime.Now.ToString("yyyy") BITNP | Designed by lzlhake & <a href="http://www.jackh.cn" target="_blank">Jack.H</a></span></p>
+    </div>
+</div>
+
+<environment names="Development">
+    <link rel="stylesheet" href="~/_shared/_sharedfooter.css" />
+    <script src="~/_shared/_sharedfooter.es5.js"></script>
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="~/_shared/_sharedfooter.min.css" asp-append-version="true" />
+    <script src="~/_shared/_sharedfooter.es5.min.js" asp-append-version="true"></script>
+</environment>
