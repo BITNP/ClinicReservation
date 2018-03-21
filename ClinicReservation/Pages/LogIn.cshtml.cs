@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
+    [AuthenticationRequired(AuthenticationPolicy.All, AuthenticationFailedAction.RedirectCAS)]
     public class LogInModel : PageModel
     {
         private readonly IAuthenticationService authenticationService;
@@ -17,19 +18,9 @@ namespace ClinicReservation.Pages
             this.authenticationService = authenticationService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
-            IAuthenticationResult authenticationResult = await authenticationService.CASAsync();
-            if (authenticationResult.IsAuthenticated && authenticationResult.IsCAS)
-            {
-                // redirect to user's main page
-                return Redirect("/Board");
-            }
-            else
-            {
-                // redirect to CAS
-                return authenticationService.CreateRedirectCASResult();
-            }
+            return Redirect("/Board");
         }
     }
 }

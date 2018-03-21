@@ -2,7 +2,23 @@
 @model ClinicReservation.Pages.BoardModel
 @{
     ViewData["Title"] = "Board";
+    ViewData["DisableLeftNavi"] = true;
 }
 
-<h2>Board</h2>
+@section styles {
+    <environment names="Development">
+        <link href="~/css/board.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/css/board.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section scripts {
+    <environment names="Development">
+        <script src="~/js/index.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/index.min.js" asp-append-version="true"></script>
+    </environment>
+}
 

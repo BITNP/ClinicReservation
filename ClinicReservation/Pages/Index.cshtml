@@ -1,6 +1,7 @@
 ﻿@page
 @model IndexModel
 @inject IServiceState state
+@inject AuthenticationCore.IAuthenticationResult authenticationResult
 @{
     // 在线预约系统首页
     // 提供查询入口和创建预约入口
@@ -11,23 +12,50 @@
     ViewData["ImportScript"] = new List<string>() { "index" };
     ViewData["DisableLeftNavi"] = true;
 }
-@section styles
-{
-    <link href="~/css/reservation/index.css" rel="stylesheet" />
+@section styles {
+    <environment names="Development">
+        <link href="~/css/index.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/css/index.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section scripts {
+    <environment names="Development">
+        <script src="~/js/index.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/index.min.js" asp-append-version="true"></script>
+    </environment>
 }
 
 <div style="display: flex; flex-direction:row; justify-content: center; flex-wrap: wrap;">
+    @if (!authenticationResult.IsAuthenticated)
+    {
+        <div class="np-section">
+            <p class="np-title">登陆</p>
+            <p>跳转到网协CAS服务进行注册或登陆</p>
 
-    <div class="np-section">
-        <p class="np-title">登陆</p>
-        <p>跳转到网协CAS服务进行登陆</p>
+            <p>登陆后可以看到更多个人化信息。</p>
+            <div id="btn_login" data-control="button" data-text="登陆CAS系统"></div>
 
-        <p>登陆后可以看到更多个人化信息。</p>
-        <div id="btn_login" data-control="button" data-text="登陆CAS系统"></div>
+            <br />
+            <br />
+        </div>
+    }
+    else
+    {
+        <div class="np-section">
+            <p class="np-title">下午好</p>
+            <p>个人中心记录了已经发布的订单</p>
 
-        <br />
-        <br />
-    </div>
+            <p>查看更多</p>
+            <div id="btn_board" data-control="button" data-text="进入个人中心"></div>
+
+            <br />
+            <br />
+        </div>
+    }
     <div class="np-section">
         <p class="np-title">填写预约信息</p>
         <p>向我们发起预约请求</p>
@@ -35,6 +63,8 @@
         <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
         @if (state.AllowCreate)
         {
+            <p>可能需要登陆</p>
+
             <div id="btn_create" data-control="button" data-text="填写预约"></div>
         }
         else

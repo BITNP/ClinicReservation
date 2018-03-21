@@ -1,6 +1,4 @@
-﻿"use strict";
-
-var add_event = function add_event(elements, event, handler) {
+﻿var add_event = function (elements, event, handler) {
     var i = 0;
     var len = elements.length;
     for (i; i < len; i++) {
@@ -8,35 +6,40 @@ var add_event = function add_event(elements, event, handler) {
     }
 };
 
-var set_location = function set_location(url) {
+var set_location = function (url) {
     var culture = window.culture;
-    if (!culture) window.culture = culture = "";
+    if (!culture)
+        window.culture = culture = "";
     window.location = culture + url;
 };
 
 (function (window) {
     var langreg = /^[a-zA-Z]{2,2}(\-(\*|([a-zA-Z]{2,2})))?(\/|$)/.compile();
 
-    var startsWidthCulture = function startsWidthCulture(url) {
+    var startsWidthCulture = function (url) {
         url = url.substr(1);
-        if (langreg.exec(url) != null) return true;
+        if (langreg.exec(url) != null)
+            return true;
         return false;
     };
-    var load = function load() {
+    var load = function () {
         var culture = window.culture;
-        if (!culture) window.culture = culture = "";
+        if (!culture)
+            window.culture = culture = "";
 
         if (culture.length > 0) {
             $("a").each(function () {
                 var href = this.href;
-                if (href.startsWith('/') && !startsWidthCulture(href)) {
+                if (href.startsWith('/') &&
+                    !startsWidthCulture(href)) {
                     href = culture + href;
                     this.href = href;
                 }
             });
             $("form").each(function () {
                 var action = this.action;
-                if (action.startsWith('/') && !startsWidthCulture(action)) {
+                if (action.startsWith('/') &&
+                    !startsWidthCulture(action)) {
                     action = culture + action;
                     this.action = action;
                 }
@@ -46,4 +49,3 @@ var set_location = function set_location(url) {
 
     window.addEventListener("load", load, false);
 })(window);
-

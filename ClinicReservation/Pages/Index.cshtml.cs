@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
+    [AuthenticationRequired]
     public class IndexModel : CultureMatchingPageModel
     {
         private readonly IAuthenticationService authenticationService;
@@ -18,10 +19,14 @@ namespace ClinicReservation.Pages
             this.authenticationService = authenticationService;
         }
 
-        public async void OnGetAsync()
-        {
-            IAuthenticationResult authenticationResult = await authenticationService.CASAsync(true);
 
+        public IActionResult OnGet([FromServices]IAuthenticationResult authenticationResult)
+        {
+            if (authenticationResult.IsAuthenticated)
+            {
+                return Redirect("/Board");
+            }
+            return Page();
         }
     }
 }

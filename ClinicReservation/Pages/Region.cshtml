@@ -1,0 +1,10 @@
+﻿@page
+@model ClinicReservation.Pages.RegionModel
+@{
+    ViewData["Title"] = "Region";
+    ViewData["DisableLeftNavi"] = true;
+    string source = Model.Source;
+}
+
+<a href="/en-us/@source">English</a>
+<a href="/zh-cn/@source">简体中文</a>

@@ -1,15 +1,39 @@
 ﻿[
   {
     "outputFile": "wwwroot/css/site.css",
-    "inputFile": "wwwroot/css/site.less"
+    "inputFile": "wwwroot/raw/css/site.less"
+  },
+  {
+    "outputFile": "wwwroot/js/site.js",
+    "inputFile": "wwwroot/raw/js/site.js"
+  },
+  {
+    "outputFile": "wwwroot/css/sharedheader.css",
+    "inputFile": "wwwroot/raw/shared/sharedheader.less"
+  },
+  {
+    "outputFile": "wwwroot/css/sharedfooter.css",
+    "inputFile": "wwwroot/raw/shared/sharedfooter.less"
+  },
+  {
+    "outputFile": "wwwroot/js/sharedheader.js",
+    "inputFile": "wwwroot/raw/shared/sharedheader.js"
+  },
+  {
+    "outputFile": "wwwroot/css/board.css",
+    "inputFile": "wwwroot/raw/css/board.less"
+  },
+  {
+    "outputFile": "wwwroot/css/index.css",
+    "inputFile": "wwwroot/raw/css/index.less"
+  },
+  {
+    "outputFile": "wwwroot/js/index.js",
+    "inputFile": "wwwroot/raw/js/index.js"
   },
   {
     "outputFile": "wwwroot/css/reservation/create.css",
     "inputFile": "wwwroot/css/reservation/create.less"
-  },
-  {
-    "outputFile": "wwwroot/lib/npstrap/js/controls.es5.js",
-    "inputFile": "wwwroot/lib/npstrap/js/controls.js"
   },
   {
     "outputFile": "wwwroot/js/reservation/create.es5.js",
@@ -23,10 +47,7 @@
     "outputFile": "wwwroot/js/reservation/index.es5.js",
     "inputFile": "wwwroot/js/reservation/index.js"
   },
-  {
-    "outputFile": "wwwroot/css/member/index.css",
-    "inputFile": "wwwroot/css/member/index.less"
-  },
+
   {
     "outputFile": "wwwroot/css/reservation/index.css",
     "inputFile": "wwwroot/css/reservation/index.less"
@@ -42,22 +63,6 @@
   {
     "outputFile": "wwwroot/js/member/viewdetails.es5.js",
     "inputFile": "wwwroot/js/member/viewdetails.js"
-  },
-  {
-    "outputFile": "wwwroot/_shared/_sharedheader.es5.js",
-    "inputFile": "wwwroot/_shared/_sharedheader.js"
-  },
-  {
-    "outputFile": "wwwroot/_shared/_sharedheader.css",
-    "inputFile": "wwwroot/_shared/_sharedheader.less"
-  },
-  {
-    "outputFile": "wwwroot/_shared/_sharedfooter.es5.js",
-    "inputFile": "wwwroot/_shared/_sharedfooter.js"
-  },
-  {
-    "outputFile": "wwwroot/_shared/_sharedfooter.css",
-    "inputFile": "wwwroot/_shared/_sharedfooter.less"
   },
   {
     "outputFile": "wwwroot/js/reservation/message.es5.js",

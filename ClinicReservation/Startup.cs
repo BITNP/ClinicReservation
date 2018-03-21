@@ -45,7 +45,9 @@ namespace ClinicReservation
             };
             services.AddSingleton<ServiceConfig>(serviceConfig);
 
-            services.AddMvc();
+            services.AddMvc().AddRazorPagesOptions(option =>
+            {
+            });
 
             services.AddSession(options =>
             {
@@ -86,8 +88,9 @@ namespace ClinicReservation
             string defaultLanguage = Configuration["Culture:Default"];
             IEnumerable<string> supportedLanguages = Configuration.GetSection("Culture:Supported").AsEnumerable().Where(x => x.Value != null).Select(x => x.Value);
             services.AddMvcLocalization(defaultLanguage, supportedLanguages);
+            services.AddCodeMatching();
 
-            services.AddMvcAuthentication(
+            services.AddMvcAuthentication<CASResultHandler>(
                 redirectUrl: Configuration["CAS:redirectUrl"],
                 validateUrl: Configuration["CAS:validateUrl"],
                 sessionName: Configuration["CAS:sessionName"]);

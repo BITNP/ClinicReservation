@@ -1,7 +1,9 @@
 ﻿@using ClinicReservation.Controllers
 @using LocalizationCore
+@using LocalizationCore.CodeMatching
 @inject ICultureContext cultureContext
 @inject ILocalizedViewRenderContext renderContext
+@inject ICodeMatchingService code
 @{
     string requestedLanguage = "";
     if (renderContext != null)
@@ -13,23 +15,29 @@
         requestedLanguage = cultureContext.CurrentCulture.DisplayName;
     }
     string source = cultureContext.Action;
-    string url = $"{cultureContext.UrlCultureSpecifier}/Reservation/{nameof(ReservationController.Language)}?source={source}";
+    string url = $"{cultureContext.UrlCultureSpecifier}/Region";
+    if (source != null && source.Length > 0)
+    {
+        url += "?source={source}";
+    }
 }
 <div class="left">
-    <span class="glyphicon glyphicon-globe" style="margin-right: 0.5em; font-size: 1.2em"></span>
-    <a href="@url" class="lang-link">@requestedLanguage</a>
+    <i class="fas fa-globe" style="font-size: 1.2em" aria-hidden="true"></i>
+    <a href="/region" class="lang-link">@code.Match(requestedLanguage, requestedLanguage)</a>
 </div>
 <div class="right">
     <div>
-        <p><span>© @DateTime.Now.ToString("yyyy") BITNP | Designed by lzlhake & <a href="http://www.jackh.cn" target="_blank">Jack.H</a></span></p>
+        <p style="margin: 0"><span>© @DateTime.Now.ToString("yyyy") BITNP | Designed by lzlhake & <a href="http://www.jackh.cn" target="_blank">Jack.H</a></span></p>
     </div>
 </div>
 
 <environment names="Development">
-    <link rel="stylesheet" href="~/_shared/_sharedfooter.css" />
-    <script src="~/_shared/_sharedfooter.es5.js"></script>
+    <link rel="stylesheet" href="~/css/sharedfooter.css" />
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 </environment>
 <environment names="Staging,Production">
-    <link rel="stylesheet" href="~/_shared/_sharedfooter.min.css" asp-append-version="true" />
-    <script src="~/_shared/_sharedfooter.es5.min.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="~/css/sharedfooter.min.css" asp-append-version="true" />
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 </environment>
