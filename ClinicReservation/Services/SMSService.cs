@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using ClinicReservation.Models.Reservation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Runtime.Serialization.Json;
 using System.Runtime.Serialization;
 using LocalizationCore;
+using ClinicReservation.Models.Data;
 
 namespace ClinicReservation.Services
 {
@@ -50,12 +50,12 @@ namespace ClinicReservation.Services
 
         // 用于向申请者发送短信
         // 通知创建申请成功
-        public Task SendCreationSuccessAsync(ReservationDetail reservation, ICultureExpression culture)
+        public Task SendCreationSuccessAsync(Reservation reservation, ICultureExpression culture)
         {
-            if (reservation.PosterPhone != null && reservation.PosterName != null)
+            if (reservation.Poster.Phone != null && reservation.Poster.Name != null)
             {
-                string phone = reservation.PosterPhone;
-                string name = reservation.PosterName;
+                string phone = reservation.Poster.Phone;
+                string name = reservation.Poster.Name;
                 int ID = reservation.Id;
                 string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已成功，预约号(标识ID)为" + ID + "，请耐心等待维修人员受理，若有变动请及时登录平台更改，谢谢。";
                 return SendSMSAsync(phone, message);
@@ -68,12 +68,12 @@ namespace ClinicReservation.Services
 
         // 用于向申请者发送短信
         // 通知已受理
-        public Task SendAnsweredAsync(ReservationDetail reservation)
+        public Task SendAnsweredAsync(Reservation reservation)
         {
-            if (reservation.PosterPhone != null && reservation.PosterName != null)
+            if (reservation.Poster.Phone != null && reservation.Poster.Name != null)
             {
-                string phone = reservation.PosterPhone;
-                string name = reservation.PosterName;
+                string phone = reservation.Poster.Phone;
+                string name = reservation.Poster.Name;
                 string message = "【北理网协】尊敬的" + name + "您好，您的电脑诊所预约已被受理，请按预约时间地点前往维修，若有变动请及时登录平台更改，谢谢。";
                 return SendSMSAsync(phone, message);
             }
@@ -85,19 +85,19 @@ namespace ClinicReservation.Services
 
         // 用于向诊所人员发送短信
         // 通知有新的申请
-        public Task SendReservationCreatedAsync(ReservationDetail reservation)
+        public Task SendReservationCreatedAsync(Reservation reservation)
         {
             return Task.CompletedTask;
         }
 
         // 用于向诊所人员发送短信
         // 通知申请被用户主动关闭
-        public Task SendReservationClosedAsync(ReservationDetail reservation)
+        public Task SendReservationClosedAsync(Reservation reservation)
         {
-            if (reservation.DutyMember != null)
+            if (reservation.Duty != null)
             {
-                string phone = reservation.DutyMember.Contact;
-                string postername = reservation.PosterName;
+                string phone = reservation.Duty.Phone;
+                string postername = reservation.Poster.Name;
                 int ID = reservation.Id;
                 string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动关闭。";
                 return SendSMSAsync(phone, message);
@@ -110,12 +110,12 @@ namespace ClinicReservation.Services
 
         // 用于向诊所人员发送短信
         // 通知申请被用户主动取消
-        public Task SendReservationCancelledAsync(ReservationDetail reservation)
+        public Task SendReservationCancelledAsync(Reservation reservation)
         {
-            if (reservation.DutyMember != null)
+            if (reservation.Duty != null)
             {
-                string phone = reservation.DutyMember.Contact;
-                string postername = reservation.PosterName;
+                string phone = reservation.Duty.Phone;
+                string postername = reservation.Poster.Name;
                 int ID = reservation.Id;
                 string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "主动取消。";
                 return SendSMSAsync(phone, message);
@@ -128,12 +128,12 @@ namespace ClinicReservation.Services
 
         // 用于向诊所人员发送短信
         // 当预约更改时通知受理该问题的人员
-        public Task SendReservationUpdatedAsync(ReservationDetail reservation)
+        public Task SendReservationUpdatedAsync(Reservation reservation)
         {
-            if (reservation.DutyMember != null)
+            if (reservation.Duty != null)
             {
-                string phone = reservation.DutyMember.Contact;
-                string postername = reservation.PosterName;
+                string phone = reservation.Duty.Phone;
+                string postername = reservation.Poster.Name;
                 int ID = reservation.Id;
                 string message = "【北理网协】您好，您受理的标识ID为" + ID + "的维修申请，已被用户" + postername + "作出更改，请及时登录平台查看。";
                 return SendSMSAsync(phone, message);
@@ -171,7 +171,7 @@ namespace ClinicReservation.Services
                     var ms = new MemoryStream(Encoding.Unicode.GetBytes(responseContent));
                     DataContractJsonSerializer deseralizer = new DataContractJsonSerializer(typeof(SMSResponse));
                     SMSResponse sMSResponse = (SMSResponse)deseralizer.ReadObject(ms); //反序列化ReadObject
-                    if(sMSResponse.Code != 0)
+                    if (sMSResponse.Code != 0)
                     {
                         throw new Exception(sMSResponse.Msg);
                     }

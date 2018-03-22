@@ -11,13 +11,6 @@ namespace ClinicReservation.Pages
     [AuthenticationRequired(AuthenticationPolicy.All, AuthenticationFailedAction.RedirectCAS)]
     public class LogInModel : PageModel
     {
-        private readonly IAuthenticationService authenticationService;
-
-        public LogInModel(IAuthenticationService authenticationService)
-        {
-            this.authenticationService = authenticationService;
-        }
-
         public IActionResult OnGet()
         {
             return Redirect("/Board");

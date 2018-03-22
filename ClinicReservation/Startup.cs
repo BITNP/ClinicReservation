@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ClinicReservation.Models.Reservation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
 using ClinicReservation.Models;
 using ClinicReservation.Services;
-using ClinicReservation.Controllers;
+//using ClinicReservation.Controllers;
 using DNTCaptcha.Core;
 using LocalizationCore;
 using AuthenticationCore;
+using ClinicReservation.Models.Data;
 
 namespace ClinicReservation
 {
@@ -27,6 +27,7 @@ namespace ClinicReservation
         {
             Configuration = configuration;
         }
+
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -45,9 +46,7 @@ namespace ClinicReservation
             };
             services.AddSingleton<ServiceConfig>(serviceConfig);
 
-            services.AddMvc().AddRazorPagesOptions(option =>
-            {
-            });
+            services.AddMvc();
 
             services.AddSession(options =>
             {
@@ -55,7 +54,8 @@ namespace ClinicReservation
                 options.Cookie.Name = serviceConfig.SessionName;
             });
 
-            services.AddDbContext<ReservationDbContext>(options => options.UseSqlServer(serviceConfig.ConnectionString));
+            services.AddDbContext<DataDbContext>(options => options.UseSqlServer(serviceConfig.ConnectionString));
+            services.AddScoped<IDbQuery, DbQuery>();
 
             services.AddSingleton<NPOLJwtTokenService>(provider =>
             {
@@ -111,11 +111,11 @@ namespace ClinicReservation
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
             app.UseSession();
 
             app.UseMvcLocalization(checkCultureSupported: false);
+
+            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {

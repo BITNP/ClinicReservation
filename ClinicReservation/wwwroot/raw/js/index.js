@@ -2,13 +2,13 @@
     "use strict";
 
     var create_click = function () {
-        set_location("/create");
+        //set_location("/create");
     };
     var login_click = function () {
-        set_location("/login");
+        //set_location("/login");
     };
     var board_click = function () {
-        set_location("/board");
+        //set_location("/board");
     };
 
     var load = function () {

@@ -1,0 +1,29 @@
+﻿{
+  "cate_undescribable": {
+    "name": "Undescribable"
+  },
+  "cate_dirt_cleaning": {
+    "name": "Dirt Cleaning"
+  },
+  "cate_hardware": {
+    "name": "Hardware Problem"
+  },
+  "cate_software": {
+    "name": "Software Problem"
+  },
+  "cate_os_reinstall": {
+    "name": "Operating System Reinstalling"
+  },
+  "cate_software_install": {
+    "name": "Software Installing"
+  },
+  "cate_presale": {
+    "name": "Pre-sale Consulting"
+  },
+  "cate_programming": {
+    "name": "Programming Problem"
+  },
+  "cate_talk": {
+    "name": "Just Talk"
+  }
+}

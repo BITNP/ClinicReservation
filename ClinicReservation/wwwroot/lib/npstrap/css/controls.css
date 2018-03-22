@@ -315,7 +315,7 @@ div[data-control="checkbox"] .holder input[type="checkbox"]:checked + span {
   background: #003567;
 }
 div[data-control="checkbox"] .holder:before {
-  content: '开';
+  content: attr(data-on);
   position: absolute;
   top: 4px;
   left: 6px;
@@ -323,9 +323,10 @@ div[data-control="checkbox"] .holder:before {
   color: #003567;
   font-size: 0.8em;
   font-weight: bold;
+  transition: opacity .5s ease;
 }
 div[data-control="checkbox"] .holder:after {
-  content: '关';
+  content: attr(data-off);
   position: absolute;
   top: 4px;
   right: 6px;
@@ -333,6 +334,7 @@ div[data-control="checkbox"] .holder:after {
   color: #333;
   font-size: 0.8em;
   font-weight: bold;
+  transition: opacity .5s ease;
 }
 div[data-control="checkbox"] .message {
   margin-left: 1em;
@@ -342,6 +344,18 @@ div[data-control="checkbox"] .message span {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+}
+div[data-control="checkbox"][data-checked="true"] > .holder:before {
+  opacity: 1;
+}
+div[data-control="checkbox"][data-checked="true"] > .holder:after {
+  opacity: 0;
+}
+div[data-control="checkbox"][data-checked="false"] > .holder:before {
+  opacity: 0;
+}
+div[data-control="checkbox"][data-checked="false"] > .holder:after {
+  opacity: 1;
 }
 div[data-control="checkbox"]:focus {
   outline: none;

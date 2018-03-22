@@ -212,8 +212,16 @@
     var button_click = function button_click() {
         var button = this;
         if (!this.context.is_enabled()) return;
-        if (button.context.flyout != undefined) button.context.flyout.showFlyout();
-        button.context.events.trigger("click", button, {});
+        var args = {
+            handled: false
+        };
+        button.context.events.trigger("click", button, args);
+        if (!args.handled && button.context.has_href()) {
+            window.location = button.context.get_href();
+        }
+        if (!args.handled && button.context.flyout != undefined) {
+            button.context.flyout.showFlyout();
+        }
     };
     var button_set_text = function button_set_text(text) {
         var context = this;
@@ -226,6 +234,19 @@
         var button = context.self;
         return dataset_helper.read(button, "text");
     };
+    var button_set_href = function button_set_href(href) {
+        var context = this;
+        var button = context.self;
+        dataset_helper.set(button, "href", href);
+    };
+    var button_get_href = function button_get_href() {
+        var context = this;
+        var button = context.self;
+        return dataset_helper.read(button, "href");
+    };
+    var button_has_href = function button_has_href() {
+        return this.get_href() != undefined;
+    };
     var button_init = function button_init(parent) {
         $(parent).find("div[data-control='button']").each(function () {
             var button = this;
@@ -236,7 +257,10 @@
                 set_enabled: button_set_enabled,
                 is_enabled: button_is_enabled,
                 set_text: button_set_text,
-                get_text: button_get_text
+                get_text: button_get_text,
+                get_href: button_get_href,
+                set_href: button_set_href,
+                has_href: button_has_href
             };
 
             $(button).click(button_click);
@@ -252,7 +276,7 @@
     //#endregion
 
     //#region ListBox
-    var listbox_set_selected = function listbox_set_selected(i) {
+    var listbox_set_selected_index = function listbox_set_selected_index(i) {
         var box = this.self;
         var box_main = $(box).find(".main-list")[0];
 
@@ -263,8 +287,10 @@
 
         if (i == -1) {
             dataset_helper.set(box, "selected-index", -1);
+            dataset_helper.set(box, "selected-id", undefined);
         } else {
             dataset_helper.set(box, "selected-index", i);
+            dataset_helper.set(box, "selected-id", dataset_helper.read(box_main.children[0].children[i], "id"));
             $(box_main.children[0].children[i]).addClass("selected");
         }
 
@@ -272,7 +298,80 @@
             if (i == -1) box_main.children[0].style.top = "2.1em";else box_main.children[0].style.top = "-" + box_main.children[0].children[i].offsetTop + "px";
         }
 
-        if (i == -1) this.events.trigger("changed", box, { action: "programmatic", selected_index: -1, selected_item: undefined });else this.events.trigger("changed", box, { action: "programmatic", selected_index: i, selected_item: box.children[0].children[i] });
+        if (i == -1) this.events.trigger("changed", box, { action: "programmatic", selected_index: -1, selected_item: undefined, selected_id: undefined });else this.events.trigger("changed", box, { action: "programmatic", selected_index: i, selected_item: box.children[0].children[i], selected_id: dataset_helper.read(box, "selected-id") });
+    };
+    var listbox_set_selected_id = function listbox_set_selected_id(id) {
+        var box = this.self;
+        var box_main = $(box).find(".main-list")[0];
+        id = "" + id;
+        var selected = box.context.selected_item();
+        var selected_id = box.context.selected_id();
+        if (selected_id === id) {
+            return;
+        }
+        if (selected != undefined) $(selected).removeClass("selected");
+
+        var reset = false;
+        var i = 0;
+        if (id === undefined || id === null || id === "undefined" || id === "null") {
+            dataset_helper.set(box, "selected-index", -1);
+            dataset_helper.set(box, "selected-id", undefined);
+            reset = true;
+        } else {
+            for (i = 0; i < box_main.children[0].children.length; i++) {
+                if (dataset_helper.read(box_main.children[0].children[i], "id") === id) {
+                    break;
+                }
+            }
+            if (i >= box_main.children[0].children.length) {
+                return;
+            }
+            dataset_helper.set(box, "selected-index", i);
+            dataset_helper.set(box, "selected-id", id);
+            $(box_main.children[0].children[i]).addClass("selected");
+        }
+
+        if ($(box).hasClass("expand") == false) {
+            if (reset) box_main.children[0].style.top = "2.1em";else box_main.children[0].style.top = "-" + box_main.children[0].children[i].offsetTop + "px";
+        }
+
+        if (reset) this.events.trigger("changed", box, { action: "programmatic", selected_index: -1, selected_item: undefined, selected_id: undefined });else this.events.trigger("changed", box, { action: "programmatic", selected_index: i, selected_item: box_main.children[0].children[i], selected_id: id });
+    };
+    var listbox_set_selected_item = function listbox_set_selected_item(item) {
+        var box = this.self;
+        var box_main = $(box).find(".main-list")[0];
+
+        var selected = box.context.selected_item();
+        if (selected === item) {
+            return;
+        }
+        if (selected != undefined) $(selected).removeClass("selected");
+
+        var reset = false;
+        if (item === undefined || item === null) {
+            dataset_helper.set(box, "selected-index", -1);
+            dataset_helper.set(box, "selected-id", undefined);
+            reset = true;
+        } else {
+            var i = 0;
+            for (i; i < box_main.children[0].children.length; i++) {
+                if (box_main.children[0].children[i] === item) {
+                    break;
+                }
+            }
+            if (i >= box_main.children[0].children.length) {
+                return;
+            }
+            dataset_helper.set(box, "selected-index", i);
+            dataset_helper.set(box, "selected-id", dataset_helper.read(item, "id"));
+            $(item).addClass("selected");
+        }
+
+        if ($(box).hasClass("expand") == false) {
+            if (reset) box_main.children[0].style.top = "2.1em";else box_main.children[0].style.top = "-" + item.offsetTop + "px";
+        }
+
+        if (reset) this.events.trigger("changed", box, { action: "programmatic", selected_index: -1, selected_item: undefined, selected_id: undefined });else this.events.trigger("changed", box, { action: "programmatic", selected_index: i, selected_item: item, selected_id: dataset_helper.read(box, "selected-id") });
     };
     var listbox_span_click = function listbox_span_click(e) {
         var span = e.currentTarget;
@@ -295,12 +394,15 @@
 
         if (lindex >= 0) $(listbox_div.children[lindex]).removeClass("selected");
         dataset_helper.set(listbox, "selected-index", index);
+        var id = dataset_helper.read(listbox_div.children[index], "id");
+        dataset_helper.set(listbox, "selected-id", id);
         $(listbox_div.children[index]).addClass("selected");
         listbox.blur();
         listbox.context.events.trigger("changed", listbox, {
             action: "user_selection",
             selected_index: index,
-            selected_item: listbox_div.children[index]
+            selected_item: listbox_div.children[index],
+            selected_id: id
         });
     };
     var listbox_collp = function listbox_collp(e) {
@@ -331,12 +433,18 @@
     };
     var listbox_selected_index = function listbox_selected_index() {
         var box = this.self;
-        return dataset_helper.read(box, "selected-index");
+        return parseInt(dataset_helper.read(box, "selected-index"));
     };
     var listbox_selected_item = function listbox_selected_item() {
         var box = this.self;
         var selected = parseInt(this.selected_index());
         return $(box).find(".main-list")[0].children[0].children[selected];
+    };
+    var listbox_selected_id = function listbox_selected_id() {
+        var box = this.self;
+        var id = dataset_helper.read(box, "selected-id");
+        if (id === undefined || id === null || id === "undefined" || id === "null") return undefined;
+        return id;
     };
     var listbox_init = function listbox_init(parent) {
         $(parent).find("div[data-control='listbox']").each(function () {
@@ -353,7 +461,7 @@
             var findrecord = undefined;
             var i = 0;
             while (box.children.length > 0) {
-                if (childs[0].innerText == record) findrecord = i;
+                if (childs[0].innerText === record) findrecord = i;
                 div.appendChild(childs[0].cloneNode(true));
                 box.removeChild(childs[0]);
                 i++;
@@ -375,13 +483,43 @@
 
             box.appendChild(box_main);
             var index = parseInt(dataset_helper.read(box, "selected-index"));
-            if (!index && index != 0) {
+            if (!isNaN(index)) {
                 if (findrecord != undefined) {
                     dataset_helper.set(box, "selected-index", findrecord);
+                    dataset_helper.set(box, "selected-id", dataset_helper.read(div.children[findrecord], "id"));
                     index = findrecord;
+                } else if (index >= 0 && index <= div.children.length) {
+                    dataset_helper.set(box, "selected-index", index);
+                    dataset_helper.set(box, "selected-id", dataset_helper.read(div.children[index], "id"));
                 } else {
                     dataset_helper.set(box, "selected-index", -1);
+                    dataset_helper.set(box, "selected-id", undefined);
                     index = -1;
+                }
+            } else {
+                if (findrecord != undefined) {
+                    dataset_helper.set(box, "selected-index", findrecord);
+                    dataset_helper.set(box, "selected-id", dataset_helper.read(div.children[findrecord], "id"));
+                    index = findrecord;
+                } else {
+                    var id = dataset_helper.read(box, "selected-id");
+                    if (id != undefined && id != null && id != "undefined" && id != "null") {
+                        var fi = 0;
+                        for (fi = 0; fi < div.children.length; fi++) {
+                            if (dataset_helper.read(div.children[fi], "id") === id) {
+                                break;
+                            }
+                        }
+                        if (fi < div.children.length) {
+                            index = fi;
+                            dataset_helper.set(box, "selected-index", fi);
+                            dataset_helper.set(box, "selected-id", id);
+                        } else {
+                            dataset_helper.set(box, "selected-index", -1);
+                            dataset_helper.set(box, "selected-id", undefined);
+                            index = -1;
+                        }
+                    }
                 }
             }
             if (index >= 0 && index < div.children.length) {
@@ -389,6 +527,7 @@
                 $(div.children[index]).addClass("selected");
             } else {
                 dataset_helper.set(box, "selected-index", -1);
+                dataset_helper.set(box, "selected-id", undefined);
                 div.style.top = "2.1em";
             }
 
@@ -400,7 +539,10 @@
                 self: box,
                 selected_item: listbox_selected_item,
                 selected_index: listbox_selected_index,
-                set_selection: listbox_set_selected,
+                selected_id: listbox_selected_id,
+                set_selected_index: listbox_set_selected_index,
+                set_selected_id: listbox_set_selected_id,
+                set_selected_item: listbox_set_selected_item,
                 set_enabled: listbox_set_enabled,
                 is_enabled: listbox_is_enabled,
                 insert_item: listbox_insert_item,
@@ -444,6 +586,7 @@
         var holder = $(box).find(".itemholder")[0];
         var index = this.selected_index();
         dataset_helper.set(box, "selected-index", -1);
+        dataset_helper.set(box, "selected-id", undefined);
         holder.innerHTML = "";
         if (items instanceof Array) {
             var span;
@@ -458,7 +601,8 @@
             box.context.events.trigger("changed", box, {
                 action: "item_removed",
                 selected_index: -1,
-                selected_item: undefined
+                selected_item: undefined,
+                selected_id: undefined
             });
         }
     };
@@ -495,12 +639,14 @@
                 childs[i].remove();
                 if (selected_index == index) {
                     dataset_helper.set(box, "selected-index", -1);
+                    dataset_helper.set(box, "selected-id", undefined);
                     if ($(box).hasClass("expand") == false) holder.style.top = "2.1em";
 
                     box.context.events.trigger("changed", box, {
                         action: "item_removed",
                         selected_index: -1,
-                        selected_item: undefined
+                        selected_item: undefined,
+                        selected_id: undefined
                     });
                 } else if (selected_index < index) {} else {
                     selected_index--;
@@ -515,7 +661,7 @@
     //#endregion
 
     //#region Select
-    var select_set_selected = function select_set_selected(i) {
+    var select_set_selected_index = function select_set_selected_index(i) {
         var select = this.self;
         var $select = $(select);
         var select_main = $select.find(".main-select")[0];
@@ -528,29 +674,115 @@
         var actualnone = false;
         if (i == -1) {
             dataset_helper.set(select, "selected-index", -1);
+            dataset_helper.set(select, "selected-id", undefined);
             actualnone = true;
             i = 0;
         } else {
             dataset_helper.set(select, "selected-index", i);
             $(select_main.children[0].children[0].children[i]).addClass("selected");
+            dataset_helper.set(select, "selected-id", dataset_helper.read(select_main.children[0].children[0].children[i], "id"));
         }
         if ($select.hasClass("expand")) select_main.children[0].scrollTop = select_main.children[0].children[0].children[i].offsetTop;else select_main.children[0].children[0].style.top = "-" + select_main.children[0].children[0].children[i].offsetTop + "px";
 
         if (actualnone) select.context.events.trigger("changed", select, {
             action: "programmatic",
             selected_index: -1,
-            selected_item: undefined
+            selected_item: undefined,
+            selected_id: undefined
         });else select.context.events.trigger("changed", select, {
             action: "programmatic",
             selected_index: i,
-            selected_item: select_main.children[0].children[0].children[i]
+            selected_item: select_main.children[0].children[0].children[i],
+            selected_id: dataset_helper.read(select_main.children[0].children[0].children[i], "id")
         });
+    };
+    var select_set_selected_id = function select_set_selected_id(id) {
+        var select = this.self;
+        var $select = $(select);
+        var select_main = $select.find(".main-select")[0];
+        var selected = select.context.selected_item();
+        var selected_id = select.context.selected_id();
+
+        id = "" + id;
+        if (selected_id === id) {
+            return;
+        }
+        if (selected != undefined) $(selected).removeClass("selected");
+
+        var reset = false;
+        var i = 0;
+        if (id === undefined || id === null || id === "undefined" || id === "null") {
+            dataset_helper.set(select, "selected-index", -1);
+            dataset_helper.set(select, "selected-id", undefined);
+            reset = true;
+        } else {
+            for (i = 0; i < select_main.children[0].children[0].children.length; i++) {
+                if (dataset_helper.read(select_main.children[0].children[0].children[i], "id") === id) {
+                    break;
+                }
+            }
+            if (i >= select_main.children[0].children[0].children.length) {
+                return;
+            }
+            dataset_helper.set(select, "selected-index", i);
+            dataset_helper.set(select, "selected-id", id);
+            $(select_main.children[0].children[0].children[i]).addClass("selected");
+        }
+
+        if ($select.hasClass("expand")) select_main.children[0].scrollTop = select_main.children[0].children[0].children[i].offsetTop;else select_main.children[0].children[0].style.top = "-" + select_main.children[0].children[0].children[i].offsetTop + "px";
+
+        if (reset) this.events.trigger("changed", select, { action: "programmatic", selected_index: -1, selected_item: undefined, selected_id: undefined });else this.events.trigger("changed", select, { action: "programmatic", selected_index: i, selected_item: select_main.children[0].children[0].children[i], selected_id: id });
+    };
+    var select_set_selected_item = function select_set_selected_item(item) {
+        var select = this.self;
+        var $select = $(select);
+        var select_main = $select.find(".main-select")[0];
+        var selected = select.context.selected_item();
+
+        if (selected === item) {
+            return;
+        }
+        if (selected != undefined) $(selected).removeClass("selected");
+
+        var reset = false;
+        var i = 0;
+        if (item === undefined || item === null) {
+            dataset_helper.set(selected, "selected-index", -1);
+            dataset_helper.set(selected, "selected-id", undefined);
+            reset = true;
+        } else {
+            for (i; i < select_main.children[0].children[0].children.length; i++) {
+                if (select_main.children[0].children[0].children[i] === item) {
+                    break;
+                }
+            }
+            if (i >= select_main.children[0].children[0].children.length) {
+                return;
+            }
+            dataset_helper.set(select, "selected-index", i);
+            dataset_helper.set(select, "selected-id", dataset_helper.read(item, "id"));
+            $(item).addClass("selected");
+        }
+
+        if ($select.hasClass("expand")) select_main.children[0].scrollTop = select_main.children[0].children[0].children[i].offsetTop;else select_main.children[0].children[0].style.top = "-" + select_main.children[0].children[0].children[i].offsetTop + "px";
+
+        if (reset) this.events.trigger("changed", select, { action: "programmatic", selected_index: -1, selected_item: undefined, selected_id: undefined });else this.events.trigger("changed", select, { action: "programmatic", selected_index: i, selected_item: item, selected_id: dataset_helper.read(select, "selected-id") });
     };
     var select_selected_item = function select_selected_item() {
         var select = this.self;
         var selected = parseInt(this.selected_index());
         if (selected == -1) return undefined;
         return $(select).find(".main-select")[0].children[0].children[0].children[selected];
+    };
+    var select_selected_id = function select_selected_id() {
+        var select = this.self;
+        var id = dataset_helper.read(select, "selected-id");
+        if (id === undefined || id === null || id === "undefined" || id === "null") return undefined;
+        return id;
+    };
+    var select_selected_index = function select_selected_index() {
+        var select = this.self;
+        return parseInt(dataset_helper.read(select, "selected-index"));
     };
     var select_span_click = function select_span_click(e) {
         var span = e.currentTarget;
@@ -574,12 +806,14 @@
         if (lindex >= 0) $(select_div.children[0].children[lindex]).removeClass("selected");
 
         dataset_helper.set(select, "selected-index", index);
+        dataset_helper.set(select, "selected-id", dataset_helper.read(select_div.children[0].children[index], "id"));
         $(select_div.children[0].children[index]).addClass("selected");
         select.blur();
         select.context.events.trigger("changed", select, {
             action: "user_selection",
             selected_index: index,
-            selected_item: select_div.children[0].children[index]
+            selected_item: select_div.children[0].children[index],
+            selected_id: dataset_helper.read(select_div.children[0].children[index], "id")
         });
     };
     var select_list_scroll = function select_list_scroll(e, delta) {
@@ -654,13 +888,43 @@
             }
             dataset_helper.clear(select, "selected-item");
             var index = parseInt(dataset_helper.read(select, "selected-index"));
-            if (!index && index != 0) {
+            if (!isNaN(index)) {
                 if (findrecord != undefined) {
                     dataset_helper.set(select, "selected-index", findrecord);
+                    dataset_helper.set(select, "selected-id", dataset_helper.read(cdiv.children[findrecord], "id"));
                     index = findrecord;
+                } else if (index >= 0 && index < cdiv.children.length) {
+                    dataset_helper.set(select, "selected-index", index);
+                    dataset_helper.set(select, "selected-id", dataset_helper.read(cdiv.children[index], "id"));
                 } else {
                     dataset_helper.set(select, "selected-index", -1);
+                    dataset_helper.set(select, "selected-id", undefined);
                     index = -1;
+                }
+            } else {
+                if (findrecord != undefined) {
+                    dataset_helper.set(select, "selected-index", findrecord);
+                    dataset_helper.set(select, "selected-id", dataset_helper.read(cdiv.children[findrecord], "id"));
+                    index = findrecord;
+                } else {
+                    var id = dataset_helper.read(select, "selected-id");
+                    if (id != undefined && id != null && id != "undefined" && id != "null") {
+                        var fi = 0;
+                        for (fi = 0; fi < cdiv.children.length; fi++) {
+                            if (dataset_helper.read(cdiv.children[fi], "id") === id) {
+                                break;
+                            }
+                        }
+                        if (fi < cdiv.children.length) {
+                            index = fi;
+                            dataset_helper.set(select, "selected-index", fi);
+                            dataset_helper.set(select, "selected-id", id);
+                        } else {
+                            dataset_helper.set(select, "selected-index", -1);
+                            dataset_helper.set(select, "selected-id", undefined);
+                            index = -1;
+                        }
+                    }
                 }
             }
 
@@ -685,8 +949,10 @@
                 select_main.children[0].children[0].style.top = "-" + select_main.children[0].children[0].children[index].offsetTop + "px";
                 $(select_main.children[0].children[0].children[index]).addClass("selected");
                 dataset_helper.set(select, "selected-index", index);
+                dataset_helper.set(select, "selected-id", dataset_helper.read(select_main.children[0].children[0].children[index], "id"));
             } else {
                 dataset_helper.set(select, "selected-index", -1);
+                dataset_helper.set(select, "selected-id", undefined);
                 select_main.children[0].children[0].style.top = "0";
             }
 
@@ -698,7 +964,10 @@
                 self: select,
                 selected_item: select_selected_item,
                 selected_index: listbox_selected_index,
-                set_selection: select_set_selected,
+                selected_id: listbox_selected_id,
+                set_selected_index: select_set_selected_index,
+                set_selected_item: select_set_selected_item,
+                set_selected_id: select_set_selected_id,
                 set_enabled: select_set_enabled,
                 is_enabled: select_is_enabled,
                 get_items: select_get_items,
@@ -748,6 +1017,7 @@
         var holder = $(select).find(".itemholder")[0];
         var index = this.selected_index();
         dataset_helper.set(select, "selected-index", -1);
+        dataset_helper.set(select, "selected-id", undefined);
         holder.children[0].innerHTML = "";
         if (items instanceof Array) {
             var span;
@@ -763,7 +1033,8 @@
             select.context.events.trigger("changed", select, {
                 action: "item_removed",
                 selected_index: -1,
-                selected_item: undefined
+                selected_item: undefined,
+                selected_id: undefined
             });
         }
     };
@@ -800,12 +1071,14 @@
                 childs[i].remove();
                 if (selected_index == index) {
                     dataset_helper.set(select, "selected-index", -1);
+                    dataset_helper.set(select, "selected-id", undefined);
                     if ($(select).hasClass("expand") == false) holder.children[0].style.top = "0";
 
                     select.context.events.trigger("changed", select, {
                         action: "item_removed",
                         selected_index: -1,
-                        selected_item: undefined
+                        selected_item: undefined,
+                        selected_id: undefined
                     });
                 } else if (selected_index < index) {} else {
                     selected_index--;
@@ -871,6 +1144,18 @@
             if (div.hasAttribute("tabindex") == false) div.setAttribute("tabindex", -1);
             div.innerHTML = "";
             holder = document.createElement("div");
+
+            if (dataset_helper.read(div, "on") != undefined) {
+                dataset_helper.set(holder, "on", dataset_helper.read(div, "on"));
+            } else {
+                dataset_helper.set(holder, "on", "开");
+            }
+            if (dataset_helper.read(div, "off") != undefined) {
+                dataset_helper.set(holder, "off", dataset_helper.read(div, "off"));
+            } else {
+                dataset_helper.set(holder, "off", "关");
+            }
+
             msg = document.createElement("div");
             msgspan = document.createElement("span");
             msgspan.innerText = dataset_helper.read(div, "message");

@@ -1,0 +1,11 @@
+﻿{
+  "group_normal": {
+    "name": "Normal User"
+  },
+  "group_duty": {
+    "name": "Duty Member"
+  },
+  "group_admin": {
+    "name": "System Admin"
+  }
+}

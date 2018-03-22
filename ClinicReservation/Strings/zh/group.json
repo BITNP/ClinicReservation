@@ -1,0 +1,11 @@
+﻿{
+  "group_normal": {
+    "name": "一般用户"
+  },
+  "group_duty": {
+    "name": "值班人员"
+  },
+  "group_admin": {
+    "name": "系统管理"
+  }
+}

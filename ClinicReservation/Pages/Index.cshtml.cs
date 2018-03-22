@@ -24,7 +24,7 @@ namespace ClinicReservation.Pages
         {
             if (authenticationResult.IsAuthenticated)
             {
-                return Redirect("/Board");
+                return Redirect("/board");
             }
             return Page();
         }

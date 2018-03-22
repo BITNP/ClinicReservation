@@ -1,0 +1,29 @@
+﻿{
+  "cate_undescribable": {
+    "name": "不可描述"
+  },
+  "cate_dirt_cleaning": {
+    "name": "清灰"
+  },
+  "cate_hardware": {
+    "name": "硬件故障"
+  },
+  "cate_software": {
+    "name": "软件故障"
+  },
+  "cate_os_reinstall": {
+    "name": "操作系统重新安装"
+  },
+  "cate_software_install": {
+    "name": "软件安装"
+  },
+  "cate_presale": {
+    "name": "售前自循"
+  },
+  "cate_programming": {
+    "name": "编程学科求助"
+  },
+  "cate_talk": {
+    "name": "谈人生谈理想"
+  }
+}

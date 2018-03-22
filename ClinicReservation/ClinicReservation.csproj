@@ -6,6 +6,15 @@
     <ApplicationInsightsAnnotationResourceId>/subscriptions/c702710e-a3bb-464e-abf9-f4d881c3d25c/resourcegroups/bitnp-clinic-res/providers/microsoft.insights/components/bitnp-clinic-res</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20180322153256_add_users.cs" />
+    <Compile Remove="Migrations\20180322153256_add_users.Designer.cs" />
+    <Compile Remove="Migrations\20180322165631_add_users.cs" />
+    <Compile Remove="Migrations\20180322165631_add_users.Designer.cs" />
+    <Compile Remove="Migrations\20180322170123_add_users.cs" />
+    <Compile Remove="Migrations\20180322170123_add_users.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\bitnp-clinic-res - FTP.pubxml" />

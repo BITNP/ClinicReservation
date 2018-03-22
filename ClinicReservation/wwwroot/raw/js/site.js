@@ -14,11 +14,11 @@ var set_location = function (url) {
 };
 
 (function (window) {
-    var langreg = /^[a-zA-Z]{2,2}(\-(\*|([a-zA-Z]{2,2})))?(\/|$)/.compile();
+    var langreg = /^[a-zA-Z]{2}(\-(\*|([a-zA-Z]{2})))?(\/|$)/;
 
     var startsWidthCulture = function (url) {
         url = url.substr(1);
-        if (langreg.exec(url) != null)
+        if (langreg.exec(url) !== null && langreg.exec(url) !== undefined)
             return true;
         return false;
     };
@@ -30,6 +30,8 @@ var set_location = function (url) {
         if (culture.length > 0) {
             $("a").each(function () {
                 var href = this.href;
+                if (href === undefined || href === null || href === "undefined" || href === "null")
+                    return;
                 if (href.startsWith('/') &&
                     !startsWidthCulture(href)) {
                     href = culture + href;
@@ -38,10 +40,22 @@ var set_location = function (url) {
             });
             $("form").each(function () {
                 var action = this.action;
+                if (action === undefined || action === null || action === "undefined" || action === "null")
+                    return;
                 if (action.startsWith('/') &&
                     !startsWidthCulture(action)) {
                     action = culture + action;
                     this.action = action;
+                }
+            });
+            $("div[data-control='button']").each(function () {
+                var href = this.context.get_href();
+                if (href === undefined || href === null || href === "undefined" || href === "null")
+                    return;
+                if (href.startsWith('/') &&
+                    !startsWidthCulture(href)) {
+                    href = culture + href;
+                    this.context.set_href(href);
                 }
             });
         }
