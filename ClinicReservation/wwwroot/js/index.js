@@ -4,13 +4,13 @@
     "use strict";
 
     var create_click = function create_click() {
-        set_location("/create");
+        //set_location("/create");
     };
     var login_click = function login_click() {
-        set_location("/login");
+        //set_location("/login");
     };
     var board_click = function board_click() {
-        set_location("/board");
+        //set_location("/board");
     };
 
     var load = function load() {

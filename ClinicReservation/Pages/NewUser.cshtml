@@ -2,12 +2,13 @@
 @model ClinicReservation.Pages.NewUserModel
 @{
     ViewData["Title"] = "注册用户";
+    ViewData["DisableLeftNavi"] = true;
     string name = "";
     string phone = "";
     string email = "";
     string im = "";
     string github = "";
-    string department_code = "undefined";
+    string department_code = "dep_not_set";
     if (Model.UserModel != null)
     {
         var userModel = Model.UserModel;
@@ -21,11 +22,49 @@
     }
     if (string.IsNullOrWhiteSpace(department_code))
     {
-        department_code = "undefined";
+        department_code = "dep_not_set";
     }
 }
+@section styles {
+    <environment names="Development">
+        <link href="~/css/newuser.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/css/newuser.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section scripts {
+    <environment names="Development">
+        <script src="~/js/newuser.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/newuser.min.js" asp-append-version="true"></script>
+    </environment>
+}
+
 <script>
-    
+    window.message = {
+        name: {
+            hint: "我们将使用您的姓名称呼您。",
+            error: "该项不能为空"
+        },
+        phone: {
+            hint: "[可选] 留下电话号码以便我们与您沟通。",
+            error: "电话号码格式错误。"
+        },
+        email: {
+            hint: "[可选] 留下邮箱以便我们与您沟通。",
+            error: "邮箱格式错误。"
+        },
+        im: {
+            hint: "[可选] 留下QQ或微信以便我们与您沟通。",
+            error: "QQ或微信格式错误。"
+        },
+        github: {
+            hint: "[可选] 留下GitHub地址一起搞基。",
+            error: "地址格式错误。"
+        }
+    };
 </script>
 <div>
     <p class="smalltitle">在系统中注册信息</p>
@@ -37,37 +76,34 @@
     <div>
         <p class="itemname">姓名</p>
         <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
-        <p id="input_name_hint" class="info-base info-hint">我们将使用您的姓名称呼您。</p>
         <p class="itemname">联系电话</p>
-        <div id="input_phonenumber" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
-        <p id="input_phone_hint" class="info-base info-hint">[可选] 留下电话号码以便我们与您沟通。</p>
-        <p id="input_phone_err" class="info-base info-error">[错误] 电话号码格式错误。</p>
+        <div id="input_phone" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
         <p class="itemname">邮箱</p>
-        <div id="input_email" class="input-item" data-control="input" data-type="text" data-value="@email"></div>
-        <p id="input_mail_hint" class="info-base info-hint">[可选] 留下邮箱以便我们与您沟通。</p>
-        <p id="input_mail_err" class="info-base info-error">[错误] 邮箱格式错误。</p>
+        <div id="input_email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
         <p class="itemname">QQ/微信</p>
-        <div id="input_qqnumber" class="input-item" data-control="input" data-type="text" data-value="@im"></div>
-        <p id="input_qq_hint" class="info-base info-hint">[可选] 留下QQ或微信以便我们与您沟通。</p>
-        <p id="input_qq_err" class="info-base info-error">[错误] QQ或微信格式错误。</p>
+        <div id="input_im" class="input-item" data-control="input" data-type="text" data-value="@im"></div>
         <p class="itemname">GitHub</p>
-        <div id="input_qqnumber" class="input-item" data-control="input" data-type="text" data-value="@github"></div>
-        <p id="input_qq_hint" class="info-base info-hint">[可选] 留下GitHub地址一起搞基。</p>
-        <p id="input_qq_err" class="info-base info-error">[错误] 地址格式错误。</p>
+        <div id="input_github" class="input-item" data-control="input" data-type="url" data-value="@github"></div>
         <p class="itemname">所属学院</p>
-        <div id="input_posterschool" data-control="select" data-selected-id="@department_code">
+        <div id="input_department" data-control="select" data-selected-id="@department_code">
             @foreach (Department department in Model.Departments)
             {
                 <span data-id="@department.Code">@department.DisplayName</span>
             }
         </div>
+        <p id="input_dep_hint" class="info-base info-hint">选择您所在的学院。</p>
+        <p id="input_dep_err" class="info-base info-error">[错误] 未找到学院名称。</p>
     </div>
+
+    <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="创建"></div>
+    <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
 
     <form id="hidden_submiter" asp-page="newuser" method="post" enctype="multipart/form-data" style="display:none">
         <input name="name" />
         <input name="phone" />
         <input name="email" />
         <input name="im" />
+        <input name="github" />
         <input name="department" />
     </form>
     <br />

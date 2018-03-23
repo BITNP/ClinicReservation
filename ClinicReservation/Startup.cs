@@ -113,7 +113,14 @@ namespace ClinicReservation
 
             app.UseSession();
 
-            app.UseMvcLocalization(checkCultureSupported: false);
+            app.UseMvcLocalization(checkCultureSupported: false, filter: path =>
+            {
+                if (path.StartsWithSegments("/js"))
+                {
+                    return new CheckHeaderFilterResult();
+                }
+                return new InvokeMiddlewareFilterResult();
+            });
 
             app.UseStaticFiles();
 

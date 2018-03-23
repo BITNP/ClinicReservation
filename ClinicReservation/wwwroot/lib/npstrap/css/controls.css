@@ -125,6 +125,8 @@ div[data-control="input"] {
 }
 div[data-control="input"] input[type="text"],
 div[data-control="input"] input[type="number"],
+div[data-control="input"] input[type="email"],
+div[data-control="input"] input[type="url"],
 div[data-control="input"] input[type="password"],
 div[data-control="input"] textarea {
   margin: 0.3rem;
@@ -140,23 +142,27 @@ div[data-control="input"] textarea {
   box-sizing: content-box;
   font-family: "Microsoft YaHei", "微软雅黑";
 }
-div[data-control="input"] textarea {
-  height: 8em;
-  resize: none;
-}
 div[data-control="input"] input[type="text"]:hover,
 div[data-control="input"] input[type="number"]:hover,
+div[data-control="input"] input[type="email"]:hover,
+div[data-control="input"] input[type="url"]:hover,
 div[data-control="input"] input[type="password"]:hover,
 div[data-control="input"] textarea:hover {
   border-color: #333;
 }
 div[data-control="input"] input[type="text"]:focus,
 div[data-control="input"] input[type="number"]:focus,
+div[data-control="input"] input[type="email"]:focus,
+div[data-control="input"] input[type="url"]:focus,
 div[data-control="input"] input[type="password"]:focus,
 div[data-control="input"] textarea:focus {
   outline: none;
   border-color: #003567;
   background: #fff;
+}
+div[data-control="input"] textarea {
+  height: 8em;
+  resize: none;
 }
 div[data-control="input"] p.header {
   margin: 0.3rem;
@@ -202,6 +208,8 @@ div[data-control="input"].has-hint div.hint {
 }
 div[data-control="input"].has-error input[type="text"],
 div[data-control="input"].has-error input[type="number"],
+div[data-control="input"].has-error input[type="email"],
+div[data-control="input"].has-error input[type="url"],
 div[data-control="input"].has-error input[type="password"],
 div[data-control="input"].has-error textarea {
   margin: 0.3rem;
@@ -214,12 +222,16 @@ div[data-control="input"].has-error textarea {
 }
 div[data-control="input"].has-error input[type="text"]:hover,
 div[data-control="input"].has-error input[type="number"]:hover,
+div[data-control="input"].has-error input[type="email"]:hover,
+div[data-control="input"].has-error input[type="url"]:hover,
 div[data-control="input"].has-error input[type="password"]:hover,
 div[data-control="input"].has-error textarea:hover {
   border-color: #A00;
 }
 div[data-control="input"].has-error input[type="text"]:focus,
 div[data-control="input"].has-error input[type="number"]:focus,
+div[data-control="input"].has-error input[type="email"]:focus,
+div[data-control="input"].has-error input[type="url"]:focus,
 div[data-control="input"].has-error input[type="password"]:focus,
 div[data-control="input"].has-error textarea:focus {
   outline: none;
@@ -240,12 +252,16 @@ div[data-control="input"][data-enabled="false"] div.hint {
 }
 div[data-control="input"][data-enabled="false"] input[type="text"],
 div[data-control="input"][data-enabled="false"] input[type="number"],
+div[data-control="input"][data-enabled="false"] input[type="email"],
+div[data-control="input"][data-enabled="false"] input[type="url"],
 div[data-control="input"][data-enabled="false"] input[type="password"],
 div[data-control="input"][data-enabled="false"] textarea {
   border-color: #BBB;
 }
 div[data-control="input"][data-enabled="false"].has-error input[type="text"],
 div[data-control="input"][data-enabled="false"].has-error input[type="number"],
+div[data-control="input"][data-enabled="false"].has-error input[type="email"],
+div[data-control="input"][data-enabled="false"].has-error input[type="url"],
 div[data-control="input"][data-enabled="false"].has-error input[type="password"],
 div[data-control="input"][data-enabled="false"].has-error textarea {
   border-color: #B00;

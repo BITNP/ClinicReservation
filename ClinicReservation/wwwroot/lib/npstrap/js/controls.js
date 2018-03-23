@@ -1737,6 +1737,16 @@
             if (!$div.hasClass("has-hint")) $div.addClass("has-hint");
         }, 0);
     };
+    var input_focus_event_raiser = function input_focus_event_raiser(e) {
+        var div = e.currentTarget.parentElement;
+        var context = div.context;
+        context.events.trigger("focus", div, {});
+    };
+    var input_blur_event_raiser = function input_blur_event_raiser(e) {
+        var div = e.currentTarget.parentElement;
+        var context = div.context;
+        context.events.trigger("blur", div, {});
+    };
     var input_input_blur = function input_input_blur(e) {
         var div = e.currentTarget.parentElement;
         var $div = $(div);
@@ -1915,6 +1925,8 @@
                 var placeholder = dataset_helper.read(div, "placeholder");
                 if (placeholder) element.placeholder = placeholder;
             }
+            element.addEventListener("focus", input_focus_event_raiser, false);
+            element.addEventListener("blur", input_blur_event_raiser, false);
             div.appendChild(element);
             $(element).change(input_value_change);
             var value = dataset_helper.read(div, "value");

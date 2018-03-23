@@ -32,6 +32,14 @@
     "inputFile": "wwwroot/raw/js/index.js"
   },
   {
+    "outputFile": "wwwroot/css/newuser.css",
+    "inputFile": "wwwroot/raw/css/newuser.less"
+  },
+  {
+    "outputFile": "wwwroot/js/newuser.js",
+    "inputFile": "wwwroot/raw/js/newuser.js"
+  },
+  {
     "outputFile": "wwwroot/css/reservation/create.css",
     "inputFile": "wwwroot/css/reservation/create.less"
   },

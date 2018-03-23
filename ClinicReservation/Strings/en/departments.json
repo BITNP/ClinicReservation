@@ -1,0 +1,25 @@
+﻿{
+  "dep_not_set": { "name": "Not Set" },
+  "dep_sae": { "name": "School of Aerospace Engineering" },
+  "dep_smen": { "name": "School of Mechatronical Engineering" },
+  "dep_me": { "name": "School of Mechanical Engineering" },
+  "dep_opt": { "name": "School of Optics and Photonics" },
+  "dep_sie": { "name": "School of Information and Electronics" },
+  "dep_ac": { "name": "School of Automation" },
+  "dep_cs": { "name": "School of Computer Science" },
+  "dep_ss": { "name": "School of Software Science" },
+  "dep_nst": { "name": "School of Network Science & Technology" },
+  "dep_mse": { "name": "School of Materials Science & Engineering" },
+  "dep_cce": { "name": "School of Chemistry and Chemical Engineering" },
+  "dep_life": { "name": "School of Life Science" },
+  "dep_math": { "name": "School of Mathematics and Statistics" },
+  "dep_physics": { "name": "School of Physics" },
+  "dep_sme": { "name": "School of Management and Economics" },
+  "dep_rw": { "name": "School of Humantities and Social Science" },
+  "dep_marx": { "name": "School of Marxism" },
+  "dep_law": { "name": "School of Law" },
+  "dep_sfl": { "name": "School of Foreign Languages" },
+  "dep_design": { "name": "School of Design and Arts" },
+  "dep_gse": { "name": "Graduate of School of Education" }
+
+}

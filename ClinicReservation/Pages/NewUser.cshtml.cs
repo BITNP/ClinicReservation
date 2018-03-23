@@ -53,6 +53,9 @@ namespace ClinicReservation.Pages
                     IM = model.IM,
                     GitHub = model.GitHub
                 };
+                user.Department = dbQuery.TryGetDepartmentByCode(model.Department);
+                dbContext.Users.Add(user);
+                dbContext.SaveChanges();
                 return Redirect("/board");
             }
             return Page();
