@@ -43,10 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Authorization\" />
     <Folder Include="Pages\en\" />
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="Services\SMS\" />
     <Folder Include="wwwroot\lib\fontawesome\css\" />
     <Folder Include="wwwroot\lib\fontawesome\webfonts\" />
   </ItemGroup>
