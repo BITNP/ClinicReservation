@@ -26,6 +26,7 @@ namespace ClinicReservation
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -98,10 +99,17 @@ namespace ClinicReservation
             services.AddSingleton<INotificationProvider, NotificationProvider>(service => new NotificationProvider(serviceConfig.NotificationPath));
             services.AddSingleton<IServiceState, ServiceState>(service => new ServiceState(serviceConfig.ServiceStatePath));
             services.AddSingleton<IServiceNotAvailableReasonProvider, ServiceNotAvailableReasonProvider>(service => new ServiceNotAvailableReasonProvider(serviceConfig.ServiceReasonPath));
+
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime applicationLifetime)
         {
+            applicationLifetime.ApplicationStopped.Register(OnShutdown);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -124,6 +132,8 @@ namespace ClinicReservation
 
             app.UseStaticFiles();
 
+            app.UseDNTCaptcha();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -134,6 +144,11 @@ namespace ClinicReservation
                     name: "mvc",
                     template: "{controller=Reservation}/{action=Index}/{id?}");
             });
+        }
+
+        private void OnShutdown()
+        {
+
         }
     }
 }

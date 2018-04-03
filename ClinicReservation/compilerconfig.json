@@ -40,6 +40,14 @@
     "inputFile": "wwwroot/raw/js/newuser.js"
   },
   {
+    "outputFile": "wwwroot/css/create.css",
+    "inputFile": "wwwroot/raw/css/create.less"
+  },
+  {
+    "outputFile": "wwwroot/js/create.js",
+    "inputFile": "wwwroot/raw/js/create.js"
+  },
+  {
     "outputFile": "wwwroot/css/reservation/create.css",
     "inputFile": "wwwroot/css/reservation/create.less"
   },

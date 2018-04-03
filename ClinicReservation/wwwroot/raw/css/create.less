@@ -1,0 +1,26 @@
+﻿@import "../_form.less";
+
+.date-quick-pick {
+    .flex-row(stretch);
+    background: #AAA;
+    padding: 0.3em;
+    margin: 0.3em;
+    overflow-x: auto;
+
+    p {
+        .transition(background, 0.2s, linear);
+        cursor: pointer;
+        margin: 0;
+        flex-shrink: 0;
+
+        span {
+            margin: 0.5em 1em;
+            display: block;
+        }
+    }
+
+    .selected {
+        background: #003567;
+        color: #FFF;
+    }
+}

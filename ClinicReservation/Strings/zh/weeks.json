@@ -1,0 +1,32 @@
+﻿{
+  "day_Monday": {
+    "name": "周一"
+  },
+  "day_Tuesday": {
+    "name": "周二"
+  },
+  "day_Wednesday": {
+    "name": "周三"
+  },
+  "day_Thursday": {
+    "name": "周四"
+  },
+  "day_Friday": {
+    "name": "周五"
+  },
+  "day_Saturday": {
+    "name": "周六"
+  },
+  "day_Sunday": {
+    "name": "周日"
+  },
+  "day_Today": {
+    "name": "今天"
+  },
+  "day_Tomorrow": {
+    "name": "明天"
+  },
+  "day_Nextweek": {
+    "name": "下{0}"
+  }
+}

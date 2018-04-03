@@ -1,0 +1,32 @@
+﻿{
+  "day_Monday": {
+    "name": "Monday"
+  },
+  "day_Tuesday": {
+    "name": "Tuesday"
+  },
+  "day_Wednesday": {
+    "name": "Wednesday"
+  },
+  "day_Thursday": {
+    "name": "Thursday"
+  },
+  "day_Friday": {
+    "name": "Friday"
+  },
+  "day_Saturday": {
+    "name": "Saturday"
+  },
+  "day_Sunday": {
+    "name": "Sunday"
+  },
+  "day_Today": {
+    "name": "Today"
+  },
+  "day_Tomorrow": {
+    "name": "Tomorrow"
+  },
+  "day_Nextweek": {
+    "name": "Next {0}"
+  }
+}

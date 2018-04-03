@@ -1,4 +1,5 @@
-﻿using ClinicReservation.Validates;
+﻿using ClinicReservation.Models.Data;
+using ClinicReservation.Validates;
 using System.ComponentModel.DataAnnotations;
 
 namespace ClinicReservation.Models
@@ -22,6 +23,11 @@ namespace ClinicReservation.Models
         [Required]
         [Department]
         public string Department { get; set; }
+        
+        public string Code { get; set; }
+
+        public Department DepartmentInstance { get; set; }
+
 
         public void Nullify()
         {
@@ -42,6 +48,9 @@ namespace ClinicReservation.Models
 
             if (string.IsNullOrWhiteSpace(Department))
                 Department = null;
+
+            if (string.IsNullOrWhiteSpace(Code))
+                Code = null;
         }
         public void Emptify()
         {
@@ -57,6 +66,8 @@ namespace ClinicReservation.Models
                 GitHub = "";
             if (Department == null)
                 Department = "";
+            if (Code == null)
+                Code = "";
         }
     }
 }

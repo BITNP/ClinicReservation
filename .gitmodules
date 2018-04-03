@@ -4,3 +4,6 @@
 [submodule "MvcLocalization"]
 	path = MvcLocalization
 	url = https://github.com/lzl1918/MvcLocalization
+[submodule "DNTCaptcha.Core"]
+	path = DNTCaptcha.Core
+	url = https://github.com/BITNP/DNTCaptcha.Core

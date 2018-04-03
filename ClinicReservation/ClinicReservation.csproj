@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DNTCaptcha.Core" Version="1.4.3" />
     <PackageReference Include="Hake.Extension.ValueRecord" Version="1.5.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
@@ -44,13 +43,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Authorization\" />
     <Folder Include="Pages\en\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Services\SMS\" />
     <Folder Include="wwwroot\lib\fontawesome\css\" />
     <Folder Include="wwwroot\lib\fontawesome\webfonts\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DNTCaptcha.Core\src\DNTCaptcha.Core\DNTCaptcha.Core.csproj" />
     <ProjectReference Include="..\MvcAuthentication\AuthenticationCore\AuthenticationCore.csproj" />
     <ProjectReference Include="..\MvcLocalization\LocalizationCore\LocalizationCore.csproj" />
   </ItemGroup>

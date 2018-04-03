@@ -1,4 +1,5 @@
 ﻿using LocalizationCore.CodeMatching;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -37,6 +38,13 @@ namespace ClinicReservation.Models.Data
 
         [Required]
         public Department Department { get; set; }
+
+        [Required]
+        public DateTime LastSyncTime { get; set; }
+
+        [Required]
+        public bool IsPersonalInformationFilled { get; set; }
+
 
         [InverseProperty(nameof(Reservation.Poster))]
         public ICollection<Reservation> PostedReservations { get; set; }

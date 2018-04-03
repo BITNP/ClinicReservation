@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
+    [CustomHandler(typeof(RedirectHandler), "login")]
     public class BoardModel : PageModel
     {
         private readonly IAuthenticationService authenticationService;
@@ -24,13 +25,8 @@ namespace ClinicReservation.Pages
 
         public IActionResult OnGet([FromServices] IAuthenticationResult authenticationResult)
         {
-            if (!authenticationResult.IsAuthenticated)
-            {
-                return Redirect("/login");
-            }
-
-            User user = dbQuery.TryGetUserByName(authenticationResult.User.Name);
-            if (user == null)
+            User user = dbQuery.TryGetUser(authenticationResult.User);
+            if (user == null || !user.IsPersonalInformationFilled)
             {
                 // create a user
                 return Redirect("/newuser");

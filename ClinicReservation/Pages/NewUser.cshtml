@@ -1,29 +1,17 @@
 ﻿@page
 @model ClinicReservation.Pages.NewUserModel
 @{
-    ViewData["Title"] = "注册用户";
+    ViewData["Title"] = "完善个人信息";
     ViewData["DisableLeftNavi"] = true;
-    string name = "";
-    string phone = "";
-    string email = "";
-    string im = "";
-    string github = "";
-    string department_code = "dep_not_set";
-    if (Model.UserModel != null)
-    {
-        var userModel = Model.UserModel;
-        userModel.Emptify();
-        name = userModel.Name;
-        phone = userModel.Phone;
-        email = userModel.Email;
-        im = userModel.IM;
-        github = userModel.GitHub;
-        department_code = userModel.Department;
-    }
-    if (string.IsNullOrWhiteSpace(department_code))
-    {
-        department_code = "dep_not_set";
-    }
+    NewUserFormModel userModel = Model.UserModel;
+    bool enableNameEditing = userModel.Name == null;
+    userModel.Emptify();
+    string name = userModel.Name;
+    string phone = userModel.Phone;
+    string email = userModel.Email;
+    string im = userModel.IM;
+    string github = userModel.GitHub;
+    string department_code = userModel.Department;
 }
 @section styles {
     <environment names="Development">
@@ -63,23 +51,39 @@
         github: {
             hint: "[可选] 留下GitHub地址一起搞基。",
             error: "地址格式错误。"
+        },
+        code: {
+            hint: "[可选] 输入你喜欢的神秘代码"
         }
     };
 </script>
 <div>
     <p class="smalltitle">在系统中注册信息</p>
     <div>
-        @*@Html.Raw(notificationProvider[culture.Culture])*@
+        <p>在开始使用预约系统之前，我们希望您能够填写以下个人信息。</p>
+        <p>在必要的时候，我们可能会通过填写的个人信息与你沟通。</p>
+        <p>若你不希望在系统中保留任何个人信息，可以直接点击页面下方的创建按钮。</p>
     </div>
     <br />
     <p class="smalltitle">个人信息</p>
     <div>
-        <p class="itemname">姓名</p>
-        <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
+        @if (enableNameEditing)
+        {
+            <p class="itemname">姓名</p>
+            <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
+            <p class="itemname">邮箱</p>
+            <div id="input_email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
+        }
+        else
+        {
+            <p class="itemname">姓名</p>
+            <div id="input_name" data-control="input" class="input-item" data-type="text" data-enabled="false" data-value="@name"></div>
+            <p class="itemname">邮箱</p>
+            <div id="input_email" class="input-item" data-control="input" data-type="email" data-enabled="false" data-value="@email"></div>
+
+        }
         <p class="itemname">联系电话</p>
         <div id="input_phone" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
-        <p class="itemname">邮箱</p>
-        <div id="input_email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
         <p class="itemname">QQ/微信</p>
         <div id="input_im" class="input-item" data-control="input" data-type="text" data-value="@im"></div>
         <p class="itemname">GitHub</p>
@@ -93,6 +97,8 @@
         </div>
         <p id="input_dep_hint" class="info-base info-hint">选择您所在的学院。</p>
         <p id="input_dep_err" class="info-base info-error">[错误] 未找到学院名称。</p>
+        <p class="itemname">神秘代码</p>
+        <div id="input_secret_code" class="input-item" data-control="input" data-type="text" data-value=""></div>
     </div>
 
     <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="创建"></div>
@@ -105,6 +111,7 @@
         <input name="im" />
         <input name="github" />
         <input name="department" />
+        <input name="code" />
     </form>
     <br />
 </div>
