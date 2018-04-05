@@ -17,15 +17,23 @@ namespace ClinicReservation.Helpers
         {
             bool isNextWeek = false;
             string[] result = new string[count];
-            int index = 0;
-            string name;
-            DayOfWeek dayOfWeek;
+            DayOfWeek dayOfWeek = currentDate.DayOfWeek;
+            string name = "day_" + dayOfWeek.ToString();
             TimeSpan oneDay = TimeSpan.FromDays(1);
+            currentDate += oneDay;
+            count--;
+            int index = 1;
             string nextPrefix = "";
             while (count > 0)
             {
                 dayOfWeek = currentDate.DayOfWeek;
                 name = "day_" + dayOfWeek.ToString();
+
+                if (dayOfWeek == DayOfWeek.Monday)
+                {
+                    nextPrefix = matchingService.Match("day_Next", "Next {0}");
+                    isNextWeek = true;
+                }
                 if (isNextWeek)
                 {
                     result[index] = string.Format(nextPrefix, matchingService.Match(name, dayOfWeek.ToString()));
@@ -34,15 +42,10 @@ namespace ClinicReservation.Helpers
                 {
                     result[index] = matchingService.Match(name, dayOfWeek.ToString());
                 }
-
                 currentDate += oneDay;
                 count--;
                 index++;
-                if (dayOfWeek == DayOfWeek.Monday)
-                {
-                    nextPrefix = matchingService.Match("day_Next", "Next {0}");
-                    isNextWeek = true;
-                }
+
             }
             result[0] = matchingService.Match("day_Today", "Today");
             result[1] = matchingService.Match("day_Tomorrow", "Tomorrow");

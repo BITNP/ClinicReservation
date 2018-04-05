@@ -1,6 +1,7 @@
 ﻿using AuthenticationCore;
 using ClinicReservation.Models.Data;
 using ClinicReservation.Services;
+using ClinicReservation.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace ClinicReservation
+namespace ClinicReservation.Handlers
 {
     public class CASResultHandler : ICASResponseHandler
     {

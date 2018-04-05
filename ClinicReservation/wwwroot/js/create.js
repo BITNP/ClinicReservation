@@ -117,7 +117,11 @@
 
     var check_delay = 1000;
     var load = function load() {
+        $("#input_detail")[0].context.set_value($("#hidden_problemdetail").val());
         $("#input_detail")[0].context.set_hint("focus", "", window.message.detail.hint);
+        if (window.detail_error) {
+            $("#input_detail")[0].context.set_error(window.detail_error);
+        }
 
         $(".date-quick-pick > p").click(datepickclick);
         $("#input_bookdate")[0].context.events.add("changed", datechanged);

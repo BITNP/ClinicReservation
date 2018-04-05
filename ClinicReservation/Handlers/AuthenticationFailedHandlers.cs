@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ClinicReservation
+namespace ClinicReservation.Handlers
 {
     public class RedirectHandler
     {

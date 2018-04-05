@@ -694,7 +694,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   position: relative;
   top: -0.1em;
   font-weight: normal;
-  content: "年";
+  content: attr(data-post);
 }
 div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-month p::after {
   font-size: 0.8em;
@@ -702,7 +702,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   position: relative;
   top: -0.1em;
   font-weight: normal;
-  content: "月";
+  content: attr(data-post);
 }
 div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-date p::after {
   font-size: 0.8em;
@@ -710,7 +710,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   position: relative;
   top: -0.1em;
   font-weight: normal;
-  content: "日";
+  content: attr(data-post);
 }
 div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-itemscrollview:last-of-type {
   border-width: 0;

@@ -18,6 +18,10 @@ using DNTCaptcha.Core;
 using LocalizationCore;
 using AuthenticationCore;
 using ClinicReservation.Models.Data;
+using ClinicReservation.Services.Cache;
+using ClinicReservation.Services.SMS;
+using ClinicReservation.Services.Database;
+using ClinicReservation.Handlers;
 
 namespace ClinicReservation
 {
@@ -82,7 +86,7 @@ namespace ClinicReservation
                 return serv;
             });
 
-            services.AddSingleton<SMSService>();
+            services.AddSingleton<ISMSService, SMSService>();
 
             services.AddDNTCaptcha();
 
@@ -99,6 +103,8 @@ namespace ClinicReservation
             services.AddSingleton<INotificationProvider, NotificationProvider>(service => new NotificationProvider(serviceConfig.NotificationPath));
             services.AddSingleton<IServiceState, ServiceState>(service => new ServiceState(serviceConfig.ServiceStatePath));
             services.AddSingleton<IServiceNotAvailableReasonProvider, ServiceNotAvailableReasonProvider>(service => new ServiceNotAvailableReasonProvider(serviceConfig.ServiceReasonPath));
+
+            services.AddSingleton<IValidatorSetPropertyMethodCache>(provider => new ValidatorSetPropertyMethodCache(100));
 
         }
 

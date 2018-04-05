@@ -1,5 +1,6 @@
 ﻿@page
 @using ClinicReservation.Helpers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 @model ClinicReservation.Pages.CreateModel
 @inject LocalizationCore.CodeMatching.ICodeMatchingService codeMatchingService
 @{
@@ -8,9 +9,23 @@
 
     DateTime currentDate = DateTimeHelper.GetBeijingTime();
     DateTime longestDate = currentDate + TimeSpan.FromDays(14);
-    string[] datenames = DateTimeHelper.GetDisplayDateTime(currentDate, 5, codeMatchingService);
+    string[] datenames = DateTimeHelper.GetDisplayDateTime(currentDate, 7, codeMatchingService);
     int datediff = 0;
     string bookdate = currentDate.ToString("yyyy/MM/dd");
+    string location = Constants.DEFAULT_LOCATION_CODE;
+    string category = Constants.DEFAULT_CATEGORY_CODE;
+    string detail = "";
+    bool isdetailError = false;
+    NewReservationFormModel data = Model.LastData;
+    if (data != null)
+    {
+
+        location = data.Location;
+        category = data.Category;
+        bookdate = data.BookDate;
+        detail = data.Detail;
+        isdetailError = ModelState[nameof(Model.LastData.Detail)].ValidationState != ModelValidationState.Valid;
+    }
 }
 @section styles {
     <environment names="Development">
@@ -29,6 +44,10 @@
     </environment>
 }
 <script>
+    @if(isdetailError)
+    {
+        @Html.Raw("window.detail_error = '请检查描述信息';");
+    }
     window.message = {
         detail: {
             hint: "在此处描述遇到的问题。",
@@ -40,7 +59,7 @@
         captcha_empty: {
             error: "验证码不能为空。"
         }
-    };
+    }
 </script>
 <div>
     <p class="smalltitle">我们的建议</p>
@@ -52,10 +71,10 @@
     <p class="smalltitle">问题描述</p>
     <div>
         <p class="itemname">问题类型</p>
-        <div id="input_questiontype" data-control="listbox" data-selected-index="0">
+        <div id="input_questiontype" data-control="listbox" data-selected-id="@category">
             @foreach (Category cate in Model.Categories)
             {
-                <span>@cate.DisplayName</span>
+                <span data-id="@cate.Code">@cate.DisplayName</span>
             }
         </div>
         <p class="itemname">详细信息（大于五个字）</p>
@@ -65,10 +84,10 @@
     <p class="smalltitle">预约信息</p>
     <div>
         <p class="itemname">预约地点</p>
-        <div id="input_location" data-control="listbox" data-selected-index="0">
+        <div id="input_location" data-control="listbox" data-selected-id="@location">
             @foreach (Location loc in Model.Locations)
             {
-                <span>@loc.DisplayName</span>
+                <span data-id="@loc.Code">@loc.DisplayName</span>
             }
         </div>
         <p class="itemname">预约时间</p>
@@ -94,7 +113,7 @@
                 }
             }
         </div>
-        <div id="input_bookdate" data-control="datepicker" data-value="@bookdate" data-mindate="@currentDate.ToString("yyyy/MM/dd")" data-maxdate="@longestDate.ToString("yyyy/MM/dd")"></div>
+        <div id="input_bookdate" data-control="datepicker" data-value="@bookdate" data-mindate="@currentDate.ToString("yyyy/MM/dd")" data-maxdate="@longestDate.ToString("yyyy/MM/dd")" data-year-post="" data-month-post="" data-day-post="" data-month-name="January;February;March;April;May;June;July;August;September;October;November;December"></div>
     </div>
     <p class='itemname'>验证码</p>
     <dnt-captcha asp-captcha-generator-max="9876"
@@ -109,7 +128,7 @@
     <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="提交申请"></div>
     <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
 
-    @*<textarea id="hidden_problemdetail" style="display: none">@problemdetail</textarea>*@
+    <textarea id="hidden_problemdetail" style="display: none">@detail</textarea>
     <form id="hidden_submiter" asp-page="Create" method="post" enctype="multipart/form-data" style="display:none">
         <input name="category" />
         <textarea name="detail"></textarea>

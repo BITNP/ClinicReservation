@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
-using ClinicReservation.Services;
 using ClinicReservation.Models.Data;
-using System.Reflection;
+using ClinicReservation.Services.Database;
 
 namespace ClinicReservation.Validates
 {
+
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class CategoryAttribute : ValidationAttribute
+    public class CategoryAttribute : ValidationSetResultAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -19,12 +19,7 @@ namespace ClinicReservation.Validates
             Category categoryInstance = query.TryGetCategory(category);
             if (categoryInstance == null)
                 return new ValidationResult($"The requested category with key {category} is not found in database");
-
-            string name = validationContext.MemberName + "Instance";
-            PropertyInfo property = validationContext.ObjectType.GetProperty(name);
-
-            if (property != null && property.CanWrite)
-                property.SetMethod.Invoke(validationContext.ObjectInstance, new object[] { categoryInstance });
+            TrySetResult(validationContext, categoryInstance);
             return ValidationResult.Success;
         }
     }

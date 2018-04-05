@@ -6,6 +6,7 @@ using AuthenticationCore;
 using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
 using ClinicReservation.Services;
+using ClinicReservation.Services.Database;
 using LocalizationCore;
 using LocalizationCore.CodeMatching;
 using Microsoft.AspNetCore.Mvc;

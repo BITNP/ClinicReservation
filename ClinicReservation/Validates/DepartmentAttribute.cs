@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Threading.Tasks;
 using ClinicReservation.Models.Data;
-using ClinicReservation.Services;
-using System.Reflection;
+using ClinicReservation.Services.Database;
 
 namespace ClinicReservation.Validates
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class DepartmentAttribute : ValidationAttribute
+    public class DepartmentAttribute : ValidationSetResultAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -23,11 +19,7 @@ namespace ClinicReservation.Validates
             if (departmentInstance == null)
                 return new ValidationResult($"The requested department with key {department} is not found in database");
 
-            string name = validationContext.MemberName + "Instance";
-            PropertyInfo property = validationContext.ObjectType.GetProperty(name);
-
-            if (property != null && property.CanWrite)
-                property.SetMethod.Invoke(validationContext.ObjectInstance, new object[] { departmentInstance });
+            TrySetResult(validationContext, departmentInstance);
             return ValidationResult.Success;
         }
     }

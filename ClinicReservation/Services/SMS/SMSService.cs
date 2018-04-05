@@ -7,29 +7,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Text;
 using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
 using LocalizationCore;
 using ClinicReservation.Models.Data;
 
-namespace ClinicReservation.Services
+namespace ClinicReservation.Services.SMS
 {
-    [DataContract]
-    public class SMSResponse
-    {
-        [DataMember]
-        public int Code { get; set; }
 
-        [DataMember]
-        public string Msg { get; set; }
-
-        [DataMember]
-        public int Count { get; set; }
-
-        [DataMember]
-        public long Sid { get; set; }
-    }
-
-    public sealed class SMSService
+    internal sealed class SMSService : ISMSService
     {
         public static readonly EventId SUCCESS_EVENT = new EventId(0, "sms_success");
         public static readonly EventId FAILED_EVENT = new EventId(1, "sms_failed");

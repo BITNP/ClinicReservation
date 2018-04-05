@@ -1,14 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
-using ClinicReservation.Services;
 using ClinicReservation.Models.Data;
-using System.Reflection;
+using ClinicReservation.Services.Database;
 
 namespace ClinicReservation.Validates
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class LocationAttribute : ValidationAttribute
+    public class LocationAttribute : ValidationSetResultAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -20,11 +19,7 @@ namespace ClinicReservation.Validates
             if (locationInstance == null)
                 return new ValidationResult($"The requested location with key {location} is not found in database");
 
-            string name = validationContext.MemberName + "Instance";
-            PropertyInfo property = validationContext.ObjectType.GetProperty(name);
-
-            if (property != null && property.CanWrite)
-                property.SetMethod.Invoke(validationContext.ObjectInstance, new object[] { locationInstance });
+            TrySetResult(validationContext, locationInstance);
             return ValidationResult.Success;
         }
     }

@@ -48,6 +48,10 @@
     "inputFile": "wwwroot/raw/js/create.js"
   },
   {
+    "outputFile": "wwwroot/css/detail.css",
+    "inputFile": "wwwroot/raw/css/detail.less"
+  },
+  {
     "outputFile": "wwwroot/css/reservation/create.css",
     "inputFile": "wwwroot/css/reservation/create.less"
   },

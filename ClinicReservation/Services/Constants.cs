@@ -9,5 +9,7 @@ namespace ClinicReservation.Services
     {
         public const string DEFAULT_AVATAR = "/images/resources/user.png";
         public const string DEFAULT_DEPARTMENT_CODE = "dep_not_set";
+        public const string DEFAULT_LOCATION_CODE = "loc_not_specific";
+        public const string DEFAULT_CATEGORY_CODE = "cate_undescribable";
     }
 }

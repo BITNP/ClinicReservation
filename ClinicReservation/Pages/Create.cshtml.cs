@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AuthenticationCore;
+using ClinicReservation.Handlers;
 using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
 using ClinicReservation.Services;
+using ClinicReservation.Services.Database;
 using LocalizationCore;
 using LocalizationCore.CodeMatching;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired]
+    [AuthenticationRequired(failedAction: AuthenticationFailedAction.CustomHandler)]
     public class CreateModel : CultureMatchingPageModel
     {
         private readonly DataDbContext dbContext;
@@ -24,6 +26,7 @@ namespace ClinicReservation.Pages
 
         public IEnumerable<Category> Categories { get; private set; }
         public IEnumerable<Location> Locations { get; private set; }
+        public NewReservationFormModel LastData { get; private set; }
 
         public CreateModel(DataDbContext dbContext, IDbQuery query, ICodeMatchingService codeMatching, IAuthenticationResult authResult, ICultureContext cultureContext)
         {
@@ -43,7 +46,7 @@ namespace ClinicReservation.Pages
             codeMatching.Match(Categories);
         }
 
-        [CustomHandler(typeof(RedirectHandler), "CreateUnauth")]
+        [CustomHandler(typeof(RedirectHandler), "onCreateUnauthenticated")]
         public IActionResult OnPost([FromForm] NewReservationFormModel model)
         {
             User user;
@@ -71,7 +74,7 @@ namespace ClinicReservation.Pages
                 int id = reservation.Id;
                 return Redirect($"/detail?id={id}");
             }
-
+            LastData = model;
             Locations = dbContext.Locations;
             Categories = dbContext.Categories;
             codeMatching.Match(Locations);

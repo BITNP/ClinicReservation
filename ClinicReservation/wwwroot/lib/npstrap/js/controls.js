@@ -1209,13 +1209,25 @@
             picker_holder.innerHTML = "";
             $picker_holder.focus(datepicker_focus);
             $picker_holder.blur(datepicker_blur);
+            var yearPost = dataset_helper.read(picker_holder, "year-post");
+            if (yearPost === undefined) yearPost = "年";
+            var monthPost = dataset_helper.read(picker_holder, "month-post");
+            if (monthPost === undefined) monthPost = "月";
+            var dayPost = dataset_helper.read(picker_holder, "day-post");
+            if (dayPost === undefined) dayPost = "日";
+            var monthName = dataset_helper.read(picker_holder, "month-name");
+            if (monthName === undefined) monthName = "1;2;3;4;5;6;7;8;9;10;11;12";
+            var monthNames = monthName.split(';');
+            if (monthNames.length != 12) monthNames = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
             picker_holder.context = {
                 set_date: datepicker_setdate,
                 get_date: datepicker_getdate,
                 set_enabled: datepicker_set_enabled,
                 is_enabled: datepicker_is_enabled,
                 self: picker_holder,
-                events: new handler_base()
+                events: new handler_base(),
+                posts: { year: yearPost, month: monthPost, day: dayPost },
+                months: monthNames
             };
 
             var enabled = dataset_helper.read(picker_holder, "enabled");
@@ -1298,7 +1310,9 @@
             div.className = "input-date-value";
             var p;
             p = document.createElement("p");
-            p.innerText = dateval.getFullYear() + " 年 " + (dateval.getMonth() + 1) + " 月 " + dateval.getDate() + " 日";
+            var cyearPost = yearPost.length <= 0 ? "," : yearPost;
+            var cmonthPost = monthPost.length <= 0 ? "," : monthPost;
+            p.innerText = dateval.getFullYear() + " " + cyearPost + " " + monthNames[dateval.getMonth()] + " " + cmonthPost + " " + dateval.getDate() + " " + dayPost;
             div.appendChild(p);
             picker.appendChild(div);
 
@@ -1310,6 +1324,7 @@
             $(cdiv).addClass("input-date-container-year");
             for (var i = mindate.getFullYear(); i <= maxdate.getFullYear(); i++) {
                 var p = document.createElement("p");
+                dataset_helper.set(p, "post", yearPost);
                 if (i == dateval.getFullYear()) {
                     p.className = "selected";
                 }
@@ -1327,10 +1342,12 @@
             if (maxdate.getFullYear() == dateval.getFullYear()) monthend = maxdate.getMonth() + 1;
             for (var i = monthbegin; i <= monthend; i++) {
                 var p = document.createElement("p");
+                dataset_helper.set(p, "post", monthPost);
+                dataset_helper.set(p, "month", i);
                 if (i == dateval.getMonth() + 1) {
                     p.className = "selected";
                 }
-                p.innerText = i.toString();
+                p.innerText = monthNames[i - 1];
                 $(p).click(datepicker_month_clicked);
                 cdiv.appendChild(p);
             }
@@ -1344,6 +1361,7 @@
             if (maxdate.getFullYear() == dateval.getFullYear() && maxdate.getMonth() == dateval.getMonth()) dayend = maxdate.getDate();
             for (var i = daybegin; i <= dayend; i++) {
                 var p = document.createElement("p");
+                dataset_helper.set(p, "post", dayPost);
                 if (i == dateval.getDate()) {
                     p.className = "selected";
                 }
@@ -1369,9 +1387,13 @@
         var container = yearp.parentElement.parentElement;
         var datepicker = container.parentElement;
         var picker_holder = datepicker.parentElement;
-        var mindate = dataset_helper.read(datepicker, "mindate");
-        var maxdate = dataset_helper.read(datepicker, "maxdate");
-        var dateval = dataset_helper.read(datepicker, "value");
+        var yearPost = picker_holder.context.posts.year;
+        var monthPost = picker_holder.context.posts.month;
+        var dayPost = picker_holder.context.posts.day;
+        var monthNames = picker_holder.context.months;
+        var mindate = dataset_helper.read(picker_holder, "mindate");
+        var maxdate = dataset_helper.read(picker_holder, "maxdate");
+        var dateval = dataset_helper.read(picker_holder, "value");
         var minresult = /^(\d{4})\/((0?[1-9])|(1[0-2]))\/((0?[1-9])|(1\d)|(2\d)|(3[0-1]))$/g.exec(mindate);
         var maxresult = /^(\d{4})\/((0?[1-9])|(1[0-2]))\/((0?[1-9])|(1\d)|(2\d)|(3[0-1]))$/g.exec(maxdate);
         var valresult = /^(\d{4})\/((0?[1-9])|(1[0-2]))\/((0?[1-9])|(1\d)|(2\d)|(3[0-1]))$/g.exec(dateval);
@@ -1400,10 +1422,12 @@
         if (newyear == maxyear) monthend = maxmonth;
         for (var i = monthbegin; i <= monthend; i++) {
             var p = document.createElement("p");
+            dataset_helper.set(p, "post", monthPost);
+            dataset_helper.set(p, "month", i);
             if (i == monthbegin) {
                 p.className = "selected";
             }
-            p.innerText = i.toString();
+            p.innerText = monthNames[i - 1];
             $(p).click(datepicker_month_clicked);
             monthct.appendChild(p);
         }
@@ -1415,6 +1439,7 @@
         datect.innerHTML = "";
         for (var i = daybegin; i <= dayend; i++) {
             var p = document.createElement("p");
+            dataset_helper.set(p, "post", dayPost);
             if (i == daybegin) {
                 p.className = "selected";
             }
@@ -1423,7 +1448,9 @@
             datect.appendChild(p);
         }
         dataset_helper.set(picker_holder, "value", newyear + "/" + monthbegin + "/" + daybegin);
-        datepicker.children[0].children[0].innerText = newyear + " 年 " + monthbegin + " 月 " + daybegin + " 日";
+        if (yearPost.length <= 0) yearPost = ',';
+        if (monthPost.length <= 0) monthPost = ',';
+        datepicker.children[0].children[0].innerText = newyear + " " + yearPost + " " + monthNames[monthbegin - 1] + " " + monthPost + " " + daybegin + " " + dayPost;
         picker_holder.context.events.trigger("changed", picker_holder, {
             action: "user_selection",
             date: { year: valyear, month: monthbegin, day: daybegin }
@@ -1435,6 +1462,10 @@
         var container = monthp.parentElement.parentElement;
         var datepicker = container.parentElement;
         var picker_holder = datepicker.parentElement;
+        var yearPost = picker_holder.context.posts.year;
+        var monthPost = picker_holder.context.posts.month;
+        var dayPost = picker_holder.context.posts.day;
+        var monthNames = picker_holder.context.months;
         var mindate = dataset_helper.read(picker_holder, "mindate");
         var maxdate = dataset_helper.read(picker_holder, "maxdate");
         var dateval = dataset_helper.read(picker_holder, "value");
@@ -1456,7 +1487,7 @@
             if (monthct.children[i].className == "selected") monthct.children[i].className = "";
         }
         monthp.className = "selected";
-        var newmonth = parseInt(monthp.innerText, 10);
+        var newmonth = parseInt(dataset_helper.read(monthp, "month"), 10);
         var daybegin = 1,
             dayend = new Date(valyear, newmonth, 0).getDate();
         if (valyear == minyear && minmonth == newmonth) daybegin = minday;
@@ -1464,6 +1495,7 @@
         datect.innerHTML = "";
         for (var i = daybegin; i <= dayend; i++) {
             var p = document.createElement("p");
+            dataset_helper.set(p, "post", dayPost);
             if (i == daybegin) {
                 p.className = "selected";
             }
@@ -1473,7 +1505,9 @@
         }
         dataset_helper.set(picker_holder, "value", valyear + "/" + newmonth + "/" + daybegin);
         datect.scrollTop = 0;
-        datepicker.children[0].children[0].innerText = valyear + " 年 " + newmonth + " 月 " + daybegin + " 日";
+        if (yearPost.length <= 0) yearPost = ',';
+        if (monthPost.length <= 0) monthPost = ',';
+        datepicker.children[0].children[0].innerText = valyear + " " + yearPost + " " + monthNames[newmonth - 1] + " " + monthPost + " " + daybegin + " " + dayPost;
         picker_holder.context.events.trigger("changed", picker_holder, {
             action: "user_selection",
             date: { year: valyear, month: newmonth, day: daybegin }
@@ -1485,6 +1519,7 @@
         var container = datep.parentElement.parentElement;
         var datepicker = container.parentElement;
         var picker_holder = datepicker.parentElement;
+        var monthNames = picker_holder.context.months;
         var dateval = dataset_helper.read(picker_holder, "value");
         var valresult = /^(\d{4})\/((0?[1-9])|(1[0-2]))\/((0?[1-9])|(1\d)|(2\d)|(3[0-1]))$/g.exec(dateval);
         var valyear = parseInt(valresult["1"], 10),
@@ -1496,7 +1531,12 @@
         }
         datep.className = "selected";
         dataset_helper.set(picker_holder, "value", valyear + "/" + valmonth + "/" + datep.innerText);
-        datepicker.children[0].children[0].innerText = valyear + " 年 " + valmonth + " 月 " + datep.innerText + " 日";
+        var yearPost = picker_holder.context.posts.year;
+        var monthPost = picker_holder.context.posts.month;
+        var dayPost = picker_holder.context.posts.day;
+        if (yearPost.length <= 0) yearPost = ',';
+        if (monthPost.length <= 0) monthPost = ',';
+        datepicker.children[0].children[0].innerText = valyear + " " + yearPost + " " + monthNames[valmonth - 1] + " " + monthPost + " " + datep.innerText + " " + dayPost;
         picker_holder.context.events.trigger("changed", picker_holder, {
             action: "user_selection",
             date: { year: valyear, month: valmonth, day: datep.innerText }
@@ -1543,6 +1583,10 @@
     var datepicker_setdate = function datepicker_setdate(date) {
         var i = 0;
         var picker_holder = this.self;
+        var yearPost = picker_holder.context.posts.year;
+        var monthPost = picker_holder.context.posts.month;
+        var dayPost = picker_holder.context.posts.day;
+        var monthNames = picker_holder.context.months;
         var picker = $(picker_holder).find(".main-picker")[0];
         var mindate = dataset_helper.read(picker_holder, "mindate");
         var maxdate = dataset_helper.read(picker_holder, "maxdate");
@@ -1609,11 +1653,13 @@
         index = monthbegin;
         for (var i = monthbegin; i <= monthend; i++) {
             var p = document.createElement("p");
+            dataset_helper.set(p, "post", monthPost);
+            dataset_helper.set(p, "month", i);
             if (i == valmonth) {
                 p.className = "selected";
                 index = i;
             }
-            p.innerText = i.toString();
+            p.innerText = monthNames[i - 1];
             $(p).click(datepicker_month_clicked);
             monthct.appendChild(p);
         }
@@ -1626,6 +1672,7 @@
         index = daybegin;
         for (var i = daybegin; i <= dayend; i++) {
             var p = document.createElement("p");
+            dataset_helper.set(p, "post", dayPost);
             if (i == valday) {
                 p.className = "selected";
                 index = i;
@@ -1637,7 +1684,10 @@
         datect.scrollTop = datect.children[index - daybegin].offsetTop;
 
         dataset_helper.set(picker_holder, "value", valyear + "/" + valmonth + "/" + valday);
-        picker.children[0].children[0].innerText = valyear + " 年 " + valmonth + " 月 " + valday + " 日";
+
+        if (yearPost.length <= 0) yearPost = ',';
+        if (monthPost.length <= 0) monthPost = ',';
+        picker.children[0].children[0].innerText = valyear + " " + yearPost + " " + monthNames[valmonth - 1] + " " + monthPost + " " + valday + " " + dayPost;
         picker_holder.context.events.trigger("changed", picker_holder, {
             action: "programmatic",
             date: { year: valyear, month: valmonth, day: valday }

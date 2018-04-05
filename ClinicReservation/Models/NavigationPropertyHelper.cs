@@ -17,14 +17,14 @@ namespace ClinicReservation.Models
 
             foreach (ReferenceEntry refentry in entity.References)
             {
-                if (refentry.IsLoaded == false)
+                if (!refentry.IsLoaded)
                     refentry.Load();
             }
-            if (loadcollections == true)
+            if (loadcollections)
             {
                 foreach (CollectionEntry colentry in entity.Collections)
                 {
-                    if (colentry.IsLoaded == false)
+                    if (!colentry.IsLoaded)
                         colentry.Load();
                 }
             }
