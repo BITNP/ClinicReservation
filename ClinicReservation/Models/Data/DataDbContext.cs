@@ -73,7 +73,8 @@ namespace ClinicReservation.Models.Data
             modelBuilder.Entity<Department>().HasIndex(department => department.Code).IsUnique();
 
             modelBuilder.Entity<UserGroup>().HasIndex(usergroup => usergroup.Code).IsUnique();
-            
+            modelBuilder.Entity<UserGroup>().HasIndex(group => group.PromptCode).IsUnique();
+
             modelBuilder.Entity<AllowedGroupAction>().HasKey(action => new { action.GroupId, action.Action });
             modelBuilder.Entity<AllowedGroupAction>().HasOne(action => action.Group).WithMany(group => group.Actions).OnDelete(DeleteBehavior.Cascade);
 

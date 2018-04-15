@@ -1,0 +1,16 @@
+﻿@page
+@model SuperMagicModel
+@{
+    ViewData["Title"] = "Super Magic";
+    ViewData["DisableLeftNavi"] = true;
+}
+<div>
+    <form asp-page="supermagic" method="post" enctype="application/x-www-form-urlencoded">
+        <div id="input_department" data-control="select" data-selected-id="merge" data-name="action">
+            <span data-id="merge">合并</span>
+            <span data-id="replace">覆盖</span>
+        </div>
+        <div id="input_code" class="input-item" data-control="input" data-type="text" data-value="" data-name="code"></div>
+        <div data-control="submit" data-text="走起"></div>
+    </form>
+</div>

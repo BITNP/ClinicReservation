@@ -37,7 +37,7 @@ namespace ClinicReservation.Pages
             this.cultureContext = cultureContext;
         }
 
-        [CustomHandler(typeof(RedirectHandler), "login")]
+        [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "login")]
         public void OnGet()
         {
             Locations = dbContext.Locations;
@@ -46,7 +46,7 @@ namespace ClinicReservation.Pages
             codeMatching.Match(Categories);
         }
 
-        [CustomHandler(typeof(RedirectHandler), "onCreateUnauthenticated")]
+        [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "onCreateUnauthenticated")]
         public IActionResult OnPost([FromForm] NewReservationFormModel model)
         {
             User user;

@@ -7,6 +7,7 @@ using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
 using ClinicReservation.Services;
 using ClinicReservation.Services.Database;
+using ClinicReservation.Services.Groups;
 using LocalizationCore;
 using LocalizationCore.CodeMatching;
 using Microsoft.AspNetCore.Mvc;
@@ -15,22 +16,24 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(failedAction: AuthenticationFailedAction.Return401)]
+    [AuthenticationRequired(failedAction: AuthenticationFailedAction.Return403)]
     public class NewUserModel : CultureMatchingPageModel
     {
         private readonly DataDbContext dbContext;
         private readonly ICodeMatchingService codeMatching;
         private readonly IDbQuery dbQuery;
+        private readonly IGroupPromptResolver resolver;
 
         public IEnumerable<Department> Departments { get; private set; }
 
         public NewUserFormModel UserModel { get; private set; }
 
-        public NewUserModel(DataDbContext dbContext, ICodeMatchingService codeMatching, IDbQuery dbQuery)
+        public NewUserModel(DataDbContext dbContext, ICodeMatchingService codeMatching, IDbQuery dbQuery, IGroupPromptResolver resolver)
         {
             this.dbContext = dbContext;
             this.codeMatching = codeMatching;
             this.dbQuery = dbQuery;
+            this.resolver = resolver;
         }
 
         public IActionResult OnGet([FromServices] IAuthenticationResult authResult)
@@ -100,8 +103,9 @@ namespace ClinicReservation.Pages
                     user.GitHub = model.GitHub;
                     user.Department = model.DepartmentInstance;
                     user.IsPersonalInformationFilled = true;
-                    SetUserGroup(user, model.Code);
                     EntityEntry<User> entry = dbQuery.GetDbEntry(user);
+                    entry.EnsureReferencesLoaded(nameof(user.Groups));
+                    SetUserGroup(user, model.Code);
                     entry.State = EntityState.Modified;
                     dbQuery.SaveChanges();
                 }
@@ -128,10 +132,14 @@ namespace ClinicReservation.Pages
             }
 
             // add the user to a group according to the code
-            if (string.IsNullOrWhiteSpace(code))
-                return;
-
-            string[] groupCodes = code.Split(';');
+            IReadOnlyList<UserGroup> groups = resolver.Resolve(code);
+            SortedSet<int> existingGroupIds = new SortedSet<int>(user.Groups.Select(link => link.GroupId));
+            foreach (UserGroup group in groups)
+            {
+                if (existingGroupIds.Contains(group.Id))
+                    continue;
+                dbQuery.AddUserGroup(user, group);
+            }
         }
     }
 }

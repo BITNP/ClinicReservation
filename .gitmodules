@@ -7,3 +7,6 @@
 [submodule "DNTCaptcha.Core"]
 	path = DNTCaptcha.Core
 	url = https://github.com/BITNP/DNTCaptcha.Core
+[submodule "MvcAuthorization"]
+	path = MvcAuthorization
+	url = https://github.com/lzl1918/MvcAuthorization

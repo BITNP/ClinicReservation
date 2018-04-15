@@ -4,12 +4,13 @@ namespace ClinicReservation.Models.Data
 {
     public enum GroupAction
     {
-        CreateModifyReservation,
-        ViewAllReservations,
-        AcceptReservation,
-        SendBoardMessageToAllReservations,
-        SendBoardMessageOnlyRelated,
-        SendHiddenBoardMessage
+        CreateModifyReservation = 0,
+        ViewAllReservations = 1,
+        AcceptReservation = 2,
+        SendBoardMessageToAllReservations = 3,
+        SendBoardMessageOnlyRelated = 4,
+        SendHiddenBoardMessage = 5,
+        ModifyGroups = 6,
     }
 
     public class AllowedGroupAction

@@ -58,62 +58,53 @@
     };
 </script>
 <div>
-    <p class="smalltitle">在系统中注册信息</p>
-    <div>
-        <p>在开始使用预约系统之前，我们希望您能够填写以下个人信息。</p>
-        <p>在必要的时候，我们可能会通过填写的个人信息与你沟通。</p>
-        <p>若你不希望在系统中保留任何个人信息，可以直接点击页面下方的创建按钮。</p>
-    </div>
-    <br />
-    <p class="smalltitle">个人信息</p>
-    <div>
-        @if (enableNameEditing)
-        {
-            <p class="itemname">姓名</p>
-            <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
-            <p class="itemname">邮箱</p>
-            <div id="input_email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
-        }
-        else
-        {
-            <p class="itemname">姓名</p>
-            <div id="input_name" data-control="input" class="input-item" data-type="text" data-enabled="false" data-value="@name"></div>
-            <p class="itemname">邮箱</p>
-            <div id="input_email" class="input-item" data-control="input" data-type="email" data-enabled="false" data-value="@email"></div>
-
-        }
-        <p class="itemname">联系电话</p>
-        <div id="input_phone" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
-        <p class="itemname">QQ/微信</p>
-        <div id="input_im" class="input-item" data-control="input" data-type="text" data-value="@im"></div>
-        <p class="itemname">GitHub</p>
-        <div id="input_github" class="input-item" data-control="input" data-type="url" data-value="@github"></div>
-        <p class="itemname">所属学院</p>
-        <div id="input_department" data-control="select" data-selected-id="@department_code">
-            @foreach (Department department in Model.Departments)
-            {
-                <span data-id="@department.Code">@department.DisplayName</span>
-            }
+    <form asp-page="newuser" method="post" enctype="multipart/form-data">
+        <p class="smalltitle">在系统中注册信息</p>
+        <div>
+            <p>在开始使用预约系统之前，我们希望您能够填写以下个人信息。</p>
+            <p>在必要的时候，我们可能会通过填写的个人信息与你沟通。</p>
+            <p>若你不希望在系统中保留任何个人信息，可以直接点击页面下方的创建按钮。</p>
         </div>
-        <p id="input_dep_hint" class="info-base info-hint">选择您所在的学院。</p>
-        <p id="input_dep_err" class="info-base info-error">[错误] 未找到学院名称。</p>
-        <p class="itemname">神秘代码</p>
-        <div id="input_secret_code" class="input-item" data-control="input" data-type="text" data-value=""></div>
-    </div>
+        <br />
+        <p class="smalltitle">个人信息</p>
+        <div>
+            @if (enableNameEditing)
+            {
+                <p class="itemname">姓名</p>
+                <div id="input_name" data-name="name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
+                <p class="itemname">邮箱</p>
+                <div id="input_email" data-name="email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
+            }
+            else
+            {
+                <p class="itemname">姓名</p>
+                <div id="input_name" data-name="name" data-control="input" class="input-item" data-type="text" data-enabled="false" data-value="@name"></div>
+                <p class="itemname">邮箱</p>
+                <div id="input_email" data-name="email" class="input-item" data-control="input" data-type="email" data-enabled="false" data-value="@email"></div>
 
-    <div id="btn_submit" style="margin: 1em 0.3em;" data-control="button" data-text="创建"></div>
-    <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
+            }
+            <p class="itemname">联系电话</p>
+            <div id="input_phone" data-name="phone" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
+            <p class="itemname">QQ/微信</p>
+            <div id="input_im" data-name="im" class="input-item" data-control="input" data-type="text" data-value="@im"></div>
+            <p class="itemname">GitHub</p>
+            <div id="input_github" data-name="github" class="input-item" data-control="input" data-type="url" data-value="@github"></div>
+            <p class="itemname">所属学院</p>
+            <div id="input_department" data-name="department" data-control="select" data-selected-id="@department_code">
+                @foreach (Department department in Model.Departments)
+                {
+                    <span data-id="@department.Code">@department.DisplayName</span>
+                }
+            </div>
+            <p id="input_dep_hint" class="info-base info-hint">选择您所在的学院。</p>
+            <p id="input_dep_err" class="info-base info-error">[错误] 未找到学院名称。</p>
+            <p class="itemname">神秘代码</p>
+            <div id="input_secret_code" data-name="code" class="input-item" data-control="input" data-type="text" data-value=""></div>
+        </div>
 
-    <form id="hidden_submiter" asp-page="newuser" method="post" enctype="multipart/form-data" style="display:none">
-        <input name="name" />
-        <input name="phone" />
-        <input name="email" />
-        <input name="im" />
-        <input name="github" />
-        <input name="department" />
-        <input name="code" />
+        <div id="btn_submit" style="margin: 1em 0.3em;" data-control="submit" data-text="创建"></div>
+        <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
     </form>
-    <br />
 </div>
 
 

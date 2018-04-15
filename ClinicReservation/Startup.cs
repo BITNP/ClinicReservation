@@ -23,10 +23,12 @@ using ClinicReservation.Services.SMS;
 using ClinicReservation.Services.Database;
 using ClinicReservation.Handlers;
 using ClinicReservation.Services.Authentication;
+using ClinicReservation.Services.Data;
+using ClinicReservation.Services.Groups;
 
 namespace ClinicReservation
 {
-    public class Startup
+    public partial class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -108,6 +110,9 @@ namespace ClinicReservation
 
             services.AddSingleton<IValidatorSetPropertyMethodCache>(provider => new ValidatorSetPropertyMethodCache(100));
 
+            services.AddScoped<IGroupPromptResolver, GroupPromptResolver>();
+            services.AddScoped<IReservationStore, ReservationStore>();
+            AddAuthorizations(services);
         }
 
         public void Configure(

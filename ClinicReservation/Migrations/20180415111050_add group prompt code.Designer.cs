@@ -11,9 +11,10 @@ using System;
 namespace ClinicReservation.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180415111050_add group prompt code")]
+    partial class addgrouppromptcode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,9 +260,6 @@ namespace ClinicReservation.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("PromptCode")
                         .IsUnique();
 
                     b.ToTable("UserGroups");

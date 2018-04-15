@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace ClinicReservation.Pages
 {
     [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
-    [CustomHandler(typeof(RedirectHandler), "login")]
+    [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "login")]
     public class BoardModel : PageModel
     {
         private readonly IAuthenticationService authenticationService;

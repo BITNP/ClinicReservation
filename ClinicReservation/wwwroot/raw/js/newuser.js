@@ -53,31 +53,19 @@
         return succ;
     };
 
-    var submit_button_click = function () {
-        if (!is_valid_format())
+    var submit_button_click = function (sender, args) {
+        if (!is_valid_format()) {
+            args.handled = true;
             return;
+        }
 
         $("#btn_submit")[0].context.set_enabled(false);
         $("#load_ring")[0].style.opacity = 1;
-
+        var form = args.form;
         $.debounce(1000, function () {
-            var name = $("#input_name")[0].context.get_value().trim();
-            var phone = $("#input_phone")[0].context.get_value().trim();
-            var email = $("#input_email")[0].context.get_value().trim();
-            var im = $("#input_im")[0].context.get_value().trim();
-            var github = $("#input_github")[0].context.get_value().trim();
-            var code = $("#input_secret_code")[0].context.get_value().trim();
-
-            var form = $("#hidden_submiter");
-            form.find("[name='name']")[0].value = name;
-            form.find("[name='phone']")[0].value = phone;
-            form.find("[name='email']")[0].value = email;
-            form.find("[name='im']")[0].value = im;
-            form.find("[name='github']")[0].value = github;
-            form.find("[name='code']")[0].value = code;
-            form.find("[name='department']")[0].value = $("#input_department")[0].context.selected_id();
             form.submit();
         })();
+        args.handled = true;
     };
 
     var check_delay = 1000;

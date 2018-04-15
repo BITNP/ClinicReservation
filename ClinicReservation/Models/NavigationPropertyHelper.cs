@@ -29,6 +29,25 @@ namespace ClinicReservation.Models
                 }
             }
         }
+
+        public static void EnsureReferencesLoaded<TEntity>(this EntityEntry<TEntity> entity, params string[] properties) where TEntity : class
+        {
+            if (entity == null)
+                return;
+            if (properties.Length <= 0)
+                return;
+
+            foreach (ReferenceEntry refentry in entity.References)
+            {
+                if (properties.Contains(refentry.Metadata.Name) && !refentry.IsLoaded)
+                    refentry.Load();
+            }
+            foreach (CollectionEntry colentry in entity.Collections)
+            {
+                if (properties.Contains(colentry.Metadata.Name) && !colentry.IsLoaded)
+                    colentry.Load();
+            }
+        }
     }
 
 }

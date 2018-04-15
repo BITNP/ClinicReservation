@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ClinicReservation.Handlers
 {
     public class RedirectHandler
     {
-        private string target;
+        private readonly string target;
         public RedirectHandler(string target)
         {
             this.target = target;
@@ -17,6 +16,22 @@ namespace ClinicReservation.Handlers
         public IActionResult Invoke()
         {
             return new RedirectToPageResult(target);
+        }
+    }
+
+    public class CustomReturnCodeHandler
+    {
+        
+
+        private readonly int code;
+        public CustomReturnCodeHandler(int code)
+        {
+            this.code = code;
+        }
+
+        public IActionResult Invoke()
+        {
+            return new CodeOnlyActionResult(code);
         }
     }
 }

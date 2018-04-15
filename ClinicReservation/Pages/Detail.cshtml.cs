@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace ClinicReservation.Pages
 {
     [AuthenticationRequired(failedAction: AuthenticationFailedAction.CustomHandler)]
+    [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "login")]
     public class DetailModel : CultureMatchingPageModel
     {
         private readonly IDbQuery dbQuery;
@@ -30,7 +31,6 @@ namespace ClinicReservation.Pages
             this.codeMatching = codeMatching;
         }
 
-        [CustomHandler(typeof(RedirectHandler), "login")]
         public IActionResult OnGet(int id)
         {
             Reservation reservation = dbQuery.TryGetReservation(id);
@@ -38,7 +38,7 @@ namespace ClinicReservation.Pages
             if (reservation == null || user == null)
             {
                 // redirect 404
-                return Forbid();
+                return CodeOnlyActionResult.Code404;
             }
 
             // check if the current user is the owner of this reservation

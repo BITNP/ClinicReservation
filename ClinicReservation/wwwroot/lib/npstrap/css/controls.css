@@ -46,7 +46,8 @@ a:hover {
 .buttonbase-focus {
   text-decoration: none;
 }
-div[data-control="button"] {
+div[data-control="button"],
+div[data-control="submit"] {
   background-color: #ccc;
   color: #000;
   font-weight: bold;
@@ -66,38 +67,47 @@ div[data-control="button"] {
   display: inline-block;
   text-align: center;
 }
-div[data-control="button"] div[data-control="flyout"] {
+div[data-control="button"] div[data-control="flyout"],
+div[data-control="submit"] div[data-control="flyout"] {
   display: none;
 }
-div[data-control="button"]:hover {
+div[data-control="button"]:hover,
+div[data-control="submit"]:hover {
   background-color: #aaa;
   cursor: pointer;
 }
-div[data-control="button"]:active {
+div[data-control="button"]:active,
+div[data-control="submit"]:active {
   text-decoration: none;
   outline: none;
   background-color: #999;
   color: #000;
 }
-div[data-control="button"]:focus {
+div[data-control="button"]:focus,
+div[data-control="submit"]:focus {
   text-decoration: none;
 }
-div[data-control="button"][data-accent="true"] {
+div[data-control="button"][data-accent="true"],
+div[data-control="submit"][data-accent="true"] {
   background-color: #003567;
   color: #FFF;
 }
-div[data-control="button"][data-accent="true"]:hover {
+div[data-control="button"][data-accent="true"]:hover,
+div[data-control="submit"][data-accent="true"]:hover {
   background: #001345;
   color: #fff;
 }
-div[data-control="button"][data-accent="true"]:active {
+div[data-control="button"][data-accent="true"]:active,
+div[data-control="submit"][data-accent="true"]:active {
   background-color: #000023;
   color: #FFF;
 }
-div[data-control="button"][data-accent="true"]:focus {
+div[data-control="button"][data-accent="true"]:focus,
+div[data-control="submit"][data-accent="true"]:focus {
   text-decoration: none;
 }
-div[data-control="button"][data-enabled="false"] {
+div[data-control="button"][data-enabled="false"],
+div[data-control="submit"][data-enabled="false"] {
   background-color: #BBB;
   color: #888;
   font-weight: bold;
@@ -450,6 +460,9 @@ div[data-control="listbox"] div.main-list div.cover {
   opacity: 0;
   border: none;
 }
+div[data-control="listbox"] div.main-list input.input {
+  display: none;
+}
 div[data-control="listbox"].no-header p.header,
 div[data-control="select"].no-header p.header {
   display: none;
@@ -569,6 +582,9 @@ div[data-control="select"] div.main-select div.cover {
   background: rgba(0, 0, 0, 0);
   opacity: 0;
   border: none;
+}
+div[data-control="select"] div.main-select input.input {
+  display: none;
 }
 div[data-control="select"][data-enabled="false"] p.header {
   color: #555;
@@ -725,6 +741,9 @@ div[data-control="datepicker"] div.main-picker div.cover {
   opacity: 0;
   cursor: pointer;
   border: none;
+}
+div[data-control="datepicker"] div.main-picker input.input {
+  display: none;
 }
 div[data-control="datepicker"].no-header p.header {
   display: none;

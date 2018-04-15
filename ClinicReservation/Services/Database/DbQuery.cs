@@ -1,6 +1,8 @@
 ﻿using AuthenticationCore;
+using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ClinicReservation.Services.Database
@@ -25,6 +27,20 @@ namespace ClinicReservation.Services.Database
         public void AddUser(User user)
         {
             dbContext.Users.Add(user);
+        }
+        public void AddUserGroup(User user, UserGroup group)
+        {
+            UserGroupUser link = new UserGroupUser()
+            {
+                User = user,
+                Group = group
+            };
+            // dbContext.Entry(user).EnsureReferencesLoaded(nameof(user.Groups));
+            if (user.Groups == null)
+            {
+                user.Groups = new List<UserGroupUser>();
+            }
+            user.Groups.Add(link);
         }
 
         public Department TryGetDepartment(string department)

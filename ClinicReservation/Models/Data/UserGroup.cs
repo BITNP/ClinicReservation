@@ -21,6 +21,10 @@ namespace ClinicReservation.Models.Data
         [StringLength(64)]
         public string DefaultName { get; set; }
 
+        [Required]
+        [StringLength(64, MinimumLength = 4)]
+        public string PromptCode { get; set; }
+
 
         public ICollection<AllowedGroupAction> Actions { get; set; }
         public ICollection<UserGroupUser> Users { get; set; }

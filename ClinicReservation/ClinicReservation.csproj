@@ -53,6 +53,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DNTCaptcha.Core\src\DNTCaptcha.Core\DNTCaptcha.Core.csproj" />
     <ProjectReference Include="..\MvcAuthentication\AuthenticationCore\AuthenticationCore.csproj" />
+    <ProjectReference Include="..\MvcAuthorization\AuthorizationCore\AuthorizationCore.csproj" />
     <ProjectReference Include="..\MvcLocalization\LocalizationCore\LocalizationCore.csproj" />
   </ItemGroup>
 </Project>

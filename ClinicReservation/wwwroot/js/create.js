@@ -34,29 +34,23 @@
         return succ;
     };
 
-    var submit_button_click = function submit_button_click() {
-        if (!is_valid_format()) return;
+    var submit_button_click = function submit_button_click(sender, args) {
+        if (!is_valid_format()) {
+            args.handled = true;
+            return;
+        }
 
         $("#btn_submit")[0].context.set_enabled(false);
         $("#load_ring")[0].style.opacity = 1;
-
+        var form = $(args.form);
         $.debounce(1000, function () {
-            var detail = $("#input_detail")[0].context.get_value().trim();
-
-            var form = $("#hidden_submiter");
-            form.find("[name='detail']")[0].value = detail;
-            form.find("[name='category']")[0].value = $("#input_questiontype")[0].context.selected_id();
-            var date = $("#input_bookdate")[0].context.get_date();
-            var date_str = date.year + "/" + date.month + "/" + date.day;
-            form.find("[name='bookdate']")[0].value = date_str;
-            form.find("[name='location']")[0].value = $("#input_location")[0].context.selected_id();
             if (form.find("[name='captchaToken']").length > 0) {
                 form.find("[name='captchaText']")[0].value = $("#DNTCaptchaText")[0].value;
                 form.find("[name='captchaToken']")[0].value = $("#DNTCaptchaToken")[0].value;
-                form.find("[name='captchaInput']")[0].value = $("#input_captcha")[0].context.get_value();
             }
             form.submit();
         })();
+        args.handled = true;
     };
 
     var lastindex = -1;

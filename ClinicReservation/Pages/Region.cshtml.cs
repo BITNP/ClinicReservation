@@ -19,6 +19,11 @@ namespace ClinicReservation.Pages
                 Source = source.Substring(1);
             else
                 Source = source;
+
+            if (Source.Equals("region", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Source = "";
+            }
         }
     }
 }

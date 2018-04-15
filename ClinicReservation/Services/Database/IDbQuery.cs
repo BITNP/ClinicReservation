@@ -13,6 +13,8 @@ namespace ClinicReservation.Services.Database
         User TryGetUser(IUser user);
         void AddUser(User user);
 
+        void AddUserGroup(User user, UserGroup group);
+
         void AddReservation(Reservation reservation);
         Reservation TryGetReservation(int id);
 

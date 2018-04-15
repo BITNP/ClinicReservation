@@ -17,12 +17,12 @@
     string url = $"{cultureContext.UrlCultureSpecifier}/Region";
     if (source != null && source.Length > 0)
     {
-        url += "?source={source}";
+        url += $"?source={source}";
     }
 }
 <div class="left">
     <i class="fas fa-globe" style="font-size: 1.2em" aria-hidden="true"></i>
-    <a href="/region" class="lang-link">@code.Match(requestedLanguage, requestedLanguage)</a>
+    <a href="@url" class="lang-link">@code.Match(requestedLanguage, requestedLanguage)</a>
 </div>
 <div class="right">
     <div>

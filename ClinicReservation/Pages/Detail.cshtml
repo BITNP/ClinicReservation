@@ -1,7 +1,8 @@
 ﻿@page
-@model ClinicReservation.Pages.DetailModel
+@model DetailModel
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "预约详细";
+    ViewData["DisableLeftNavi"] = true;
     Reservation reservation = Model.Reservation;
     IList<BoardMessage> messages = new List<BoardMessage>();
 }
