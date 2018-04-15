@@ -22,6 +22,7 @@ namespace ClinicReservation.Models.Data
         public string DefaultName { get; set; }
 
 
+        public ICollection<AllowedGroupAction> Actions { get; set; }
         public ICollection<UserGroupUser> Users { get; set; }
 
         [NotMapped]

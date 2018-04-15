@@ -22,6 +22,7 @@ using ClinicReservation.Services.Cache;
 using ClinicReservation.Services.SMS;
 using ClinicReservation.Services.Database;
 using ClinicReservation.Handlers;
+using ClinicReservation.Services.Authentication;
 
 namespace ClinicReservation
 {
@@ -61,6 +62,7 @@ namespace ClinicReservation
 
             services.AddDbContext<DataDbContext>(options => options.UseSqlServer(serviceConfig.ConnectionString));
             services.AddScoped<IDbQuery, DbQuery>();
+            services.AddScoped<IScopedUserAccessor, ScopedUserAccessor>();
 
             services.AddSingleton<NPOLJwtTokenService>(provider =>
             {

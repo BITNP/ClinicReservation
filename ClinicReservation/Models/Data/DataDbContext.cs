@@ -38,8 +38,8 @@ namespace ClinicReservation.Models.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<User> Users { get; set; }
-
         public DbSet<DutySchedule> Schedules { get; set; }
+        public DbSet<AllowedGroupAction> GroupActions { get; set; }
 
         public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
         {
@@ -73,11 +73,13 @@ namespace ClinicReservation.Models.Data
             modelBuilder.Entity<Department>().HasIndex(department => department.Code).IsUnique();
 
             modelBuilder.Entity<UserGroup>().HasIndex(usergroup => usergroup.Code).IsUnique();
+            
+            modelBuilder.Entity<AllowedGroupAction>().HasKey(action => new { action.GroupId, action.Action });
+            modelBuilder.Entity<AllowedGroupAction>().HasOne(action => action.Group).WithMany(group => group.Actions).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserGroupUser>().HasKey(ug => new { ug.GroupId, ug.UserId });
             modelBuilder.Entity<UserGroupUser>().HasOne(ug => ug.Group).WithMany(group => group.Users).HasForeignKey(ug => ug.GroupId);
             modelBuilder.Entity<UserGroupUser>().HasOne(ug => ug.User).WithMany(user => user.Groups).HasForeignKey(ug => ug.UserId);
-
             base.OnModelCreating(modelBuilder);
 
         }
