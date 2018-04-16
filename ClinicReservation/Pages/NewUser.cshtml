@@ -71,18 +71,20 @@
             @if (enableNameEditing)
             {
                 <p class="itemname">姓名</p>
-                <div id="input_name" data-name="name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
+                <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
                 <p class="itemname">邮箱</p>
-                <div id="input_email" data-name="email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
+                <div id="input_email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
             }
             else
             {
                 <p class="itemname">姓名</p>
-                <div id="input_name" data-name="name" data-control="input" class="input-item" data-type="text" data-enabled="false" data-value="@name"></div>
+                <div id="input_name" data-control="input" class="input-item" data-type="text" data-enabled="false" data-value="@name"></div>
                 <p class="itemname">邮箱</p>
-                <div id="input_email" data-name="email" class="input-item" data-control="input" data-type="email" data-enabled="false" data-value="@email"></div>
-
+                <div id="input_email" class="input-item" data-control="input" data-type="email" data-enabled="false" data-value="@email"></div>
             }
+            <input name="name" value="@name" style="display: none" type="text" />
+            <input name="email" value="@email" style="display: none" type="email" />
+
             <p class="itemname">联系电话</p>
             <div id="input_phone" data-name="phone" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
             <p class="itemname">QQ/微信</p>

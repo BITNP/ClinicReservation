@@ -8,6 +8,10 @@
     "inputFile": "wwwroot/raw/js/site.js"
   },
   {
+    "outputFile": "wwwroot/js/_layout_section.js",
+    "inputFile": "wwwroot/raw/js/_layout_section.js"
+  },
+  {
     "outputFile": "wwwroot/css/sharedheader.css",
     "inputFile": "wwwroot/raw/shared/sharedheader.less"
   },

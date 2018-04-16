@@ -14,8 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(failedAction: AuthenticationFailedAction.CustomHandler)]
-    [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "login")]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
+    [AuthenticationFailedHandler(typeof(RedirectHandler), "login")]
     public class DetailModel : CultureMatchingPageModel
     {
         private readonly IDbQuery dbQuery;

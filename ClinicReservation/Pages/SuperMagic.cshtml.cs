@@ -14,8 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(failedAction: AuthenticationFailedAction.CustomHandler)]
-    [AuthenticationFailedHandlerAttribute(typeof(CustomReturnCodeHandler), 404)]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
+    [AuthenticationFailedHandler(typeof(CustomReturnCodeHandler), 404)]
     public class SuperMagicModel : PageModel
     {
         private readonly IGroupPromptResolver resolver;

@@ -1,0 +1,60 @@
+﻿@import "_include.less";
+@import "_vars.less";
+
+@section-margin-wide: 4em;
+@section-margin-medium: 3em;
+@section-margin-small: 2em;
+@section-margin-tiny: 1em;
+
+div.section-container {
+    .flex-col(center);
+}
+
+div.section-container > div.section-holder {
+    .flex-row(baseline);
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-self: center;
+
+    & > div.content-section {
+        position: relative;
+        margin: 2em @section-margin-wide 2em @section-margin-wide;
+        width: 15em;
+        flex: 0 1 auto;
+
+        &::before {
+            content: attr(data-header);
+            padding: 0 0 10px 0;
+            display: block;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        & > p {
+            margin: 0 0 10px 0;
+        }
+    }
+}
+
+@media screen and (max-width: @width-medium) {
+    div.section-container > div.content-section {
+        margin-left: @section-margin-medium;
+        margin-right: @section-margin-medium;
+    }
+}
+
+@media screen and (max-width: @width-small) {
+    div.section-container > div.content-section {
+        margin-left: @section-margin-small;
+        margin-right: @section-margin-small;
+    }
+}
+
+@media screen and (max-width: @width-tiny) {
+    div.section-container > div.content-section {
+        margin-left: @section-margin-tiny;
+        margin-right: @section-margin-tiny;
+    }
+}

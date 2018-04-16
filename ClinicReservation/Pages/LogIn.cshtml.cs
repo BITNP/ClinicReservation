@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(AuthenticationPolicy.All, AuthenticationFailedAction.RedirectCAS)]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.RedirectCAS)]
     public class LogInModel : PageModel
     {
         public IActionResult OnGet()

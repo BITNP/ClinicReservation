@@ -102,6 +102,7 @@ namespace ClinicReservation
             services.AddMvcAuthentication<CASResultHandler>(
                 redirectUrl: Configuration["CAS:redirectUrl"],
                 validateUrl: Configuration["CAS:validateUrl"],
+                logoutUrl: Configuration["CAS:logoutUrl"],
                 sessionName: Configuration["CAS:sessionName"]);
 
             services.AddSingleton<INotificationProvider, NotificationProvider>(service => new NotificationProvider(serviceConfig.NotificationPath));

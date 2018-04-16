@@ -19,12 +19,15 @@ namespace ClinicReservation.Services.Groups
         {
             SortedSet<string> codes = new SortedSet<string>(promptCode.Split(';'));
             List<UserGroup> result = new List<UserGroup>();
+            UserGroup group;
             foreach (string code in codes)
             {
                 if (string.IsNullOrWhiteSpace(code))
                     continue;
 
-                result.Add(dbContext.UserGroups.First(group => group.PromptCode.Equals(code)));
+                group = dbContext.UserGroups.FirstOrDefault(gp => gp.PromptCode.Equals(code));
+                if (group != null)
+                    result.Add(group);
             }
             return result;
         }

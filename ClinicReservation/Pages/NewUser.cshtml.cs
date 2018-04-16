@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(failedAction: AuthenticationFailedAction.Return403)]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.Return403)]
     public class NewUserModel : CultureMatchingPageModel
     {
         private readonly DataDbContext dbContext;

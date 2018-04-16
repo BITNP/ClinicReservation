@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(failedAction: AuthenticationFailedAction.CustomHandler)]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
     public class CreateModel : CultureMatchingPageModel
     {
         private readonly DataDbContext dbContext;
@@ -37,7 +37,7 @@ namespace ClinicReservation.Pages
             this.cultureContext = cultureContext;
         }
 
-        [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "login")]
+        [AuthenticationFailedHandler(typeof(RedirectHandler), "login")]
         public void OnGet()
         {
             Locations = dbContext.Locations;
@@ -46,7 +46,7 @@ namespace ClinicReservation.Pages
             codeMatching.Match(Categories);
         }
 
-        [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "onCreateUnauthenticated")]
+        [AuthenticationFailedHandler(typeof(RedirectHandler), "onCreateUnauthenticated")]
         public IActionResult OnPost([FromForm] NewReservationFormModel model)
         {
             User user;

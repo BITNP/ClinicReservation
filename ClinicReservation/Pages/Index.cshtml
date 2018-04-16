@@ -7,9 +7,6 @@
     // 提供查询入口和创建预约入口
 
     ViewData["Title"] = "预约系统";
-    ViewData["Controller"] = "reservation";
-    ViewData["ImportCSS"] = new List<string>() { "index" };
-    ViewData["ImportScript"] = new List<string>() { "index" };
     ViewData["DisableLeftNavi"] = true;
 }
 @section styles {
@@ -23,43 +20,37 @@
 @section scripts {
     <environment names="Development">
         <script src="~/js/index.js"></script>
+        <script src="~/js/_layout_section.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/index.min.js" asp-append-version="true"></script>
+        <script src="~/js/_layout_section.min.js" asp-append-version="true"></script>
     </environment>
 }
+<div class="section-container">
+    <div class="section-holder">
+        @if (!authenticationResult.IsAuthenticated)
+        {
+            <div class="content-section" data-header="登陆">
+                <p>跳转到网协CAS服务进行注册或登陆</p>
+                <p>登陆后可以看到更多个人化信息。</p>
+                <div data-control="button" data-text="登陆CAS系统" data-href="/login"></div>
+            </div>
+        }
+        <div class="content-section" data-header="填写预约信息">
+            <p>向我们发起预约请求</p>
+            <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
+            @if (state.AllowCreate)
+            {
+                <p>可能需要登陆</p>
 
-<div style="display: flex; flex-direction:row; justify-content: center; flex-wrap: wrap;">
-    @if (!authenticationResult.IsAuthenticated)
-    {
-        <div class="np-section">
-            <p class="np-title">登陆</p>
-            <p>跳转到网协CAS服务进行注册或登陆</p>
-
-            <p>登陆后可以看到更多个人化信息。</p>
-            <div data-control="button" data-text="登陆CAS系统" data-href="/login"></div>
-
-            <br />
-            <br />
+                <div data-control="button" data-text="填写预约" data-href="/create"></div>
+            }
+            else
+            {
+                <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
+            }
         </div>
-    }
-    <div class="np-section">
-        <p class="np-title">填写预约信息</p>
-        <p>向我们发起预约请求</p>
-
-        <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
-        @if (state.AllowCreate)
-        {
-            <p>可能需要登陆</p>
-
-            <div data-control="button" data-text="填写预约" data-href="/create"></div>
-        }
-        else
-        {
-            <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
-        }
-        <br />
-        <br />
     </div>
 </div>
 

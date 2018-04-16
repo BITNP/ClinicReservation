@@ -18,67 +18,56 @@
 @section scripts {
     <environment names="Development">
         <script src="~/js/index.js"></script>
+        <script src="~/js/_layout_section.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/index.min.js" asp-append-version="true"></script>
+        <script src="~/js/_layout_section.min.js" asp-append-version="true"></script>
     </environment>
 }
 
-<div style="display: flex; flex-direction:row; justify-content: center; flex-wrap: wrap;">
-    @if (authorization.TryAuthorize("CanViewAllReservations") == AuthorizationResult.Success)
-    {
-        <div class="np-section">
-            <p class="np-title">预约管理</p>
-            <p>诊所人员可以查看所有用户的预约记录。</p>
-            <div data-control="button" data-text="查看所有预约" data-href="/duty"></div>
-            <br />
-            <br />
+<div class="section-container">
+    <div class="section-holder">
+        @if (authorization.TryAuthorize("CanViewAllReservations", true))
+        {
+            <div class="content-section" data-header="预约管理">
+                <p>诊所人员可以查看所有用户的预约记录。</p>
+                <div data-control="button" data-text="查看所有预约" data-href="/duty"></div>
+            </div>
+        }
+        @if (authorization.TryAuthorize("CanModifyGroups", true))
+        {
+            <div class="content-section" data-header="管理用户组">
+                <p>管理现有用户组以及权限。</p>
+                <div data-control="button" data-text="查看用户组" data-href="/duty"></div>
+            </div>
+        }
+        <div class="content-section" data-header="下午好">
+            <p>我们记录了您已经发布的预约。</p>
+            <p>查看更多</p>
+            <div data-control="button" data-text="查看预约记录" data-href="/board"></div>
         </div>
-    }
-    @if (authorization.TryAuthorize("CanModifyGroups") == AuthorizationResult.Success)
-    {
-        <div class="np-section">
-            <p class="np-title">管理用户组</p>
-            <p>管理现有用户组以及权限。</p>
-            <div data-control="button" data-text="查看用户组" data-href="/duty"></div>
-            <br />
-            <br />
-        </div>
-    }
-    <div class="np-section">
-        <p class="np-title">下午好</p>
-        <p>我们记录了您已经发布的预约。</p>
-        <p>查看更多</p>
-        <div data-control="button" data-text="查看预约记录" data-href="/board"></div>
-        <br />
-        <br />
-    </div>
-    <div class="np-section">
-        <p class="np-title">填写预约信息</p>
-        <p>向我们发起预约请求</p>
+        <div class="content-section" data-header="填写预约信息">
+            <p>向我们发起预约请求</p>
 
-        <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
-        @if (!state.AllowCreate)
-        {
-            <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
-        }
-        else if (authorization.TryAuthorize("CanCreateReservation") == AuthorizationResult.Success)
-        {
-            <div data-control="button" data-text="填写预约" data-href="/create"></div>
-        }
-        else
-        {
-            <p style="color:#ff6a00; font-weight:bold">无法为当前用户创建预约</p>
-        }
-        <br />
-        <br />
-    </div>
-    <div class="np-section">
-        <p class="np-title">注销</p>
-        <p>从预约系统中安全退出</p>
-        <div data-control="button" data-text="注销" data-href="/logout"></div>
-        <br />
-        <br />
+            <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
+            @if (!state.AllowCreate)
+            {
+                <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
+            }
+            else if (authorization.TryAuthorize("CanCreateReservation", true))
+            {
+                <div data-control="button" data-text="填写预约" data-href="/create"></div>
+            }
+            else
+            {
+                <p style="color:#ff6a00; font-weight:bold">无法为当前用户创建预约</p>
+            }
+        </div>
+        <div class="content-section" data-header="注销">
+            <p>从预约系统中安全退出</p>
+            <div data-control="button" data-text="注销" data-href="/logout"></div>
+        </div>
     </div>
 </div>
 

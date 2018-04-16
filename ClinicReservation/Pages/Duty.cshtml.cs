@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
 {
-    [AuthenticationRequired(failedAction: AuthenticationFailedAction.CustomHandler)]
-    [AuthenticationFailedHandlerAttribute(typeof(RedirectHandler), "/login")]
+    [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
+    [AuthenticationFailedHandler(typeof(RedirectHandler), "/login")]
     public class DutyModel : PageModel
     {
         public void OnGet()
