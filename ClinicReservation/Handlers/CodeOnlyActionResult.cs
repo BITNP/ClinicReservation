@@ -18,5 +18,6 @@ namespace ClinicReservation.Handlers
         }
 
         public static IActionResult Code404 { get; } = new CodeOnlyActionResult(404);
+        public static IActionResult Code401 { get; } = new CodeOnlyActionResult(401);
     }
 }

@@ -27,14 +27,14 @@ namespace ClinicReservation.Authorizations
                 return PolicyResult.Success;
 
             SortedSet<GroupAction> targetActions = new SortedSet<GroupAction>(policy.Actions);
-            query.GetDbEntry(user).EnsureReferencesLoaded(true);
+            query.GetDbEntry(user).EnsureReferencesLoaded(nameof(user.Groups));
             ICollection<UserGroupUser> groupLinks = user.Groups;
             UserGroup group;
             foreach (UserGroupUser links in groupLinks)
             {
                 query.GetDbEntry(links).EnsureReferencesLoaded(false);
                 group = links.Group;
-                query.GetDbEntry(group).EnsureReferencesLoaded(true);
+                query.GetDbEntry(group).EnsureReferencesLoaded(nameof(group.Actions));
                 foreach (AllowedGroupAction action in group.Actions)
                 {
                     if (targetActions.Contains(action.Action))

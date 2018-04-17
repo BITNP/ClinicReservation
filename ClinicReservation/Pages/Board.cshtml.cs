@@ -6,7 +6,9 @@ using AuthenticationCore;
 using ClinicReservation.Handlers;
 using ClinicReservation.Models.Data;
 using ClinicReservation.Services;
+using ClinicReservation.Services.Authentication;
 using ClinicReservation.Services.Database;
+using LocalizationCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,26 +16,23 @@ namespace ClinicReservation.Pages
 {
     [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
     [AuthenticationFailedHandler(typeof(RedirectHandler), "login")]
-    public class BoardModel : PageModel
+    public class BoardModel : CultureMatchingPageModel
     {
-        private readonly IAuthenticationService authenticationService;
-        private readonly IDbQuery dbQuery;
+        private readonly IScopedUserAccessor userAccessor;
 
-        public BoardModel(IAuthenticationService authenticationService, IDbQuery dbQuery)
+        public BoardModel(IScopedUserAccessor userAccessor)
         {
-            this.authenticationService = authenticationService;
-            this.dbQuery = dbQuery;
+            this.userAccessor = userAccessor;
         }
 
-        public IActionResult OnGet([FromServices] IAuthenticationResult authenticationResult)
+        public IActionResult OnGet()
         {
-            User user = dbQuery.TryGetUser(authenticationResult.User);
+            User user = userAccessor.User;
             if (user == null || !user.IsPersonalInformationFilled)
             {
                 // create a user
                 return Redirect("/newuser");
             }
-
             return Page();
         }
     }

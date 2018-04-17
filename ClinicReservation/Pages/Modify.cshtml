@@ -1,15 +1,15 @@
 ﻿@page
-@model CreateModel
+@model ModifyModel
 @using ClinicReservation.Helpers
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@inject ICodeMatchingService codeMatchingService
+@inject ICodeMatchingService matching
 @{
-    ViewData["Title"] = "填写预约";
+    ViewData["Title"] = "修改预约";
     ViewData["DisableLeftNavi"] = true;
 
     DateTime currentDate = DateTimeHelper.GetBeijingTime();
     DateTime longestDate = currentDate + TimeSpan.FromDays(14);
-    string[] datenames = DateTimeHelper.GetDisplayDateTime(currentDate, 7, codeMatchingService);
+    string[] datenames = DateTimeHelper.GetDisplayDateTime(currentDate, 7, matching);
     int datediff = 0;
     string bookdate = currentDate.ToString("yyyy/MM/dd");
     DateTime parsedBookDate = currentDate;
@@ -17,19 +17,23 @@
     string category = Constants.DEFAULT_CATEGORY_CODE;
     string detail = "";
     bool isdetailError = false;
-    NewReservationFormModel data = Model.LastData;
+    ModifyReservationFormModel data = Model.Reservation;
     if (data != null)
     {
-
         location = data.Location;
         category = data.Category;
         bookdate = data.BookDate;
         parsedBookDate = data.BookDateInstance;
         detail = data.Detail;
-        isdetailError = ModelState[nameof(data.Detail)].ValidationState != ModelValidationState.Valid;
+        if (Model.CheckDetailError)
+        {
+            isdetailError = ModelState[nameof(data.Detail)].ValidationState != ModelValidationState.Valid;
+        }
     }
     datediff = (parsedBookDate - currentDate).Days;
+
 }
+
 @section styles {
     <environment names="Development">
         <link href="~/css/create.css" rel="stylesheet" />
@@ -65,7 +69,8 @@
     }
 </script>
 <div>
-    <form asp-page="Create" method="post" enctype="multipart/form-data">
+    <form asp-page="Modify" method="post" enctype="multipart/form-data">
+        <input style="display:none" name="reservation" value="@data.Reservation" type="number" />
         <p class="smalltitle">我们的建议</p>
         <div>
             @*@Html.Raw(notificationProvider[culture.Culture])*@
@@ -81,6 +86,7 @@
                     <span data-id="@cate.Code">@cate.DisplayName</span>
                 }
             </div>
+
             <p class="itemname">详细信息（大于五个字）</p>
             <div id="input_detail" data-name="detail" class="input-item" data-control="input" data-type="textarea" style="resize: none; height: 8em"></div>
         </div>
@@ -131,9 +137,10 @@
                      asp-refresh-button-class="no-display" />
         <input name="captchaText" type="text" style="display: none" />
         <input name="captchaToken" type="text" style="display:none" />
-        <div id="btn_submit" style="margin: 1em 0.3em;" data-control="submit" data-text="提交申请"></div>
+        <div id="btn_submit" style="margin: 1em 0.3em;" data-control="submit" data-text="确认修改"></div>
         <div id="load_ring" data-control="loading" style="top:1.1em; position:relative; opacity: 0"></div>
     </form>
     <textarea id="hidden_problemdetail" style="display: none">@detail</textarea>
 </div>
+
 

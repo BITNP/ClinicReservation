@@ -20,6 +20,9 @@ namespace ClinicReservation.Authorizations
 
         public PolicyResult OnAuthorization(User user, Reservation target, IsReservationOwnerPolicy policy)
         {
+            if (target == null)
+                return PolicyResult.Failed;
+
             query.GetDbEntry(target).EnsureReferencesLoaded(false);
             if (target.Poster == user)
                 return PolicyResult.Success;

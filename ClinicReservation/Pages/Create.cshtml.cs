@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AuthenticationCore;
+using AuthorizationCore.Attributes;
+using ClinicReservation.Authorizations;
 using ClinicReservation.Handlers;
 using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
 using ClinicReservation.Services;
+using ClinicReservation.Services.Authentication;
 using ClinicReservation.Services.Database;
 using LocalizationCore;
 using LocalizationCore.CodeMatching;
@@ -16,24 +19,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace ClinicReservation.Pages
 {
     [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
+    [UserAuthorizationRequired(Policies.CanCreateReservation)]
     public class CreateModel : CultureMatchingPageModel
     {
         private readonly DataDbContext dbContext;
         private readonly IDbQuery query;
         private readonly ICodeMatchingService codeMatching;
-        private readonly IAuthenticationResult authResult;
+        private readonly IScopedUserAccessor userAccessor;
         private readonly ICultureContext cultureContext;
 
         public IEnumerable<Category> Categories { get; private set; }
         public IEnumerable<Location> Locations { get; private set; }
         public NewReservationFormModel LastData { get; private set; }
 
-        public CreateModel(DataDbContext dbContext, IDbQuery query, ICodeMatchingService codeMatching, IAuthenticationResult authResult, ICultureContext cultureContext)
+        public CreateModel(DataDbContext dbContext, IDbQuery query, ICodeMatchingService codeMatching, IScopedUserAccessor userAccessor, ICultureContext cultureContext)
         {
             this.dbContext = dbContext;
             this.query = query;
             this.codeMatching = codeMatching;
-            this.authResult = authResult;
+            this.userAccessor = userAccessor;
             this.cultureContext = cultureContext;
         }
 
@@ -47,11 +51,11 @@ namespace ClinicReservation.Pages
         }
 
         [AuthenticationFailedHandler(typeof(RedirectHandler), "onCreateUnauthenticated")]
-        public IActionResult OnPost([FromForm] NewReservationFormModel model)
+        public IActionResult OnPost(NewReservationFormModel model)
         {
             User user;
             if (ModelState.IsValid &&
-               (user = query.TryGetUser(authResult.User)) != null)
+               (user = userAccessor.User) != null)
             {
                 DateTime now = DateTime.Now;
                 Reservation reservation = new Reservation()

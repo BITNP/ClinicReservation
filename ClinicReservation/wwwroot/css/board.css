@@ -37,7 +37,7 @@ div.section-container > div.section-holder > div.content-section::before {
   color: #333;
 }
 div.section-container > div.section-holder > div.content-section > p {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px 0.3em;
 }
 @media screen and (max-width: 800px) {
   div.section-container > div.content-section {

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AuthenticationCore;
+using AuthorizationCore;
+using AuthorizationCore.Attributes;
+using ClinicReservation.Authorizations;
 using ClinicReservation.Handlers;
 using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
@@ -16,37 +19,28 @@ namespace ClinicReservation.Pages
 {
     [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
     [AuthenticationFailedHandler(typeof(RedirectHandler), "login")]
+    [UserAuthorizationRequired(Policies.CanViewCurrentReservation, AuthorizationFailedAction.KeepUnauthorized)]
     public class DetailModel : CultureMatchingPageModel
     {
         private readonly IDbQuery dbQuery;
-        private readonly IAuthenticationResult authResult;
         private readonly ICodeMatchingService codeMatching;
+        private readonly IAuthorizationResult result;
 
         public Reservation Reservation { get; private set; }
 
-        public DetailModel(IDbQuery dbQuery, IAuthenticationResult authResult, ICodeMatchingService codeMatching)
+        public DetailModel(IDbQuery dbQuery, ICodeMatchingService codeMatching, IAuthorizationResult result)
         {
             this.dbQuery = dbQuery;
-            this.authResult = authResult;
             this.codeMatching = codeMatching;
+            this.result = result;
         }
 
         public IActionResult OnGet(int id)
         {
-            Reservation reservation = dbQuery.TryGetReservation(id);
-            User user = dbQuery.TryGetUser(authResult.User);
-            if (reservation == null || user == null)
-            {
-                // redirect 404
+            if (!result.Succeeded())
                 return CodeOnlyActionResult.Code404;
-            }
 
-            // check if the current user is the owner of this reservation
-            // or if the current user is a duty memeber (to be added)
-            if (reservation.Poster != user)
-            {
-                return Forbid();
-            }
+            Reservation reservation = dbQuery.TryGetReservation(id);
             dbQuery.GetDbEntry(reservation).EnsureReferencesLoaded(true);
             codeMatching.Match(reservation.Category);
             codeMatching.Match(reservation.Location);

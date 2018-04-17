@@ -12,10 +12,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace ClinicReservation.Pages
 {
     [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
-    [AuthenticationFailedHandler(typeof(RedirectHandler), "/login")]
-    [UserAuthorizationRequired(Policies.CanManageAllReservations)]
-    public class DutyModel : CultureMatchingPageModel
+    [AuthenticationFailedHandler(typeof(RedirectHandler), "login")]
+    [UserAuthorizationRequired(Policies.CanCreateReservation)]
+    public class MyModel : CultureMatchingPageModel
     {
+
         public void OnGet()
         {
 

@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicReservation.Models
 {
-
     public class NewReservationFormModel : DataWithCaptchaModelBase
     {
         [Required]
@@ -28,6 +27,5 @@ namespace ClinicReservation.Models
         public Location LocationInstance { get; set; }
         public Category CategoryInstance { get; set; }
         public DateTime BookDateInstance { get; set; }
-
     }
 }
