@@ -13,6 +13,7 @@ using ClinicReservation.Services.Database;
 using LocalizationCore;
 using LocalizationCore.CodeMatching;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClinicReservation.Pages
@@ -45,6 +46,45 @@ namespace ClinicReservation.Pages
             codeMatching.Match(reservation.Category);
             codeMatching.Match(reservation.Location);
             Reservation = reservation;
+            return Page();
+        }
+
+        public IActionResult OnPost([FromForm] ReservationDetailActionFormModel model)
+        {
+            if (ModelState.ValidationState != ModelValidationState.Valid)
+            {
+                if (ModelState[nameof(model.Reservation)].ValidationState != ModelValidationState.Valid)
+                    return CodeOnlyActionResult.Code404;
+
+                Reservation reservation = model.ReservationInstance;
+                dbQuery.GetDbEntry(reservation).EnsureReferencesLoaded(true);
+                codeMatching.Match(reservation.Category);
+                codeMatching.Match(reservation.Location);
+                Reservation = reservation;
+                return Page();
+            }
+
+            Reservation res = model.ReservationInstance;
+            dbQuery.GetDbEntry(res).EnsureReferencesLoaded(true);
+            codeMatching.Match(res.Category);
+            codeMatching.Match(res.Location);
+            Reservation = res;
+            switch (model.Action)
+            {
+                case "message":
+                    break;
+                case "cancel":
+                    break;
+                case "accept":
+                    break;
+                case "feedback":
+                    break;
+                case "":
+                    break;
+                default:
+                    return CodeOnlyActionResult.Code404;
+            }
+
             return Page();
         }
     }

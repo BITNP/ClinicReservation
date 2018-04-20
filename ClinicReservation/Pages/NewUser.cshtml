@@ -30,33 +30,6 @@
     </environment>
 }
 
-<script>
-    window.message = {
-        name: {
-            hint: "我们将使用您的姓名称呼您。",
-            error: "该项不能为空"
-        },
-        phone: {
-            hint: "[可选] 留下电话号码以便我们与您沟通。",
-            error: "电话号码格式错误。"
-        },
-        email: {
-            hint: "[可选] 留下邮箱以便我们与您沟通。",
-            error: "邮箱格式错误。"
-        },
-        im: {
-            hint: "[可选] 留下QQ或微信以便我们与您沟通。",
-            error: "QQ或微信格式错误。"
-        },
-        github: {
-            hint: "[可选] 留下GitHub地址一起搞基。",
-            error: "地址格式错误。"
-        },
-        code: {
-            hint: "[可选] 输入你喜欢的神秘代码"
-        }
-    };
-</script>
 <div>
     <form asp-page="newuser" method="post" enctype="multipart/form-data">
         <p class="smalltitle">在系统中注册信息</p>
@@ -68,31 +41,65 @@
         <br />
         <p class="smalltitle">个人信息</p>
         <div>
-            @if (enableNameEditing)
-            {
-                <p class="itemname">姓名</p>
-                <div id="input_name" data-control="input" class="input-item" data-type="text" data-value="@name"></div>
-                <p class="itemname">邮箱</p>
-                <div id="input_email" class="input-item" data-control="input" data-type="email" data-value="@email"></div>
-            }
-            else
-            {
-                <p class="itemname">姓名</p>
-                <div id="input_name" data-control="input" class="input-item" data-type="text" data-enabled="false" data-value="@name"></div>
-                <p class="itemname">邮箱</p>
-                <div id="input_email" class="input-item" data-control="input" data-type="email" data-enabled="false" data-value="@email"></div>
-            }
+            <div id="input_name"
+                 data-header="姓名"
+                 data-control="input"
+                 class="input-item"
+                 data-type="text"
+                 data-enabled="false"
+                 data-value="@name"></div>
+            <div id="input_email"
+                 data-header="邮箱"
+                 class="input-item"
+                 data-control="input"
+                 data-type="email"
+                 data-enabled="false"
+                 data-value="@email"></div>
             <input name="name" value="@name" style="display: none" type="text" />
             <input name="email" value="@email" style="display: none" type="email" />
 
-            <p class="itemname">联系电话</p>
-            <div id="input_phone" data-name="phone" class="input-item" data-control="input" data-type="number" data-value="@phone"></div>
-            <p class="itemname">QQ/微信</p>
-            <div id="input_im" data-name="im" class="input-item" data-control="input" data-type="text" data-value="@im"></div>
-            <p class="itemname">GitHub</p>
-            <div id="input_github" data-name="github" class="input-item" data-control="input" data-type="url" data-value="@github"></div>
-            <p class="itemname">所属学院</p>
-            <div id="input_department" data-name="department" data-control="select" data-selected-id="@department_code">
+            <div id="input_phone"
+                 data-header="联系电话"
+                 data-name="phone"
+                 class="input-item"
+                 data-control="input"
+                 data-type="phone"
+                 data-hint-type="focus"
+                 data-hint-cate="可选"
+                 data-hint="留下电话号码以便我们与您沟通。"
+                 data-validate="\d+"
+                 data-validate-error="电话号码格式错误。"
+                 data-value="@phone"></div>
+
+            <div id="input_im"
+                 data-header="QQ/微信"
+                 data-name="im"
+                 class="input-item"
+                 data-control="input"
+                 data-type="text"
+                 data-hint-type="focus"
+                 data-hint-cate="可选"
+                 data-hint="留下QQ或微信以便我们与您沟通。"
+                 data-value="@im"></div>
+
+            <div id="input_github"
+                 data-header="GitHub"
+                 data-name="github"
+                 class="input-item"
+                 data-control="input"
+                 data-type="url"
+                 data-hint-type="focus"
+                 data-hint-cate="可选"
+                 data-hint="留下GitHub地址一起搞基。"
+                 data-validate="\d+"
+                 data-validate-error="地址格式错误。"
+                 data-value="@github"></div>
+
+            <div id="input_department"
+                 data-header="所属学院"
+                 data-name="department"
+                 data-control="select"
+                 data-selected-id="@department_code">
                 @foreach (Department department in Model.Departments)
                 {
                     <span data-id="@department.Code">@department.DisplayName</span>
@@ -101,8 +108,16 @@
             <p id="input_dep_hint" class="info-base info-hint">选择您所在的学院。</p>
             <p id="input_dep_err" class="info-base info-error">[错误] 未找到学院名称。</p>
             <div id="div_secret" style="display:none">
-                <p class="itemname">神秘代码</p>
-                <div id="input_secret_code" data-name="code" class="input-item" data-control="input" data-type="text" data-value=""></div>
+                <div id="input_secret_code"
+                     data-header="神秘代码"
+                     data-name="code"
+                     class="input-item"
+                     data-control="input"
+                     data-type="text"
+                     data-hint-type="focus"
+                     data-hint-cate="可选"
+                     data-hint="输入你喜欢的代码。"
+                     data-value=""></div>
             </div>
         </div>
 

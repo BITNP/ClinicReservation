@@ -13,7 +13,7 @@ namespace ClinicReservation.Pages
     {
         public IActionResult OnGet()
         {
-            return Redirect("/Board");
+            return RedirectToPage("board");
         }
     }
 }

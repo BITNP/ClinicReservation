@@ -1,10 +1,4 @@
-﻿.selection-none {
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-.nppage-footer,
+﻿.nppage-footer,
 .nppage-copyright {
   height: 3.2em;
   color: #666;

@@ -133,18 +133,16 @@ div[data-control="input"] {
   flex-flow: column nowrap;
   align-items: stretch;
 }
-div[data-control="input"] input[type="text"],
-div[data-control="input"] input[type="number"],
-div[data-control="input"] input[type="email"],
-div[data-control="input"] input[type="url"],
-div[data-control="input"] input[type="password"],
-div[data-control="input"] textarea {
+div[data-control="input"] > input[type="text"],
+div[data-control="input"] > input[type="number"],
+div[data-control="input"] > input[type="email"],
+div[data-control="input"] > input[type="url"],
+div[data-control="input"] > input[type="password"],
+div[data-control="input"] > textarea {
   margin: 0.3rem;
+  margin-top: 0.1em;
   border: 2px solid #aaa;
   padding: 0.3em 0.5em;
-  -moz-transition: border linear 0.2s;
-  -o-transition: border linear 0.2s;
-  -webkit-transition: border linear 0.2s;
   transition: border linear 0.2s;
   height: 1.6em;
   border-radius: 0;
@@ -152,42 +150,42 @@ div[data-control="input"] textarea {
   box-sizing: content-box;
   font-family: "Microsoft YaHei", "微软雅黑";
 }
-div[data-control="input"] input[type="text"]:hover,
-div[data-control="input"] input[type="number"]:hover,
-div[data-control="input"] input[type="email"]:hover,
-div[data-control="input"] input[type="url"]:hover,
-div[data-control="input"] input[type="password"]:hover,
-div[data-control="input"] textarea:hover {
+div[data-control="input"] > input[type="text"]:hover,
+div[data-control="input"] > input[type="number"]:hover,
+div[data-control="input"] > input[type="email"]:hover,
+div[data-control="input"] > input[type="url"]:hover,
+div[data-control="input"] > input[type="password"]:hover,
+div[data-control="input"] > textarea:hover {
   border-color: #333;
 }
-div[data-control="input"] input[type="text"]:focus,
-div[data-control="input"] input[type="number"]:focus,
-div[data-control="input"] input[type="email"]:focus,
-div[data-control="input"] input[type="url"]:focus,
-div[data-control="input"] input[type="password"]:focus,
-div[data-control="input"] textarea:focus {
+div[data-control="input"] > input[type="text"]:focus,
+div[data-control="input"] > input[type="number"]:focus,
+div[data-control="input"] > input[type="email"]:focus,
+div[data-control="input"] > input[type="url"]:focus,
+div[data-control="input"] > input[type="password"]:focus,
+div[data-control="input"] > textarea:focus {
   outline: none;
   border-color: #003567;
   background: #fff;
 }
-div[data-control="input"] textarea {
+div[data-control="input"] > textarea {
   height: 8em;
   resize: none;
 }
-div[data-control="input"] p.header {
+div[data-control="input"] > p.header {
   margin: 0.3rem;
   color: #333;
   margin-bottom: 0.1em;
   user-select: none;
   cursor: default;
+  transition: color, 0.2s, ease-in-out;
 }
-div[data-control="input"] div.hint {
+div[data-control="input"] > div.hint {
   user-select: none;
   cursor: default;
   transition: all, 0.2s, ease-in-out;
   font-size: 0.82em;
   color: #FFF;
-  padding: 0 0.55em;
   margin: 0.3rem;
   margin-top: 0;
   margin-bottom: 0;
@@ -195,13 +193,16 @@ div[data-control="input"] div.hint {
   background: #7BA23F;
   height: 0;
 }
-div[data-control="input"] div.error {
+div[data-control="input"] > div.hint > span {
+  margin: 0.3em 0.55em;
+  display: block;
+}
+div[data-control="input"] > div.error {
   user-select: none;
   cursor: default;
   transition: all, 0.2s, ease-in-out;
   font-size: 0.82em;
   color: #FFF;
-  padding: 0 0.55em;
   margin: 0.3rem;
   margin-top: 0;
   margin-bottom: 0;
@@ -209,92 +210,107 @@ div[data-control="input"] div.error {
   background: #E83015;
   height: 0;
 }
-div[data-control="input"].no-header p.header {
-  display: none;
+div[data-control="input"] > div.error > span {
+  margin: 0.3em 0.55em;
+  display: block;
 }
-div[data-control="input"].has-hint div.hint {
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
+div[data-control="input"][data-required="true"] > p.header::after {
+  /*content: '●';
+          font-size: 0.5em;*/
+  content: '*';
+  color: #E83035;
+  margin-left: 0.2em;
 }
-div[data-control="input"].has-error input[type="text"],
-div[data-control="input"].has-error input[type="number"],
-div[data-control="input"].has-error input[type="email"],
-div[data-control="input"].has-error input[type="url"],
-div[data-control="input"].has-error input[type="password"],
-div[data-control="input"].has-error textarea {
+div[data-control="input"].has-error > input[type="text"],
+div[data-control="input"].has-error > input[type="number"],
+div[data-control="input"].has-error > input[type="email"],
+div[data-control="input"].has-error > input[type="url"],
+div[data-control="input"].has-error > input[type="password"],
+div[data-control="input"].has-error > textarea {
   margin: 0.3rem;
+  margin-top: 0.1em;
   border: 2px solid #C00;
   padding: 0.3em 0.5em;
-  -moz-transition: border linear 0.2s;
-  -o-transition: border linear 0.2s;
-  -webkit-transition: border linear 0.2s;
   transition: border linear 0.2s;
 }
-div[data-control="input"].has-error input[type="text"]:hover,
-div[data-control="input"].has-error input[type="number"]:hover,
-div[data-control="input"].has-error input[type="email"]:hover,
-div[data-control="input"].has-error input[type="url"]:hover,
-div[data-control="input"].has-error input[type="password"]:hover,
-div[data-control="input"].has-error textarea:hover {
+div[data-control="input"].has-error > input[type="text"]:hover,
+div[data-control="input"].has-error > input[type="number"]:hover,
+div[data-control="input"].has-error > input[type="email"]:hover,
+div[data-control="input"].has-error > input[type="url"]:hover,
+div[data-control="input"].has-error > input[type="password"]:hover,
+div[data-control="input"].has-error > textarea:hover {
   border-color: #A00;
 }
-div[data-control="input"].has-error input[type="text"]:focus,
-div[data-control="input"].has-error input[type="number"]:focus,
-div[data-control="input"].has-error input[type="email"]:focus,
-div[data-control="input"].has-error input[type="url"]:focus,
-div[data-control="input"].has-error input[type="password"]:focus,
-div[data-control="input"].has-error textarea:focus {
+div[data-control="input"].has-error > input[type="text"]:focus,
+div[data-control="input"].has-error > input[type="number"]:focus,
+div[data-control="input"].has-error > input[type="email"]:focus,
+div[data-control="input"].has-error > input[type="url"]:focus,
+div[data-control="input"].has-error > input[type="password"]:focus,
+div[data-control="input"].has-error > textarea:focus {
   outline: none;
   border-color: #F44;
   background: #fff;
 }
-div[data-control="input"].has-error div.error {
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
+div[data-control="input"].has-error > p.header {
+  color: #B83015;
 }
-div[data-control="input"][data-enabled="false"] p.header {
+div[data-control="input"].no-header > input[type="text"],
+div[data-control="input"].no-header > input[type="number"],
+div[data-control="input"].no-header > input[type="email"],
+div[data-control="input"].no-header > input[type="url"],
+div[data-control="input"].no-header > input[type="password"],
+div[data-control="input"].no-header > textarea {
+  margin: 0.3rem;
+}
+div[data-control="input"].no-header > p.header {
+  display: none;
+}
+div[data-control="input"][data-enabled="false"] > p.header {
   color: #555;
 }
-div[data-control="input"][data-enabled="false"] div.hint {
+div[data-control="input"][data-enabled="false"] > div.hint {
   padding-top: 0;
   padding-bottom: 0;
   height: 0 !important;
 }
-div[data-control="input"][data-enabled="false"] input[type="text"],
-div[data-control="input"][data-enabled="false"] input[type="number"],
-div[data-control="input"][data-enabled="false"] input[type="email"],
-div[data-control="input"][data-enabled="false"] input[type="url"],
-div[data-control="input"][data-enabled="false"] input[type="password"],
-div[data-control="input"][data-enabled="false"] textarea {
+div[data-control="input"][data-enabled="false"] > input[type="text"],
+div[data-control="input"][data-enabled="false"] > input[type="number"],
+div[data-control="input"][data-enabled="false"] > input[type="email"],
+div[data-control="input"][data-enabled="false"] > input[type="url"],
+div[data-control="input"][data-enabled="false"] > input[type="password"],
+div[data-control="input"][data-enabled="false"] > textarea {
   border-color: #BBB;
 }
-div[data-control="input"][data-enabled="false"].has-error input[type="text"],
-div[data-control="input"][data-enabled="false"].has-error input[type="number"],
-div[data-control="input"][data-enabled="false"].has-error input[type="email"],
-div[data-control="input"][data-enabled="false"].has-error input[type="url"],
-div[data-control="input"][data-enabled="false"].has-error input[type="password"],
-div[data-control="input"][data-enabled="false"].has-error textarea {
+div[data-control="input"][data-enabled="false"].has-error > input[type="text"],
+div[data-control="input"][data-enabled="false"].has-error > input[type="number"],
+div[data-control="input"][data-enabled="false"].has-error > input[type="email"],
+div[data-control="input"][data-enabled="false"].has-error > input[type="url"],
+div[data-control="input"][data-enabled="false"].has-error > input[type="password"],
+div[data-control="input"][data-enabled="false"].has-error > textarea {
   border-color: #B00;
 }
-div[data-control="input"][data-enabled="false"].has-error div.error {
+div[data-control="input"][data-enabled="false"].has-error > div.error {
   background-color: #B83015;
+}
+div[data-control="input"][data-enabled="false"].has-error > p.header {
+  color: #B83015;
 }
 div[data-control="input"][data-type="file"] {
   display: flex;
   flex-flow: row nowrap;
 }
-div[data-control="input"][data-type="file"] p.header,
-div[data-control="input"][data-type="file"] div.hint,
-div[data-control="input"][data-type="file"] div.error {
+div[data-control="input"][data-type="file"] > p.header,
+div[data-control="input"][data-type="file"] > div.hint,
+div[data-control="input"][data-type="file"] > div.error {
   display: none;
 }
-div[data-control="input"][data-type="file"] input[type="file"] {
+div[data-control="input"][data-type="file"] > input[type="file"] {
   display: none;
 }
-div[data-control="input"][data-type="file"] input[type="text"] {
+div[data-control="input"][data-type="file"] > input[type="text"] {
   flex: 1 1 auto;
 }
-div[data-control="input"][data-type="file"] div[data-control="button"] {
+div[data-control="input"][data-type="file"] > div[data-control="button"] {
   flex: 0 0 auto;
 }
 div[data-control="checkbox"] {
@@ -406,14 +422,14 @@ div[data-control="listbox"] {
 div[data-control="listbox"] > span {
   display: none;
 }
-div[data-control="listbox"] p.header {
+div[data-control="listbox"] > p.header {
   margin: 0.3rem;
   color: #333;
   margin-bottom: 0.1em;
   user-select: none;
   cursor: default;
 }
-div[data-control="listbox"] div.main-list {
+div[data-control="listbox"] > div.main-list {
   position: relative;
   height: 2.1em;
   padding: 0;
@@ -427,8 +443,9 @@ div[data-control="listbox"] div.main-list {
   -webkit-transition: height ease-in-out 0.2s;
   transition: height ease-in-out 0.2s;
   margin: 0.3rem;
+  margin-top: 0.1em;
 }
-div[data-control="listbox"] div.main-list div.itemholder {
+div[data-control="listbox"] > div.main-list > div.itemholder {
   position: relative;
   -moz-transition: top ease-in-out 0.2s;
   -o-transition: top ease-in-out 0.2s;
@@ -437,7 +454,7 @@ div[data-control="listbox"] div.main-list div.itemholder {
   margin-top: -0.1em;
   min-height: 2.2em;
 }
-div[data-control="listbox"] div.main-list div.itemholder span {
+div[data-control="listbox"] > div.main-list > div.itemholder > span {
   display: block;
   -ms-user-select: none;
   -webkit-user-select: none;
@@ -450,7 +467,7 @@ div[data-control="listbox"] div.main-list div.itemholder span {
   -webkit-transition: opacity ease-in-out 0.2s;
   transition: opacity ease-in-out 0.2s;
 }
-div[data-control="listbox"] div.main-list div.cover {
+div[data-control="listbox"] > div.main-list > div.cover {
   position: absolute;
   left: 0;
   top: 0;
@@ -460,20 +477,26 @@ div[data-control="listbox"] div.main-list div.cover {
   opacity: 0;
   border: none;
 }
-div[data-control="listbox"] div.main-list input.input {
+div[data-control="listbox"] > div.main-list > input.input {
   display: none;
 }
-div[data-control="listbox"].no-header p.header,
-div[data-control="select"].no-header p.header {
+div[data-control="listbox"].no-header > p.header,
+div[data-control="select"].no-header > p.header {
   display: none;
+}
+div[data-control="listbox"].no-header > div.main-list,
+div[data-control="select"].no-header > div.main-list,
+div[data-control="listbox"].no-header > div.main-select,
+div[data-control="select"].no-header > div.main-select {
+  margin: 0.3rem;
 }
 div[data-control="listbox"]:focus {
   outline: none;
 }
-div[data-control="listbox"][data-enabled="false"] p.header {
+div[data-control="listbox"][data-enabled="false"] > p.header {
   color: #555;
 }
-div[data-control="listbox"][data-enabled="false"] div.main-list {
+div[data-control="listbox"][data-enabled="false"] > div.main-list {
   border-color: #BBB;
   background-color: #EBEBE4;
   cursor: default;
@@ -481,22 +504,22 @@ div[data-control="listbox"][data-enabled="false"] div.main-list {
 div[data-control="listbox"].expand {
   outline: none;
 }
-div[data-control="listbox"].expand div.main-list {
+div[data-control="listbox"].expand > div.main-list {
   background: #f0f0f0;
   border-color: #003567;
 }
-div[data-control="listbox"].expand div.main-list div.itemholder {
+div[data-control="listbox"].expand > div.main-list > div.itemholder {
   padding: 0.5em 0;
   margin-top: 0;
 }
-div[data-control="listbox"].expand div.main-list div.itemholder span:hover {
+div[data-control="listbox"].expand > div.main-list > div.itemholder > span:hover {
   background: #ddd;
 }
-div[data-control="listbox"].expand div.main-list div.itemholder span.selected {
+div[data-control="listbox"].expand > div.main-list > div.itemholder > span.selected {
   background: #225789;
   color: #fff;
 }
-div[data-control="listbox"].expand div.main-list div.cover {
+div[data-control="listbox"].expand > div.main-list > div.cover {
   display: none;
 }
 div[data-control="listbox"]:hover,
@@ -527,14 +550,14 @@ div[data-control="select"] {
 div[data-control="select"] > span {
   display: none;
 }
-div[data-control="select"] p.header {
+div[data-control="select"] > p.header {
   margin: 0.3rem;
   color: #333;
   margin-bottom: 0.1em;
   user-select: none;
   cursor: default;
 }
-div[data-control="select"] div.main-select {
+div[data-control="select"] > div.main-select {
   height: 2.1em;
   padding: 0;
   border: 2px solid #aaa;
@@ -544,8 +567,9 @@ div[data-control="select"] div.main-select {
   cursor: pointer;
   position: relative;
   margin: 0.3rem;
+  margin-top: 0.1em;
 }
-div[data-control="select"] div.main-select div.itemholder {
+div[data-control="select"] > div.main-select > div.itemholder {
   position: absolute;
   overflow-y: hidden;
   width: 100%;
@@ -556,7 +580,7 @@ div[data-control="select"] div.main-select div.itemholder {
   margin-top: -0.1em;
   min-height: 2.2em;
 }
-div[data-control="select"] div.main-select div.itemholder div {
+div[data-control="select"] > div.main-select > div.itemholder > div {
   position: absolute;
   width: 100%;
   -moz-transition: top ease-in-out 0.2s;
@@ -564,7 +588,7 @@ div[data-control="select"] div.main-select div.itemholder div {
   -webkit-transition: top ease-in-out 0.2s;
   transition: top ease-in-out 0.2s;
 }
-div[data-control="select"] div.main-select div.itemholder div span {
+div[data-control="select"] > div.main-select > div.itemholder > div > span {
   display: block;
   -ms-user-select: none;
   -webkit-user-select: none;
@@ -573,7 +597,7 @@ div[data-control="select"] div.main-select div.itemholder div span {
   margin: 0;
   padding: 0.5em 0.5em;
 }
-div[data-control="select"] div.main-select div.cover {
+div[data-control="select"] > div.main-select > div.cover {
   position: absolute;
   left: 0;
   top: 0;
@@ -583,56 +607,57 @@ div[data-control="select"] div.main-select div.cover {
   opacity: 0;
   border: none;
 }
-div[data-control="select"] div.main-select input.input {
+div[data-control="select"] > div.main-select > input.input {
   display: none;
 }
-div[data-control="select"][data-enabled="false"] p.header {
+div[data-control="select"][data-enabled="false"] > p.header {
   color: #555;
 }
-div[data-control="select"][data-enabled="false"] div.main-select {
+div[data-control="select"][data-enabled="false"] > div.main-select {
   border-color: #BBB;
   background-color: #EBEBE4;
   cursor: default;
 }
-div[data-control="select"][data-selected-index="-1"]:not(.expand) div.itemholder span {
+div[data-control="select"][data-selected-index="-1"]:not(.expand) > div.itemholder > span {
   opacity: 0;
 }
-div[data-control="select"].expandimmeditly div.main-select div.itemholder span:hover {
+div[data-control="select"].expandimmeditly > div.main-select > div.itemholder > span:hover {
   background: #DDD;
 }
-div[data-control="select"].expandimmeditly div.main-select div.cover {
+div[data-control="select"].expandimmeditly > div.main-select > div.cover {
   display: none;
 }
 div[data-control="select"].expand {
   outline: none;
 }
-div[data-control="select"].expand div.main-select {
+div[data-control="select"].expand > div.main-select {
   overflow-x: visible;
   overflow-y: visible;
   z-index: 100;
 }
-div[data-control="select"].expand div.main-select div.itemholder {
+div[data-control="select"].expand > div.main-select > div.itemholder {
   background: #f0f0f0;
   outline: solid 2px;
   outline-color: #003567;
   overflow-y: auto;
 }
-div[data-control="select"].expand div.main-select div.itemholder span.selected {
+div[data-control="select"].expand > div.main-select > div.itemholder > span.selected {
   background: #225789;
   color: #fff;
 }
 div[data-control="datepicker"] {
   display: block;
 }
-div[data-control="datepicker"] p.header {
+div[data-control="datepicker"] > p.header {
   margin: 0.3rem;
   color: #333;
   margin-bottom: 0.1em;
   user-select: none;
   cursor: default;
 }
-div[data-control="datepicker"] div.main-picker {
+div[data-control="datepicker"] > div.main-picker {
   margin: 0.3rem;
+  margin-top: 0.1em;
   height: 2.1em;
   border: 2px solid #AAA;
   position: relative;
@@ -641,19 +666,19 @@ div[data-control="datepicker"] div.main-picker {
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-div[data-control="datepicker"] div.main-picker .input-date-value {
+div[data-control="datepicker"] > div.main-picker > div.input-date-value {
   display: block;
   padding: 0.4em 0.5em;
   cursor: pointer;
 }
-div[data-control="datepicker"] div.main-picker .input-date-value p {
+div[data-control="datepicker"] > div.main-picker > div.input-date-value > p {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
   user-select: none;
   margin: 0;
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container {
   display: none;
   -ms-flex-flow: row nowrap;
   -webkit-flex-flow: row nowrap;
@@ -662,7 +687,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container {
   height: 100%;
   width: 100%;
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-itemscrollview {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-itemscrollview {
   flex-grow: 1;
   flex-shrink: 0;
   border: solid #AAA;
@@ -676,7 +701,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   overflow-x: hidden;
   overflow-y: auto;
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-itemscrollview p {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-itemscrollview > p {
   flex-shrink: 0;
   margin: 0;
   padding: 0.5em 0.6em;
@@ -690,21 +715,14 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-itemscrollview p:hover {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-itemscrollview > p:hover {
   background: #ddd;
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-itemscrollview p.selected {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-itemscrollview > p.selected {
   background: #003567;
   color: #FFF;
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-p-after-base {
-  font-size: 0.8em;
-  margin-left: 0.2em;
-  position: relative;
-  top: -0.1em;
-  font-weight: normal;
-}
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-year p::after {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-year > p::after {
   font-size: 0.8em;
   margin-left: 0.2em;
   position: relative;
@@ -712,7 +730,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   font-weight: normal;
   content: attr(data-post);
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-month p::after {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-month > p::after {
   font-size: 0.8em;
   margin-left: 0.2em;
   position: relative;
@@ -720,7 +738,7 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   font-weight: normal;
   content: attr(data-post);
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-date p::after {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-date > p::after {
   font-size: 0.8em;
   margin-left: 0.2em;
   position: relative;
@@ -728,10 +746,10 @@ div[data-control="datepicker"] div.main-picker .input-date-picker-container .inp
   font-weight: normal;
   content: attr(data-post);
 }
-div[data-control="datepicker"] div.main-picker .input-date-picker-container .input-date-container-itemscrollview:last-of-type {
+div[data-control="datepicker"] > div.main-picker > div.input-date-picker-container > div.input-date-container-itemscrollview:last-of-type {
   border-width: 0;
 }
-div[data-control="datepicker"] div.main-picker div.cover {
+div[data-control="datepicker"] > div.main-picker > div.cover {
   position: absolute;
   left: 0;
   top: 0;
@@ -742,39 +760,42 @@ div[data-control="datepicker"] div.main-picker div.cover {
   cursor: pointer;
   border: none;
 }
-div[data-control="datepicker"] div.main-picker input.input {
+div[data-control="datepicker"] > div.main-picker > input.input {
   display: none;
 }
-div[data-control="datepicker"].no-header p.header {
+div[data-control="datepicker"].no-header > p.header {
   display: none;
 }
-div[data-control="datepicker"]:hover div.main-picker {
+div[data-control="datepicker"].no-header > div.main-picker {
+  margin: 0.3rem;
+}
+div[data-control="datepicker"]:hover > div.main-picker {
   border-color: #333;
 }
-div[data-control="datepicker"][data-enabled="false"] p.header {
+div[data-control="datepicker"][data-enabled="false"] > p.header {
   color: #555;
 }
-div[data-control="datepicker"][data-enabled="false"] div.main-picker {
+div[data-control="datepicker"][data-enabled="false"] > div.main-picker {
   border-color: #BBB;
   background-color: #EBEBE4;
 }
-div[data-control="datepicker"][data-enabled="false"] div.main-picker div.cover {
+div[data-control="datepicker"][data-enabled="false"] > div.main-picker > div.cover {
   cursor: default;
 }
 div[data-control="datepicker"]:focus {
   outline: none;
 }
-div[data-control="datepicker"]:focus div.main-picker {
+div[data-control="datepicker"]:focus > div.main-picker {
   height: 12em;
   border-color: #003567;
 }
-div[data-control="datepicker"]:focus div.main-picker .input-date-value {
+div[data-control="datepicker"]:focus > div.main-picker > div.input-date-value {
   display: none;
 }
-div[data-control="datepicker"]:focus div.main-picker .input-date-picker-container {
+div[data-control="datepicker"]:focus > div.main-picker > div.input-date-picker-container {
   display: flex;
 }
-div[data-control="datepicker"]:focus div.main-picker div.cover {
+div[data-control="datepicker"]:focus > div.main-picker > div.cover {
   display: none;
 }
 @-moz-keyframes spin {

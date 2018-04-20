@@ -13,7 +13,6 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using ClinicReservation.Models;
 using ClinicReservation.Services;
-//using ClinicReservation.Controllers;
 using DNTCaptcha.Core;
 using LocalizationCore;
 using AuthenticationCore;
@@ -33,7 +32,6 @@ namespace ClinicReservation
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
         }
 
         public IConfiguration Configuration { get; }
@@ -62,7 +60,7 @@ namespace ClinicReservation
                 options.Cookie.Name = serviceConfig.SessionName;
             });
 
-            services.AddDbContext<DataDbContext>(options => options.UseSqlServer(serviceConfig.ConnectionString));
+            services.AddDbContextPool<DataDbContext>(options => options.UseSqlServer(serviceConfig.ConnectionString));
             services.AddScoped<IDbQuery, DbQuery>();
             services.AddScoped<IScopedUserAccessor, ScopedUserAccessor>();
 

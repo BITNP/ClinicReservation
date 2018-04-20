@@ -23,33 +23,55 @@ namespace ClinicReservation.Authorizations
             int id;
             Reservation reservation;
             HttpRequest request = httpContextAccessor.HttpContext.Request;
-            foreach (string key in policy.IdKeys)
+            if (request.HasFormContentType)
             {
-                if (request.Query.TryGetValue(key, out StringValues idValues))
+                foreach (string key in policy.IdKeys)
                 {
-                    string idValue = idValues;
-                    if (int.TryParse(idValue, out id))
+                    if (request.Query.TryGetValue(key, out StringValues idValues))
                     {
-                        reservation = query.TryGetReservation(id);
-                        if (reservation == null)
-                            return PolicyResult.Failed;
-                        query.GetDbEntry(reservation).EnsureReferencesLoaded(false);
-                        return CheckReservation(user, reservation);
+                        string idValue = idValues;
+                        if (int.TryParse(idValue, out id))
+                        {
+                            reservation = query.TryGetReservation(id);
+                            if (reservation == null)
+                                return PolicyResult.Failed;
+                            query.GetDbEntry(reservation).EnsureReferencesLoaded(false);
+                            return CheckReservation(user, reservation);
+                        }
                     }
-                }
-                else if (request.Form.TryGetValue(key, out idValues))
-                {
-                    string idValue = idValues;
-                    if (int.TryParse(idValue, out id))
+                    else if (request.Form.TryGetValue(key, out idValues))
                     {
-                        reservation = query.TryGetReservation(id);
-                        if (reservation == null)
-                            return PolicyResult.Failed;
-                        query.GetDbEntry(reservation).EnsureReferencesLoaded(false);
-                        return CheckReservation(user, reservation);
+                        string idValue = idValues;
+                        if (int.TryParse(idValue, out id))
+                        {
+                            reservation = query.TryGetReservation(id);
+                            if (reservation == null)
+                                return PolicyResult.Failed;
+                            query.GetDbEntry(reservation).EnsureReferencesLoaded(false);
+                            return CheckReservation(user, reservation);
+                        }
                     }
                 }
             }
+            else
+            {
+                foreach (string key in policy.IdKeys)
+                {
+                    if (request.Query.TryGetValue(key, out StringValues idValues))
+                    {
+                        string idValue = idValues;
+                        if (int.TryParse(idValue, out id))
+                        {
+                            reservation = query.TryGetReservation(id);
+                            if (reservation == null)
+                                return PolicyResult.Failed;
+                            query.GetDbEntry(reservation).EnsureReferencesLoaded(false);
+                            return CheckReservation(user, reservation);
+                        }
+                    }
+                }
+            }
+
             return PolicyResult.Failed;
         }
         private PolicyResult CheckReservation(User user, Reservation reservation)

@@ -23,7 +23,7 @@ namespace ClinicReservation.Pages
         public IActionResult OnGet([FromServices]IAuthenticationResult authenticationResult)
         {
             if (authenticationResult.IsAuthenticated)
-                return Redirect("/board");
+                return RedirectToPage("board");
 
             return Page();
         }

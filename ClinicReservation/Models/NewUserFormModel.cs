@@ -23,7 +23,7 @@ namespace ClinicReservation.Models
         [Required]
         [Department]
         public string Department { get; set; }
-        
+
         public string Code { get; set; }
 
         public Department DepartmentInstance { get; set; }

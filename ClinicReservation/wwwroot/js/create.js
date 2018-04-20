@@ -3,43 +3,7 @@
 (function (window) {
     "use strict";
 
-    var clear_error = function clear_error() {
-        this.parentElement.context.clear_error();
-    };
-    var is_valid_format = function is_valid_format() {
-        var detail = $("#input_detail")[0].context.get_value().trim();
-        var captcha = $("#input_captcha")[0].context.get_value().trim();
-        var captcha_reg = /^\d+$/;
-
-        var succ = true;
-        if (detail.length > 0) {
-            $("#input_detail")[0].context.set_value(detail);
-            if (detail.length < 5) {
-                $("#input_detail")[0].context.set_error(window.message.detail.error);
-                succ = false;
-            }
-        }
-
-        if (captcha.length <= 0) {
-            $("#input_captcha")[0].context.set_error(window.message.captcha_empty.error);
-            succ = false;
-        } else if (captcha_reg.exec(captcha)) {
-            $("#input_captcha")[0].context.set_value(captcha);
-        } else {
-            $("#input_captcha")[0].context.set_error(window.message.captcha.error);
-            succ = false;
-        }
-
-        $("#btn_submit")[0].context.set_enabled(succ);
-        return succ;
-    };
-
     var submit_button_click = function submit_button_click(sender, args) {
-        if (!is_valid_format()) {
-            args.handled = true;
-            return;
-        }
-
         $("#btn_submit")[0].context.set_enabled(false);
         $("#load_ring")[0].style.opacity = 1;
         var form = $(args.form);
@@ -109,13 +73,8 @@
         }
     };
 
-    var check_delay = 1000;
     var load = function load() {
         $("#input_detail")[0].context.set_value($("#hidden_problemdetail").val());
-        $("#input_detail")[0].context.set_hint("focus", "", window.message.detail.hint);
-        if (window.detail_error) {
-            $("#input_detail")[0].context.set_error(window.detail_error);
-        }
 
         $(".date-quick-pick > p").click(datepickclick);
         $("#input_bookdate")[0].context.events.add("changed", datechanged);
@@ -128,15 +87,6 @@
         }
 
         add_event($("#btn_submit"), "click", submit_button_click);
-
-        add_event($("#input_detail"), "blur", is_valid_format);
-        add_event($("#input_captcha"), "blur", is_valid_format);
-
-        $($("#input_detail")[0].context.input).keydown(clear_error);
-        $($("#input_captcha")[0].context.input).keydown(clear_error);
-
-        $($("#input_detail")[0].context.input).keyup($.debounce(check_delay, is_valid_format));
-        $($("#input_captcha")[0].context.input).keyup($.debounce(check_delay, is_valid_format));
     };
 
     window.addEventListener("load", load, false);

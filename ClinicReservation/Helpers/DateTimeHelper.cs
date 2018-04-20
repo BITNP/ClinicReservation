@@ -12,6 +12,11 @@ namespace ClinicReservation.Helpers
         {
             return DateTime.UtcNow.AddHours(8);
         }
+        public static DateTime NowDate()
+        {
+            DateTime now = DateTime.Now;
+            return new DateTime(year: now.Year, month: now.Month, day: now.Day);
+        }
 
         public static string[] GetDisplayDateTime(DateTime currentDate, int count, ICodeMatchingService matchingService)
         {

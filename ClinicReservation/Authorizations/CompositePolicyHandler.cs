@@ -14,13 +14,30 @@ namespace ClinicReservation.Authorizations
         public PolicyResult OnAuthorization(User user, CompositePolicy policy)
         {
             PolicyResult result;
-            foreach (string p in policy.Policies)
+            if (policy.Policies.Length <= 0)
+                return PolicyResult.Success;
+
+            switch (policy.Method)
             {
-                result = service.TryAuthorize(p);
-                if (result != PolicyResult.Success)
+                case CompositeMethod.Any:
+                    foreach (string p in policy.Policies)
+                    {
+                        result = service.TryAuthorize(p);
+                        if (result == PolicyResult.Success)
+                            return PolicyResult.Success;
+                    }
                     return PolicyResult.Failed;
+
+                case CompositeMethod.All:
+                default:
+                    foreach (string p in policy.Policies)
+                    {
+                        result = service.TryAuthorize(p);
+                        if (result != PolicyResult.Success)
+                            return PolicyResult.Failed;
+                    }
+                    return PolicyResult.Success;
             }
-            return PolicyResult.Success;
         }
     }
 

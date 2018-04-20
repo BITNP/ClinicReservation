@@ -76,7 +76,7 @@ namespace ClinicReservation.Pages
                 query.AddReservation(reservation);
                 query.SaveChanges();
                 int id = reservation.Id;
-                return Redirect($"/detail?id={id}");
+                return RedirectToPage("detail", new { id });
             }
             LastData = model;
             Locations = dbContext.Locations;

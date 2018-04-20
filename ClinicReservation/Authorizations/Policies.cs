@@ -10,6 +10,7 @@ namespace ClinicReservation.Authorizations
         public const string CanCreateReservation = "CanCreateReservation";
         public const string CanManageAllReservations = "CanManageAllReservations";
         public const string CanModifyGroups = "CanModifyGroups";
+        public const string CanChangeServiceState = "CanChangeServiceState";
 
         public const string IsCurrentReservationOwner = "IsCurrentReservationOwner";
         public const string CanModifyCurrentReservation = "CanModifyCurrentReservation";

@@ -33,6 +33,9 @@ namespace ClinicReservation
                 builder.AddPolicy(
                     policy: new IsActionAllowedPolicy(GroupAction.ModifyGroups),
                     name: Policies.CanModifyGroups);
+                builder.AddPolicy(
+                    policy: new IsActionAllowedPolicy(GroupAction.ChangeServiceState),
+                    name: Policies.CanChangeServiceState);
 
                 builder.AddPolicy(
                     policy: new IsReservationOwnerPolicy(),
@@ -44,16 +47,16 @@ namespace ClinicReservation
                     name: Policies.IsCurrentReservationOwner);
 
                 builder.AddPolicy(
-                    policy: new CompositePolicy(Policies.IsCurrentReservationOwner, Policies.CanManageAllReservations),
+                    policy: new CompositePolicy(CompositeMethod.Any, Policies.IsCurrentReservationOwner, Policies.CanManageAllReservations),
                     name: Policies.CanModifyCurrentReservation);
                 builder.AddPolicy(
-                    policy: new CompositePolicy(Policies.IsCurrentReservationOwner, Policies.CanManageAllReservations),
+                    policy: new CompositePolicy(CompositeMethod.Any, Policies.IsCurrentReservationOwner, Policies.CanManageAllReservations),
                     name: Policies.CanViewCurrentReservation);
                 builder.AddPolicy(
-                    policy: new CompositePolicy(Policies.IsCustomReservationOwner, Policies.CanManageAllReservations),
+                    policy: new CompositePolicy(CompositeMethod.Any, Policies.IsCustomReservationOwner, Policies.CanManageAllReservations),
                     name: Policies.CanModifyCustomReservation);
                 builder.AddPolicy(
-                    policy: new CompositePolicy(Policies.IsCustomReservationOwner, Policies.CanManageAllReservations),
+                    policy: new CompositePolicy(CompositeMethod.Any, Policies.IsCustomReservationOwner, Policies.CanManageAllReservations),
                     name: Policies.CanViewCustomReservation);
             });
         }

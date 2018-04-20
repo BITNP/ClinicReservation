@@ -20,7 +20,7 @@ namespace ClinicReservation.Models
             Detail = reservation.Detail;
             Location = reservation.Location.Code;
             Category = reservation.Category.Code;
-            BookDate = reservation.ReservationDate.ToString("yyyy/mm/dd");
+            BookDate = reservation.ReservationDate.ToString("yyyy/MM/dd");
             LocationInstance = reservation.Location;
             CategoryInstance = reservation.Category;
             BookDateInstance = reservation.ReservationDate;

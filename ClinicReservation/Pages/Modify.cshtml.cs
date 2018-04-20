@@ -15,6 +15,7 @@ using LocalizationCore.CodeMatching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClinicReservation.Pages
 {
@@ -73,24 +74,21 @@ namespace ClinicReservation.Pages
                 reservation.Detail = form.Detail;
                 reservation.Location = form.LocationInstance;
                 reservation.ReservationDate = form.BookDateInstance;
-                // TODO: save modification to database
+                dbQuery.GetDbEntry(reservation).State = EntityState.Modified;
+                dbQuery.SaveChanges();
+                return RedirectToPage("detail", new { id = reservation.Id });
             }
-            if (ModelState[nameof(form.Reservation)].ValidationState == ModelValidationState.Valid)
-            {
-                dbQuery.GetDbEntry(form.ReservationInstance).EnsureReferencesLoaded(true);
-                Reservation = form;
-                Locations = dbContext.Locations;
-                Categories = dbContext.Categories;
-                matching.Match(Locations);
-                matching.Match(Categories);
-                CheckDetailError = true;
-                return Page();
-            }
-            else
-            {
+            if (ModelState[nameof(form.Reservation)].ValidationState != ModelValidationState.Valid)
                 return CodeOnlyActionResult.Code404;
-            }
 
+            dbQuery.GetDbEntry(form.ReservationInstance).EnsureReferencesLoaded(true);
+            Reservation = form;
+            Locations = dbContext.Locations;
+            Categories = dbContext.Categories;
+            matching.Match(Locations);
+            matching.Match(Categories);
+            CheckDetailError = true;
+            return Page();
         }
     }
 }

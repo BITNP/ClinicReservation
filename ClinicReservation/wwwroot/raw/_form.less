@@ -1,28 +1,21 @@
 ﻿@import "_include.less";
 
-.titletd {
-    width: 1em;
-}
-
 .smalltitle {
-    .selection-none;
+    .selection-none();
     font-size: 1.4em;
     margin-top: 1.4em;
     margin-bottom: 0.5em;
 }
 
 .itemname {
-    .selection-none;
-    margin: 1em 1em 0.2em 0.5em;
+    .selection-none();
+    margin: 0.3em;
+    margin-bottom: 0.1em;
     white-space: nowrap;
 }
 
-div[data-control="listbox"],
-div[data-control="datepicker"] {
-}
-
-.info-base {
-    .selection-none;
+.info-base() {
+    .selection-none();
     .transition(all, 0.2s, ease-in-out);
     font-size: 0.8em;
     color: #FFF;
@@ -48,21 +41,11 @@ div[data-control="datepicker"] {
 
 .input-item {
     -webkit-appearance: none;
+}
 
-    &[data-error="true"] {
-
-        input, textarea {
-            border-color: #C00 !important;
-
-            &:hover {
-                border-color: #A00 !important;
-            }
-
-            &:focus {
-                outline: none;
-                border-color: #F44 !important;
-                background: #fff;
-            }
-        }
-    }
+p.header {
+    margin-top: 0.45em !important;
+}
+.itemname {
+    margin-top: 0.75em !important;
 }

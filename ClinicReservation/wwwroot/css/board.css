@@ -1,10 +1,4 @@
-﻿.selection-none {
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-div.section-container {
+﻿div.section-container {
   display: flex;
   -ms-flex-flow: column nowrap;
   -webkit-flex-flow: column nowrap;

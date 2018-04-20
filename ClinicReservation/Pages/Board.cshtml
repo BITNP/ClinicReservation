@@ -28,18 +28,33 @@
 
 <div class="section-container">
     <div class="section-holder">
-        @if (authorization.TryAuthorize("CanViewAllReservations", true))
+        @if (authorization.TryAuthorize(Policies.CanManageAllReservations, true))
         {
             <div class="content-section" data-header="预约管理">
                 <p>诊所人员可以查看所有用户的预约记录。</p>
                 <div data-control="button" data-text="查看所有预约" data-href="/duty"></div>
             </div>
         }
-        @if (authorization.TryAuthorize("CanModifyGroups", true))
+        @if (authorization.TryAuthorize(Policies.CanModifyGroups, true))
         {
             <div class="content-section" data-header="管理用户组">
                 <p>管理现有用户组以及权限。</p>
                 <div data-control="button" data-text="查看用户组" data-href="/groups"></div>
+            </div>
+        }
+        @if (authorization.TryAuthorize(Policies.CanChangeServiceState, true))
+        {
+            <div class="content-section" data-header="服务状态">
+                <p>管理预约服务状态。</p>
+                @if (state.AllowCreate)
+                {
+                    <p>当前状态：接受预约</p>
+                }
+                else
+                {
+                    <p>当前状态：暂停预约</p>
+                }
+                <div data-control="button" data-text="更改状态" data-href="/state"></div>
             </div>
         }
         <div class="content-section" data-header="下午好">
@@ -55,7 +70,7 @@
             {
                 <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
             }
-            else if (authorization.TryAuthorize("CanCreateReservation", true))
+            else if (authorization.TryAuthorize(Policies.CanCreateReservation, true))
             {
                 <div data-control="button" data-text="填写预约" data-href="/create"></div>
             }

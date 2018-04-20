@@ -109,7 +109,7 @@ namespace ClinicReservation.Pages
                     entry.State = EntityState.Modified;
                     dbQuery.SaveChanges();
                 }
-                return Redirect("/board");
+                return RedirectToPage("board");
             }
             SetErrorMessage(model);
             return Page();
