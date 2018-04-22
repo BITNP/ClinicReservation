@@ -12,6 +12,10 @@
     "inputFile": "wwwroot/raw/js/_layout_section.js"
   },
   {
+    "outputFile": "wwwroot/js/_table.js",
+    "inputFile": "wwwroot/raw/js/_table.js"
+  },
+  {
     "outputFile": "wwwroot/css/sharedheader.css",
     "inputFile": "wwwroot/raw/shared/sharedheader.less"
   },
@@ -56,48 +60,7 @@
     "inputFile": "wwwroot/raw/css/detail.less"
   },
   {
-    "outputFile": "wwwroot/css/reservation/create.css",
-    "inputFile": "wwwroot/css/reservation/create.less"
-  },
-  {
-    "outputFile": "wwwroot/js/reservation/create.es5.js",
-    "inputFile": "wwwroot/js/reservation/create.js"
-  },
-  {
-    "outputFile": "wwwroot/js/reservation/detail.es5.js",
-    "inputFile": "wwwroot/js/reservation/detail.js"
-  },
-  {
-    "outputFile": "wwwroot/js/reservation/index.es5.js",
-    "inputFile": "wwwroot/js/reservation/index.js"
-  },
-
-  {
-    "outputFile": "wwwroot/css/reservation/index.css",
-    "inputFile": "wwwroot/css/reservation/index.less"
-  },
-  {
-    "outputFile": "wwwroot/js/member/index.es5.js",
-    "inputFile": "wwwroot/js/member/index.js"
-  },
-  {
-    "outputFile": "wwwroot/css/member/viewdetails.css",
-    "inputFile": "wwwroot/css/member/viewdetails.less"
-  },
-  {
-    "outputFile": "wwwroot/js/member/viewdetails.es5.js",
-    "inputFile": "wwwroot/js/member/viewdetails.js"
-  },
-  {
-    "outputFile": "wwwroot/js/reservation/message.es5.js",
-    "inputFile": "wwwroot/js/reservation/message.js"
-  },
-  {
-    "outputFile": "wwwroot/js/member/createmember.es5.js",
-    "inputFile": "wwwroot/js/member/createmember.js"
-  },
-  {
-    "outputFile": "wwwroot/css/member/create.css",
-    "inputFile": "wwwroot/css/member/create.less"
+    "outputFile": "wwwroot/css/groups/index.css",
+    "inputFile": "wwwroot/raw/css/groups/index.less"
   }
 ]

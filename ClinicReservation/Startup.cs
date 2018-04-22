@@ -110,6 +110,7 @@ namespace ClinicReservation
             services.AddSingleton<IValidatorSetPropertyMethodCache>(provider => new ValidatorSetPropertyMethodCache(100));
 
             services.AddScoped<IGroupPromptResolver, GroupPromptResolver>();
+            services.AddSingleton<IGroupActionProvider, GroupActionProvider>();
             services.AddScoped<IReservationStore, ReservationStore>();
             AddAuthorizations(services);
         }

@@ -10,5 +10,11 @@
   },
   "en-US": {
     "name": "English"
+  },
+  "ja": {
+    "name": "Japanese"
+  },
+  "ja-JP": {
+    "name": "Japanese"
   }
 }

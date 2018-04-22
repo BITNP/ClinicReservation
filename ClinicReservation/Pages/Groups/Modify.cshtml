@@ -1,0 +1,35 @@
+﻿@page
+@model Groups.ModifyModel
+@{
+    ViewData["Title"] = "Modify";
+    ViewData["DisableLeftNavi"] = true;
+}
+
+<div>
+    <table>
+        <tbody>
+            @foreach (string permission in Model.AllPermissions)
+            {
+                <tr>
+                    <td>@permission</td>
+                    <td>
+                        @if (Model.AllowedPermissions.Contains(permission))
+                        {
+                            <div data-name="@permission" data-control="checkbox" data-checked="true" data-message=""></div>
+                        }
+                        else
+                        {
+                            <div data-name="@permission" data-control="checkbox" data-checked="false" data-message=""></div>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tr>
+            <td></td>
+            <td>
+                <div data-control="check" />
+            </td>
+        </tr>
+    </table>
+</div>

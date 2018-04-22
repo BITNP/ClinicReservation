@@ -23,7 +23,9 @@ namespace ClinicReservation.Services.Database
         bool ContainsDepartment(string department);
 
         UserGroup TryGetNormalUserGroup();
-        UserGroup TryGetGroupByCode(string group);
+        UserGroup TryGetGroupByCode(string code);
+        bool HasGroup(string code);
+        void AddGroup(UserGroup group);
 
         bool ContainsCategory(string category);
         Category TryGetCategory(string category);

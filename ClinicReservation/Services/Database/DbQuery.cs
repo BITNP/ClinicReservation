@@ -60,9 +60,17 @@ namespace ClinicReservation.Services.Database
         {
             return TryGetGroupByCode("group_normal");
         }
-        public UserGroup TryGetGroupByCode(string group)
+        public UserGroup TryGetGroupByCode(string code)
         {
-            return dbContext.UserGroups.FirstOrDefault(x => x.Code == group);
+            return dbContext.UserGroups.FirstOrDefault(x => x.Code == code);
+        }
+        public bool HasGroup(string code)
+        {
+            return dbContext.UserGroups.Any(x => x.Code == code);
+        }
+        public void AddGroup(UserGroup group)
+        {
+            dbContext.UserGroups.Add(group);
         }
 
         public EntityEntry<T> GetDbEntry<T>(T entity) where T : class

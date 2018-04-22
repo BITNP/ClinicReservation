@@ -20,6 +20,9 @@ namespace ClinicReservation.Authorizations
 
         public PolicyResult OnAuthorization(User user, IsImplicitReservationOwnerPolicy policy)
         {
+            if (user == null)
+                return PolicyResult.Failed;
+
             int id;
             Reservation reservation;
             HttpRequest request = httpContextAccessor.HttpContext.Request;

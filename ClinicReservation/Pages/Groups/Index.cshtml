@@ -1,0 +1,111 @@
+﻿@page
+@model Groups.IndexModel
+@inject ClinicReservation.Services.Groups.IGroupActionProvider actionProvider
+@{
+    ViewData["Title"] = "Index";
+    ViewData["DisableLeftNavi"] = true;
+    int actionCount = actionProvider.TotalActionCount;
+}
+@section styles {
+    <environment names="Development">
+        <link href="~/css/groups/index.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/css/groups/index.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section scripts {
+    <environment names="Development">
+        <script src="~/js/_table.js"></script>
+        <script src="~/lib/vue/js/vue.js"></script>
+        <script src="~/raw/js/groups/index.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/_table.min.js" asp-append-version="true"></script>
+        <script src="~/lib/vue/js/vue.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        window.groups = [
+            @foreach(UserGroup group in Model.Groups)
+            {
+                @Html.Raw($"{{code: '{group.Code}', users: {group.Users.Count}, actions: '{group.Actions.Count}/{actionCount}' }},")
+            }
+        ];
+    </script>
+}
+<div class="table-view">
+    <div class="items-control">
+        <div class="control-buttons">
+            <div id="btn-add" 
+                 data-control="button" 
+                 data-text="增加"></div>
+            <div id="btn-edit" 
+                 data-control="button"
+                 data-text="编辑" 
+                 data-enabled="false"></div>
+            <div id="btn-detail" 
+                 data-control="button" 
+                 data-text="权限信息"
+                 data-enabled="false"></div>
+        </div>
+        <div class="search-input-container">
+            <img src="~/images/search.png" />
+            <div class="search-input" 
+                 data-control="input" 
+                 data-type="text"></div>
+        </div>
+    </div>
+    <div class="items-control-context">
+        <div class="items-control-add-context">
+            <form asp-page="add" enctype="application/x-www-form-urlencoded" method="post">
+                <div>
+                    <div data-control="input"
+                         data-name="code"
+                         data-type="text"
+                         data-header="唯一标识"
+                         data-required="true"
+                         data-required-error="标识不能为空"
+                         data-validate="^group_\w+$"
+                         data-validate-error="标识格式为group_{xxx}"></div>
+                    <div data-control="input"
+                         data-name="promption"
+                         data-type="password"
+                         data-header="提权码"
+                         data-required="true"
+                         data-required-error="提权码不能为空"
+                         data-validate="js:$_.length>=5;js:$_.length<=20;js:$_.indexOf(';')<0"
+                         data-validate-error="提权码应大于4个字符;提权码应不超过20个字符;提权码不能包含分号"></div>
+                </div>
+                <div>
+                    <div class="btn-submit" 
+                         data-control="submit" 
+                         data-text="增加"></div>
+                    <div class="btn-cancel"
+                         data-control="button"
+                         data-text="取消"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="items-title">
+        <div class="item-code">标识</div>
+        <div class="item-users">用户数</div>
+        <div class="item-actions">权限数</div>
+    </div>
+    
+    <table class="items-list">
+        <tbody>
+            <tr v-for="group in groups" v-on:click="row_clicked(group, $event)">
+                <td>{{group.code}}</td>
+                <td>{{group.users}}</td>
+                <td>{{group.actions}}</td>
+            </tr>
+            <tr v-show="groups.length <= 0" class="no-item-hint">
+                <td colspan="3" style="text-align: center; color: #888"><span>没有可以显示的条目</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

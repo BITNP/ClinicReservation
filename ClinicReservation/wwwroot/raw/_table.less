@@ -1,0 +1,111 @@
+﻿@import "_include.less";
+
+div.table-view > div.items-control {
+    .flex-row(stretch);
+    height: 3em;
+    border-top: 0.1em solid gray;
+    border-bottom: 0.1em solid gray;
+
+
+
+    & > div.control-buttons {
+        flex-grow: 1;
+
+        & > div[data-control="button"] {
+            background: none;
+            font-weight: normal;
+        }
+
+        & > div[data-control="button"]:not([data-enabled="false"]):hover {
+            background: #EEE;
+        }
+    }
+
+    & > div.search-input-container {
+        position: relative;
+
+        & > img {
+            position: absolute;
+            height: 1.5em;
+            width: 1.5em;
+            top: 0.8em;
+            left: 0.6em;
+        }
+
+        & > div.search-input > input {
+            padding-left: 2em;
+        }
+    }
+}
+
+div.table-view > div.items-title {
+    .flex-row(center);
+    color: #666;
+    height: 2.2em;
+    background: rgba(200, 200, 200, 0.1);
+}
+
+.item-base() {
+    .selection-none();
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+div.table-view > table.items-list {
+    width: 100%;
+    border-spacing: 0;
+    margin-top: -2px;
+
+    & > tbody > tr {
+        height: 2.3em;
+
+        &:hover {
+            background: #F2F2F2;
+            cursor: pointer;
+        }
+
+        & > td {
+            .item-base();
+            font-size: 0.9em;
+        }
+
+        &.selected {
+            background: #EEE;
+        }
+
+        &.no-item-hint {
+            background: transparent;
+            &:hover {
+                cursor: default;
+                background: transparent;
+            }
+        }
+    }
+}
+
+div.table-view > div.items-control-context {
+    height: 0px;
+    transition: height 0.2s ease-in-out;
+    overflow-y: hidden;
+    position: relative;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+
+    & > div {
+        position: absolute;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        z-index: 0;
+        background: #FFF;
+        width: calc('100% - 2em');
+        margin-left: 1em;
+        margin-right: 1em;
+    }
+}
+
+
+
+div.table-view > div.items-title > div {
+    .item-base();
+}
+
