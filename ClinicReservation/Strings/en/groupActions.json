@@ -1,0 +1,29 @@
+{
+    "AcceptReservation": {
+        "name": "Accept reservations"
+    },
+    "ChangeServiceState": {
+        "name": "Change service state"
+    },
+    "CreateModifyReservation": {
+        "name": "Create or modify reservations"
+    },
+    "ManageAllReservations": {
+        "name": "Manage all reservations"
+    },
+    "ModifyGroups": {
+        "name": "Modify groups"
+    },
+    "SendBoardMessageOnlyRelated": {
+        "name": "Send board messages for user related reservations"
+    },
+    "SendBoardMessageToAllReservations": {
+        "name": "Send board messages to all reservations"
+    },
+    "SendHiddenBoardMessage": {
+        "name": "Send hidden board messages"
+    },
+    "ViewUsers": {
+        "name": "User all users"
+    }
+}

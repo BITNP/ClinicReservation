@@ -1,8 +1,8 @@
 ﻿.selection-none() {
+    user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
-    user-select: none;
 }
 
 .flex-row(@align) {
@@ -22,8 +22,16 @@
 }
 
 .transition(@prop, @time, @func) {
+    transition: @prop @time @func;
     -moz-transition: @prop @time @func;
     -o-transition: @prop @time @func;
     -webkit-transition: @prop @time @func;
-    transition: @prop @time @func;
+}
+
+.transform(@eq) {
+    transform: @eq;
+    -ms-transform: @eq;
+    -moz-transform: @eq;
+    -webkit-transform: @eq;
+    -o-transform: @eq;
 }

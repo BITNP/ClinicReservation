@@ -32,6 +32,9 @@ var set_location = function (url) {
                 var href = this.href;
                 if (href === undefined || href === null || href === "undefined" || href === "null")
                     return;
+                if (href.startsWith(window.location.origin)) {
+                    href = href.substr(window.location.origin.length);
+                }
                 if (href.startsWith('/') &&
                     !startsWidthCulture(href)) {
                     href = culture + href;

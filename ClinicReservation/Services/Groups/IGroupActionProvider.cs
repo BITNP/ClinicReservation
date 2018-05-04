@@ -10,36 +10,48 @@ namespace ClinicReservation.Services.Groups
     {
         int TotalActionCount { get; }
         string[] AllActionKeys { get; }
-        GroupAction this[int index] { get; }
-        string GetKey(int index);
-        string GetKey(GroupAction action);
+        GroupAction[] AllActions { get; }
+        GroupAction this[string key] { get; }
+        string this[GroupAction action] { get; }
+
+        bool TryGetAction(string key, out GroupAction action);
     }
 
     internal sealed class GroupActionProvider : IGroupActionProvider
     {
-        private Type actionType;
-        private string[] keys;
-        private GroupAction[] actions;
+        private readonly Type actionType;
+        private readonly string[] keys;
+        private readonly GroupAction[] actions;
+        private readonly Dictionary<string, GroupAction> keyActionMap;
+        private readonly Dictionary<GroupAction, string> actionKeyMap;
+
         public int TotalActionCount => actions.Length;
         public string[] AllActionKeys => keys;
-        public GroupAction this[int index] => actions[index];
+        public GroupAction[] AllActions => actions;
+
+        public string this[GroupAction action] => actionKeyMap[action];
+        public GroupAction this[string key] => keyActionMap[key];
 
         public GroupActionProvider()
         {
             actionType = typeof(GroupAction);
             Array values = Enum.GetValues(actionType);
-            actions = values.OfType<GroupAction>().ToArray();
-            keys = Enum.GetNames(actionType).ToArray();
+            keyActionMap = new Dictionary<string, GroupAction>();
+            actionKeyMap = new Dictionary<GroupAction, string>();
+            foreach (GroupAction action in values)
+            {
+                string name = Enum.GetName(actionType, action);
+                actionKeyMap.Add(action, name);
+                keyActionMap.Add(name, action);
+            }
+
+            actions = keyActionMap.Values.ToArray();
+            keys = keyActionMap.Keys.ToArray();
         }
 
-        public string GetKey(int index)
+        public bool TryGetAction(string key, out GroupAction action)
         {
-            return keys[index];
-        }
-
-        public string GetKey(GroupAction action)
-        {
-            return Enum.GetName(actionType, action);
+            return keyActionMap.TryGetValue(key, out action);
         }
     }
 }

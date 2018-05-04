@@ -6,30 +6,28 @@
 }
 
 <div>
-    <table>
-        <tbody>
-            @foreach (string permission in Model.AllPermissions)
-            {
-                <tr>
-                    <td>@permission</td>
-                    <td>
-                        @if (Model.AllowedPermissions.Contains(permission))
-                        {
-                            <div data-name="@permission" data-control="checkbox" data-checked="true" data-message=""></div>
-                        }
-                        else
-                        {
-                            <div data-name="@permission" data-control="checkbox" data-checked="false" data-message=""></div>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-        <tr>
-            <td></td>
-            <td>
-                <div data-control="check" />
-            </td>
-        </tr>
-    </table>
+    <form asp-page="Modify" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="text" name="code" value="@Model.Group.Code" style="display: none">
+        <table>
+            <tbody>
+                @foreach (GroupActionName permission in Model.AllPermissions)
+                {
+                    <tr>
+                        <td>@permission.DisplayName</td>
+                        <td>
+                            @if (Model.AllowedPermissions.Contains(permission))
+                            {
+                                <div data-name="@permission.Code" data-control="checkbox" data-checked="true" data-message=""></div>
+                            }
+                            else
+                            {
+                                <div data-name="@permission.Code" data-control="checkbox" data-checked="false" data-message=""></div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div data-control="submit" data-text="保存"></div>
+    </form>
 </div>

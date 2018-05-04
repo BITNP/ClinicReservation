@@ -2,6 +2,7 @@
 using ClinicReservation.Models;
 using ClinicReservation.Models.Data;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +15,18 @@ namespace ClinicReservation.Services.Database
         public DbQuery(DataDbContext dbContext)
         {
             this.dbContext = dbContext;
+
+            // check server state
+            if (dbContext.ServerStateChangedRecords.FirstOrDefault() == null)
+            {
+                dbContext.ServerStateChangedRecords.Add(new ServerStateChangedRecord()
+                {
+                    IsServiceEnabled = true,
+                    Reason = "Server Initialized",
+                    Time = DateTime.Now
+                });
+                dbContext.SaveChanges();
+            }
         }
         public User TryGetUserByName(string username)
         {
@@ -108,6 +121,15 @@ namespace ClinicReservation.Services.Database
         public Reservation TryGetReservation(int id)
         {
             return dbContext.Reservations.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void AddServerStateChangedRecord(ServerStateChangedRecord record)
+        {
+            dbContext.ServerStateChangedRecords.Add(record);
+        }
+        public ServerStateChangedRecord RetriveLastServerStateChangedRecord()
+        {
+            return dbContext.ServerStateChangedRecords.OrderByDescending(record => record.Time).Take(1).First();
         }
     }
 }

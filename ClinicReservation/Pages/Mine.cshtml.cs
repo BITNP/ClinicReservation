@@ -14,7 +14,7 @@ namespace ClinicReservation.Pages
     [AuthenticationRequired(AuthenticationPolicy.CASOnly, AuthenticationFailedAction.CustomHandler)]
     [AuthenticationFailedHandler(typeof(RedirectHandler), "login")]
     [UserAuthorizationRequired(Policies.CanCreateReservation)]
-    public class MyModel : CultureMatchingPageModel
+    public class MineModel : CultureMatchingPageModel
     {
 
         public void OnGet()

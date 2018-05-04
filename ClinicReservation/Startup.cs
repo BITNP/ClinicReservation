@@ -47,7 +47,6 @@ namespace ClinicReservation
                 ConnectionString = Configuration.GetConnectionString("reservationData"),
                 RegisterationTicket = ServiceConfig.ReadTicket(),
                 NotificationPath = "notification.json",
-                ServiceStatePath = "state.txt",
                 ServiceReasonPath = "service_reason.json"
             };
             services.AddSingleton<ServiceConfig>(serviceConfig);
@@ -104,7 +103,7 @@ namespace ClinicReservation
                 sessionName: Configuration["CAS:sessionName"]);
 
             services.AddSingleton<INotificationProvider, NotificationProvider>(service => new NotificationProvider(serviceConfig.NotificationPath));
-            services.AddSingleton<IServiceState, ServiceState>(service => new ServiceState(serviceConfig.ServiceStatePath));
+            services.AddSingleton<IServiceState, ServiceState>();
             services.AddSingleton<IServiceNotAvailableReasonProvider, ServiceNotAvailableReasonProvider>(service => new ServiceNotAvailableReasonProvider(serviceConfig.ServiceReasonPath));
 
             services.AddSingleton<IValidatorSetPropertyMethodCache>(provider => new ValidatorSetPropertyMethodCache(100));

@@ -54,10 +54,10 @@ div.table-view > table.items-list > tbody > tr:hover {
   cursor: pointer;
 }
 div.table-view > table.items-list > tbody > tr > td {
+  user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-  user-select: none;
   padding-left: 1em;
   padding-right: 1em;
   font-size: 0.9em;
@@ -91,10 +91,10 @@ div.table-view > div.items-control-context > div {
   margin-right: 1em;
 }
 div.table-view > div.items-title > div {
+  user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-  user-select: none;
   padding-left: 1em;
   padding-right: 1em;
 }

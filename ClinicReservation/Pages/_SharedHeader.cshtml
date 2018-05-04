@@ -1,27 +1,81 @@
-﻿<div class="left">
-    <img style="max-width:3em; max-height: 3em;" src="~/images/resources/logo.png"/>
-    <span><b>BITNP | 电脑诊所预约系统</b></span>
+﻿@inject IAuthenticationResult result
+@inject Services.Authentication.IScopedUserAccessor userAccessor
+@{
+
+}
+<div class="left">
+    <img style="max-width:3em; max-height: 3em;" src="~/images/resources/logo.png" />
+    <span><b>网协 | 电脑诊所预约</b></span>
 </div>
 <div class="right">
-    <div class="menu">
-        <a href="http://www.bitnp.net">首页</a>
+    <div class="navi-menu">
+        <a href="http://www.bitnp.net">网协首页</a>
         <a href="http://live.bitnp.net/">NPLIVE</a>
         <a href="/"><b>预约系统</b></a>
         <a href="http://baike.baidu.com/view/4875683.htm">关于我们</a>
     </div>
-    <div class="floatmenu" tabindex="-1">
-        <div class="name">
-            <span>BITNP</span>
-        </div>
-        <div class="menu">
-            <div>
-                <a href="http://www.bitnp.net">首页</a>
-                <a href="http://live.bitnp.net/">NPLIVE</a>
-                <a href="/">预约系统</a>
-                <a href="http://baike.baidu.com/view/4875683.htm">关于我们</a>
+
+    @if (result.IsAuthenticated)
+    {
+        <div class="float-user-control" tabindex="-1">
+            <div class="name">
+                @if (userAccessor.User != null)
+                {
+                    <img src="@userAccessor.User.Avatar" class="avatar" />
+                    <span class="user-name">@userAccessor.User.Name</span>
+                }
+                else
+                {
+                    <span class="user-name">@result.User.Name</span>
+                }
+            </div>
+            <div class="menu">
+                <div class="user-detail">
+                    <img src="@userAccessor.User.Avatar" class="avatar" />
+                    <div>
+                        <p class="user-name">@userAccessor.User.Name</p>
+                        <p>@userAccessor.User.Email</p>
+                    </div>
+
+                </div>
+                <div class="user-navi">
+                    <span class="seperator"></span>
+                    <a href="/board">跳转至用户中心</a>
+                    <a href="/mine">查看已发布</a>
+                </div>
+                <div class="more-site">
+                    <div class="title"><span class="arrow"></span><span>更多页面</span></div>
+                    <div class="user-site-navi">
+                        <span class="seperator"></span>
+                        <a href="http://www.bitnp.net">首页</a>
+                        <a href="http://live.bitnp.net/">NPLIVE</a>
+                        <a href="/">预约系统</a>
+                        <a href="http://baike.baidu.com/view/4875683.htm">关于我们</a>
+                    </div>
+                </div>
+                <div class="user-logout">
+                    <span class="seperator"></span>
+                    <a href="/logout">注销</a>
+                </div>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="float-site-navi" tabindex="-1">
+            <div class="name">
+                <span>BITNP</span>
+            </div>
+            <div class="menu">
+                <div>
+                    <a href="http://www.bitnp.net">首页</a>
+                    <a href="http://live.bitnp.net/">NPLIVE</a>
+                    <a href="/">预约系统</a>
+                    <a href="http://baike.baidu.com/view/4875683.htm">关于我们</a>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <environment names="Development">
@@ -30,5 +84,5 @@
 </environment>
 <environment names="Staging,Production">
     <link rel="stylesheet" href="~/css/sharedheader.min.css" asp-append-version="true" />
-    <script src="~/js/sharedheader.min.js" asp-append-version="true"> </script>
+    <script src="~/js/sharedheader.min.js" asp-append-version="true"></script>
 </environment>

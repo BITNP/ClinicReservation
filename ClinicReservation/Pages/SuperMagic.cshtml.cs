@@ -74,7 +74,6 @@ namespace ClinicReservation.Pages
                     }
                     break;
             }
-
         }
     }
 }

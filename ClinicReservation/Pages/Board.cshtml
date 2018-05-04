@@ -48,37 +48,51 @@
                 <p>管理预约服务状态。</p>
                 @if (state.AllowCreate)
                 {
-                    <p>当前状态：接受预约</p>
+                    <p>当前状态：<b style="color: green">接受预约</b></p>
                 }
                 else
                 {
-                    <p>当前状态：暂停预约</p>
+                    <p>当前状态：<b style="color: red">暂停预约</b></p>
                 }
-                <div data-control="button" data-text="更改状态" data-href="/state"></div>
+                <div data-control="button" data-text="更改状态">
+                    <div data-control="flyout" style="width: 24em">
+                        <form asp-page="State" method="post" enctype="application/x-www-form-urlencoded">
+                            @if (state.AllowCreate)
+                            {
+                                <p style="margin: 8px 0 8px 0.3em">将服务状态修改为：<b style="color: red">暂停预约</b></p>
+                            }
+                            else
+                            {
+                                <p style="margin: 8px 0 8px 0.3em">将服务状态修改为：<b style="color: green">接受预约</b></p>
+                            }
+                            <div data-control="input" data-name="reason" data-type="text" data-required="true" data-required-error="变更原因必填" data-header="变更原因"></div>
+                            <div data-control="submit" data-text="确认"></div>
+                        </form>
+                    </div>
+                </div>
             </div>
         }
-        <div class="content-section" data-header="下午好">
-            <p>我们记录了您已经发布的预约。</p>
-            <p>查看更多</p>
-            <div data-control="button" data-text="查看预约记录" data-href="/my"></div>
-        </div>
-        <div class="content-section" data-header="填写预约信息">
-            <p>向我们发起预约请求</p>
+        @if (authorization.TryAuthorize(Policies.CanCreateReservation, true))
+        {
+            <div class="content-section" data-header="下午好">
+                <p>我们记录了您已经发布的预约。</p>
+                <p>查看更多</p>
+                <div data-control="button" data-text="查看预约记录" data-href="/mine"></div>
+            </div>
+            <div class="content-section" data-header="填写预约信息">
+                <p>向我们发起预约请求</p>
 
-            <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
-            @if (!state.AllowCreate)
-            {
-                <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
-            }
-            else if (authorization.TryAuthorize(Policies.CanCreateReservation, true))
-            {
-                <div data-control="button" data-text="填写预约" data-href="/create"></div>
-            }
-            else
-            {
-                <p style="color:#ff6a00; font-weight:bold">无法为当前用户创建预约</p>
-            }
-        </div>
+                <p>我们的电脑诊所部门，是网协的对外窗口，为同学们解决包括电脑、软硬件、<span style="text-decoration: line-through">情感</span>在内的各种问题</p>
+                @if (!state.AllowCreate)
+                {
+                    <p style="color:#ff6a00; font-weight:bold">暂时不接受预约</p>
+                }
+                else
+                {
+                    <div data-control="button" data-text="填写预约" data-href="/create"></div>
+                }
+            </div>
+        }
         <div class="content-section" data-header="注销">
             <p>从预约系统中安全退出</p>
             <div data-control="button" data-text="注销" data-href="/logout"></div>

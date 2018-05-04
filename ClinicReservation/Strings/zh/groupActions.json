@@ -1,0 +1,29 @@
+﻿{
+    "AcceptReservation": {
+        "name": "受理预约"
+    },
+    "ChangeServiceState": {
+        "name": "更改服务状态"
+    },
+    "CreateModifyReservation": {
+        "name": "创建或修改预约"
+    },
+    "ManageAllReservations": {
+        "name": "管理所有预约请求"
+    },
+    "ModifyGroups": {
+        "name": "管理用户组"
+    },
+    "SendBoardMessageOnlyRelated": {
+        "name": "向仅与当前用户相关的预约请求发送留言"
+    },
+    "SendBoardMessageToAllReservations": {
+        "name": "向所有预约请求发送留言"
+    },
+    "SendHiddenBoardMessage": {
+        "name": "允许发送用户不可见留言"
+    },
+    "ViewUsers": {
+        "name": "查看用户"
+    }
+}

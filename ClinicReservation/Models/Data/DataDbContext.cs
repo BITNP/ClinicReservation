@@ -40,6 +40,7 @@ namespace ClinicReservation.Models.Data
         public DbSet<User> Users { get; set; }
         public DbSet<DutySchedule> Schedules { get; set; }
         public DbSet<AllowedGroupAction> GroupActions { get; set; }
+        public DbSet<ServerStateChangedRecord> ServerStateChangedRecords { get; set; }
 
         public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
         {
@@ -81,8 +82,10 @@ namespace ClinicReservation.Models.Data
             modelBuilder.Entity<UserGroupUser>().HasKey(ug => new { ug.GroupId, ug.UserId });
             modelBuilder.Entity<UserGroupUser>().HasOne(ug => ug.Group).WithMany(group => group.Users).HasForeignKey(ug => ug.GroupId);
             modelBuilder.Entity<UserGroupUser>().HasOne(ug => ug.User).WithMany(user => user.Groups).HasForeignKey(ug => ug.UserId);
-            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ServerStateChangedRecord>().HasIndex(record => record.Time);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

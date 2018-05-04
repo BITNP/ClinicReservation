@@ -1,17 +1,17 @@
 ﻿.smalltitle {
+  user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-  user-select: none;
   font-size: 1.4em;
   margin-top: 1.4em;
   margin-bottom: 0.5em;
 }
 .itemname {
+  user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-  user-select: none;
   margin: 0.3em;
   margin-bottom: 0.1em;
   white-space: nowrap;

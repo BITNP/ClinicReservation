@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20180322165631_add_users.Designer.cs" />
     <Compile Remove="Migrations\20180322170123_add_users.cs" />
     <Compile Remove="Migrations\20180322170123_add_users.Designer.cs" />
+    <Compile Remove="Migrations\20180504110000_AddServerStateChangedRecord.cs" />
+    <Compile Remove="Migrations\20180504110000_AddServerStateChangedRecord.Designer.cs" />
   </ItemGroup>
 
 

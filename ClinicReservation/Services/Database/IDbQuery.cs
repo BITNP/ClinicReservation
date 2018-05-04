@@ -33,6 +33,9 @@ namespace ClinicReservation.Services.Database
         bool ContainsLocation(string location);
         Location TryGetLocation(string location);
 
+        void AddServerStateChangedRecord(ServerStateChangedRecord record);
+        ServerStateChangedRecord RetriveLastServerStateChangedRecord();
+
         EntityEntry<T> GetDbEntry<T>(T entity) where T : class;
         void SaveChanges();
     }
